@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<project name="nginxA">
+		<http>
+			<server name="ServerA">
+				<location name="/"/>
+			</server>
+		</http>
+		<upstream>
+			<ups name="tomcat"/>
+		</upstream>
+		<modules>
+		</modules>
+		<logs>
+		</logs>
+	</project>
+	<project name="nginxB">
+		<http>
+			<server name="ServerB">
+				<location name="/"/>
+			</server>
+		</http>
+		<upstream>
+			<ups name="jboss"/>
+		</upstream>
+		<modules>
+		</modules>
+		<logs>
+		</logs>
+	</project>
+</root>
