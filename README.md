@@ -6,3 +6,5 @@ VisualCenter is GUI application based on eclipse rcp. The application uses nginx
 In the future versions, the VisualCenter will be build as a platform for multiple middleware servers management. The VisualCenter will support various of middleware in the future, such as tomcat, traffic server and redis.
 
 The open source project of middleware management will simplify Linux server building and maintaining. The Risk of migrating application onto Linux will be reduced as well.
+
+http://osc.cs2c.com.cn/mtolinux/index.php/Project/VisualCenter
