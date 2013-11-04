@@ -4,9 +4,13 @@
 package org.cs2c.vcenter.actions;
 
 import org.cs2c.vcenter.Activator;
+import org.cs2c.vcenter.views.MiddlewareView;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
+import org.cs2c.nginlib.*;
 /**
  * @author Administrator
  *
@@ -52,6 +56,12 @@ public class ImportProjectAction extends Action {
 	}
 	@Override
 	public void run(){
-		
+		// call ImportProject Dialog
+		// get middleware instance based on user input
+		MiddlewareFactory middle=null;
+		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
+		view.addProject("Nginx B", middle);
+		view.addProject("Nginx C", middle);
 	}
 }

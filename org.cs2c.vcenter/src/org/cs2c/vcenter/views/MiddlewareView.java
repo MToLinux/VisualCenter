@@ -1,7 +1,7 @@
 package org.cs2c.vcenter.views;
 
 import java.io.File;
-
+import java.util.*;
 import org.cs2c.vcenter.actions.HostManagerAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
@@ -18,13 +18,15 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.w3c.dom.Document;
-
+import org.cs2c.vcenter.views.models.*;
 import javax.xml.parsers.*;
+import org.cs2c.nginlib.*;
 
 public class MiddlewareView extends ViewPart {
 
 	public static final String ID = "org.cs2c.vcenter.views.MiddlewareView"; //$NON-NLS-1$
-
+	private TreeViewer treeViewer=null;
+	private List<TreeElement> projectList=new LinkedList<TreeElement>();
 	public MiddlewareView() {
 	}
 
@@ -35,19 +37,11 @@ public class MiddlewareView extends ViewPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		Tree tree = new Tree(parent, SWT.BORDER);
-		TreeViewer treeViewer=new TreeViewer(tree);
-		try{
-			DocumentBuilder db=DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc=db.parse(new File("tree.xml"));
-			treeViewer.setContentProvider(new NginxTreeContentProvider());
-			treeViewer.setLabelProvider(new NginxLabelProvider());
-			treeViewer.setInput(doc);
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
+		this.treeViewer=new TreeViewer(tree);
+		this.treeViewer.setContentProvider(new NginxTreeContentProvider());
+		this.treeViewer.setLabelProvider(new NginxLabelProvider());
+		
 		MenuManager menu=new MenuManager();
-		menu.add(new HostManagerAction("sss"));
 		menu.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 		tree.setMenu(menu.createContextMenu(tree));
 		this.getViewSite().registerContextMenu(menu, treeViewer);
@@ -56,7 +50,12 @@ public class MiddlewareView extends ViewPart {
 		initializeToolBar();
 		initializeMenu();
 	}
-
+	public void addProject(String name, MiddlewareFactory middleware){
+		ProjectElement project=new ProjectElement(null);
+		project.init(name, middleware);
+		this.projectList.add(project);
+		this.treeViewer.setInput(projectList);
+	}
 	/**
 	 * Create the actions.
 	 */

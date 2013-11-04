@@ -3,17 +3,21 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
  *
  */
 public class BasicConfigure implements IObjectActionDelegate {
-
+	private TreeElement elmenet;
 	/**
 	 * 
 	 */
@@ -26,8 +30,7 @@ public class BasicConfigure implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	/* (non-Javadoc)
@@ -35,8 +38,8 @@ public class BasicConfigure implements IObjectActionDelegate {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		IStructuredSelection ss=(IStructuredSelection)selection;
+		this.elmenet=(TreeElement)ss.getFirstElement();
 	}
 
 	/* (non-Javadoc)

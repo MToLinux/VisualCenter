@@ -83,14 +83,7 @@
       <objectContribution
             adaptable="false"
             id="org.cs2c.vcenter.popup.IProject"
-            objectClass="org.w3c.dom.Node">
-         <action
-               class="org.cs2c.vcenter.popup.actions.OpenMonitorAction"
-               enablesFor="1"
-               id="org.cs2c.vcenter.OpenMonitorAction"
-               label="Open Monitor"
-               menubarPath="additions">
-         </action>
+            objectClass="org.cs2c.vcenter.views.models.IProject">
          <action
                class="org.cs2c.vcenter.popup.actions.StartAction"
                id="org.cs2c.vcenter.StartAction"
@@ -112,41 +105,44 @@
                label="Reload Configure">
          </action>
          <action
+               class="org.cs2c.vcenter.popup.actions.OpenMonitorAction"
+               id="org.cs2c.vcenter.OpenMonitorAction"
+               label="Open Monitor">
+         </action>
+         <action
                class="org.cs2c.vcenter.popup.actions.BasicConfigure"
                id="org.cs2c.vcenter.BasicConfigure"
-               label="Basic Configure...">
-         </action>
-      </objectContribution>
-      <objectContribution
-            adaptable="false"
-            id="org.cs2c.vcenter.popup.IHttp"
-            objectClass="java.lang.Object">
-         <menu
-               id="org.cs2c.vcenter.popup.HttpNewMenu"
-               label="New..."
-               path="additions">
-         </menu>
-         <action
-               class="org.cs2c.vcenter.popup.actions.NewServerAction"
-               id="org.cs2c.vcenter.NewServerAction"
-               label="Server..."
-               menubarPath="org.cs2c.vcenter.popup.HttpNewAction">
-         </action>
-         <action
-               class="org.cs2c.vcenter.popup.actions.HttpConfigureAction"
-               id="org.cs2c.vcenter.HttpConfigureAction"
                label="Configure...">
          </action>
       </objectContribution>
       <objectContribution
             adaptable="false"
-            id="org.cs2c.vcenter.popup.IServer"
-            objectClass="java.lang.Object">
+            id="org.cs2c.vcenter.popup.IHttp"
+            objectClass="org.cs2c.vcenter.views.models.IHttp">
+         <menu
+               id="org.cs2c.vcenter.popup.HttpNewMenu"
+               label="New"
+               path="additions">
+            <separator
+                  name="add">
+            </separator>
+         </menu>
          <action
-               class="org.cs2c.vcenter.popup.actions.NewLocationAction"
-               id="org.cs2c.vcenter.NewLocationAction"
-               label="Location...">
+               class="org.cs2c.vcenter.popup.actions.HttpConfigureAction"
+               id="org.cs2c.vcenter.HttpConfigureAction"
+               label="Configure...">
          </action>
+         <action
+               class="org.cs2c.vcenter.popup.actions.NewServerAction"
+               id="org.cs2c.vcenter.NewServerAction"
+               label="Server..."
+               menubarPath="org.cs2c.vcenter.popup.HttpNewMenu/add">
+         </action>
+      </objectContribution>
+      <objectContribution
+            adaptable="false"
+            id="org.cs2c.vcenter.popup.IServer"
+            objectClass="org.cs2c.vcenter.views.models.IServer">
          <action
                class="org.cs2c.vcenter.popup.actions.DeployAction"
                id="org.cs2c.vcenter.DeployAction"
@@ -160,18 +156,26 @@
          <action
                class="org.cs2c.vcenter.popup.actions.NewLocationAction"
                id="org.cs2c.vcenter.NewLocationAction"
-               label="Location...">
+               label="Location..."
+               menubarPath="org.cs2c.vcenter.popup.ServerNewMenu/add">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.ServerConfigureAction"
                id="org.cs2c.vcenter.ServerConfigureAction"
                label="Configure...">
          </action>
+         <menu
+               id="org.cs2c.vcenter.popup.ServerNewMenu"
+               label="New">
+            <separator
+                  name="add">
+            </separator>
+         </menu>
       </objectContribution>
       <objectContribution
             adaptable="false"
             id="org.cs2c.vcenter.popup.ILocation"
-            objectClass="java.lang.Object">
+            objectClass="org.cs2c.vcenter.views.models.ILocation">
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteLocationAction"
                id="org.cs2c.vcenter.DeleteLocationAction"
@@ -186,7 +190,7 @@
       <objectContribution
             adaptable="false"
             id="org.cs2c.vcenter.popup.IUpstreamInstance"
-            objectClass="java.lang.Object">
+            objectClass="org.cs2c.vcenter.views.models.IUpstreamInstance">
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteUpstreamAction"
                id="org.cs2c.vcenter.DeleteUpstreamAction"
@@ -201,17 +205,25 @@
       <objectContribution
             adaptable="false"
             id="org.cs2c.vcenter.popup.IUpstream"
-            objectClass="java.lang.Object">
+            objectClass="org.cs2c.vcenter.views.models.IUpstream">
          <action
                class="org.cs2c.vcenter.popup.actions.NewUpstreamAction"
                id="org.cs2c.vcenter.NewUpstreamAction"
-               label="Upstream">
+               label="Upstream"
+               menubarPath="org.cs2c.vcenter.popup.UpstreamNewMenu/add">
          </action>
+         <menu
+               id="org.cs2c.vcenter.popup.UpstreamNewMenu"
+               label="New">
+            <separator
+                  name="add">
+            </separator>
+         </menu>
       </objectContribution>
       <objectContribution
             adaptable="false"
             id="org.cs2c.vcenter.popup.ILogsInstance"
-            objectClass="java.lang.Object">
+            objectClass="org.cs2c.vcenter.views.models.ILogsInstance">
          <action
                class="org.cs2c.vcenter.popup.actions.OpenLogAction"
                id="org.cs2c.vcenter.OpenLogAction"

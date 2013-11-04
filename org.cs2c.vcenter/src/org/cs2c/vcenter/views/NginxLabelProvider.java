@@ -3,6 +3,7 @@
  */
 package org.cs2c.vcenter.views;
 
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IViewerLabelProvider;
@@ -72,8 +73,8 @@ public class NginxLabelProvider implements ILabelProvider {
 	 */
 	@Override
 	public String getText(Object element) {
-		Node node=(Node)element;
-		return node.getNodeName();
+		TreeElement node=(TreeElement)element;
+		return node.getName();
 	}
 
 }

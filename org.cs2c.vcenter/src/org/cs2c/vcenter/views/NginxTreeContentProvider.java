@@ -3,8 +3,8 @@
  */
 package org.cs2c.vcenter.views;
 
-import java.util.ArrayList;
-
+import java.util.*;
+import org.cs2c.vcenter.views.models.*;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.w3c.dom.Document;
@@ -48,14 +48,8 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object[] getElements(Object inputElement) {
-		Document doc=(Document)inputElement;
-		Element root=doc.getDocumentElement();
-		NodeList els=root.getElementsByTagName("project");
-		Object[] objs=new Object[els.getLength()];
-		for(int i=0;i<els.getLength();i++){
-			objs[i]=els.item(i);
-		}
-		return objs;
+		List<TreeElement> projectList=(List<TreeElement>)inputElement;
+		return projectList.toArray();
 	}
 
 	/* (non-Javadoc)
@@ -63,15 +57,12 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		Node pnode=(Node)parentElement;
-		NodeList els=pnode.getChildNodes();
-		ArrayList list=new ArrayList();
-		for(int i=0;i<els.getLength();i++){
-			if(els.item(i).getNodeType()==Node.ELEMENT_NODE){
-				list.add(els.item(i));
-			}
+		TreeElement pnode=(TreeElement)parentElement;
+		List<TreeElement> children=pnode.getChildren();
+		if(children==null){
+			return null;
 		}
-		return list.toArray();
+		return children.toArray();
 	}
 
 	/* (non-Javadoc)
@@ -79,8 +70,8 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public Object getParent(Object element) {
-		Node node=(Node)element;
-		return node.getParentNode();
+		TreeElement node=(TreeElement)element;
+		return node.getParent();
 	}
 
 	/* (non-Javadoc)
@@ -88,8 +79,8 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public boolean hasChildren(Object element) {
-		Node pnode=(Node)element;
-		return pnode.hasChildNodes();
+		TreeElement node=(TreeElement)element;
+		return node.hasChildren();
 	}
 
 }
