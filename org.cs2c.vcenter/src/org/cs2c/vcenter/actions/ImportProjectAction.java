@@ -58,7 +58,17 @@ public class ImportProjectAction extends Action {
 	public void run(){
 		// call ImportProject Dialog
 		// get middleware instance based on user input
-		MiddlewareFactory middle=null;
+		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
+		authInfo.setHost("10.1.50.4");
+		authInfo.setUsername("root");
+		authInfo.setPassword("cs2csolutions");
+		MiddlewareFactory middle;
+		try {
+			middle = MiddlewareFactory.getInstance(authInfo, "/usr/local/nginx/");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			return;
+		}
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
 		view.addProject("Nginx B", middle);

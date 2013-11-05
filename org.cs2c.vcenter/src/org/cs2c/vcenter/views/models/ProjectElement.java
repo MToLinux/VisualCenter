@@ -16,7 +16,9 @@ import org.eclipse.ui.IPersistableElement;
  *
  */
 public class ProjectElement extends TreeElement implements IProject, IEditorInput{
-
+	private String statusPath;
+	private String managerUsername;
+	private String managerPassword;
 	/**
 	 * @param tree
 	 */
@@ -24,7 +26,29 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 		super(null);
 		// TODO Auto-generated constructor stub
 	}
+	public String getStatusPath() {
+		return statusPath;
+	}
 
+	public void setStatusPath(String statusPath) {
+		this.statusPath = statusPath;
+	}
+
+	public String getManagerUsername() {
+		return managerUsername;
+	}
+
+	public void setManagerUsername(String managerUsername) {
+		this.managerUsername = managerUsername;
+	}
+
+	public String getManagerPassword() {
+		return managerPassword;
+	}
+
+	public void setManagerPassword(String managerPassword) {
+		this.managerPassword = managerPassword;
+	}
 	@Override
 	public List<TreeElement> getChildren() {
 		List<TreeElement> elements=new LinkedList<TreeElement>();
