@@ -8,6 +8,7 @@ import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.ctl.Controller;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -34,11 +35,13 @@ public class ReloadConfigureAction implements IObjectActionDelegate {
 		// TODO Auto-generated method stub
 		try {
 			ReloadConf();
-		} catch (RemoteException e) {
+		}catch (Exception e) {
+			openMessageDialog(e.getMessage());
 			e.printStackTrace();
-		}catch (Exception ex) {
-			ex.printStackTrace();
 		}
+	}
+	private void openMessageDialog(String mess){
+		MessageDialog.openInformation(shell, "Exception", mess);
 	}
 	private void ReloadConf() throws RemoteException{
 		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();

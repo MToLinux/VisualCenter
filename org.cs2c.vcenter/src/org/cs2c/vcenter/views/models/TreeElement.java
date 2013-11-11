@@ -3,6 +3,7 @@
  */
 package org.cs2c.vcenter.views.models;
 import org.cs2c.nginlib.*;
+
 import java.util.*;
 /**
  * @author Administrator
@@ -31,7 +32,7 @@ public abstract class TreeElement {
 		return this.middleware;
 	}
 	
-	abstract public List<TreeElement> getChildren();
+	abstract public List<TreeElement> getChildren() throws RemoteException;
 	
 	abstract public boolean hasChildren();
 	

@@ -46,6 +46,7 @@ public class StartAction implements IObjectActionDelegate {
 					e.printStackTrace();
 				}
 			}catch (Exception ex){
+				MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 				e.printStackTrace();
 			}
 		}

@@ -36,8 +36,10 @@ public class RestartAction implements IObjectActionDelegate {
 		try {
 			RestartNginx();
 		} catch (RemoteException e) {
+			openMessageDialog(e.getMessage());
 			e.printStackTrace();
 		}catch (Exception ex) {
+			openMessageDialog(ex.getMessage());
 			ex.printStackTrace();
 		}
 	}
@@ -63,7 +65,7 @@ public class RestartAction implements IObjectActionDelegate {
 		}
 	}
 	private void openMessageDialog(String mess){
-		MessageDialog.openInformation(shell, "Information", mess);
+		MessageDialog.openInformation(shell, "Exception", mess);
 	}
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)

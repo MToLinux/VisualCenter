@@ -41,9 +41,11 @@ public class ShutdownAction implements IObjectActionDelegate {
 				if(e.getMessage().equals("The nginx is not running. ")){
 					openMessageDialog(e.getMessage());
 				}else{
+					MessageDialog.openInformation(shell, "Exception", e.getMessage());
 					e.printStackTrace();
 				}
 			}catch (Exception ex){
+				MessageDialog.openInformation(shell, "Exception", e.getMessage());
 				e.printStackTrace();
 			}
 		}
