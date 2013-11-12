@@ -4,7 +4,6 @@
 package org.cs2c.vcenter.chart;
 import java.awt.*;
 import java.awt.geom.Point2D;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.*;
@@ -15,6 +14,14 @@ import org.jfree.data.general.DefaultValueDataset;
 import org.jfree.experimental.chart.swt.ChartComposite;
 import org.jfree.ui.*;
 import org.jfree.experimental.swt.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import com.trilead.ssh2.Connection;
+import com.trilead.ssh2.Session;
+import com.trilead.ssh2.StreamGobbler;
 /**
  * @author Administrator
  *
@@ -81,18 +88,87 @@ public class SystemCPUChart extends Composite{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Display display=new Display();
-		Shell shell=new Shell(display);
-		shell.setSize(400, 400);
-		shell.setLayout(new FillLayout());
-		shell.setText("Test CPU");
-		SystemCPUChart comp=new SystemCPUChart(shell,SWT.NONE);
-		shell.open();
-		while(!shell.isDisposed()){
-			if(!display.readAndDispatch()){
-				display.sleep();
+		String hostname = "10.1.50.4";
+		String username = "root";
+		String password = "cs2csolutions";
+		long start=System.currentTimeMillis();
+		try
+		{
+			/* Create a connection instance */
+
+			Connection conn = new Connection(hostname);
+
+			/* Now connect */
+
+			conn.connect();
+
+			/* Authenticate.
+			 * If you get an IOException saying something like
+			 * "Authentication method password not supported by the server at this stage."
+			 * then please check the FAQ.
+			 */
+
+			boolean isAuthenticated = conn.authenticateWithPassword(username, password);
+
+			if (isAuthenticated == false){
+				throw new IOException("Authentication failed.");
 			}
+			/* Create a session */
+
+			Session sess = conn.openSession();
+
+			sess.execCommand("uname -a && date && uptime && who");
+
+			System.out.println("Here is some information about the remote host:");
+
+			/* 
+			 * This basic example does not handle stderr, which is sometimes dangerous
+			 * (please read the FAQ).
+			 */
+
+			InputStream stdout = new StreamGobbler(sess.getStdout());
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+  
+			while (true)
+			{
+				String line = br.readLine();
+				if (line == null)
+					break;
+				System.out.println(line);
+			}
+  
+			/* Show exit status, if available (otherwise "null") */
+  
+			System.out.println("ExitCode: " + sess.getExitStatus());
+			br.close();
+			sess.close();
+			sess=conn.openSession();
+			sess.execCommand("uname -a && date && uptime && who");
+			br=new BufferedReader(new InputStreamReader(new StreamGobbler(sess.getStdout())));
+			while (true)
+			{
+				String line = br.readLine();
+				if (line == null)
+					break;
+				System.out.println(line);
+			}
+			System.out.println("ExitCode: " + sess.getExitStatus());
+			/* Close this session */
+			br.close();
+			sess.close();
+
+			/* Close the connection */
+
+			conn.close();
+
 		}
+		catch (IOException e)
+		{
+			e.printStackTrace(System.err);
+			System.exit(2);
+		}
+		System.out.println("Time: "+(System.currentTimeMillis()-start));
 	}
 
 }

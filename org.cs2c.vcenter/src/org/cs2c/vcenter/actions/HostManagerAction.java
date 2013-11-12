@@ -48,7 +48,7 @@ public class HostManagerAction extends Action {
 	public HostManagerAction(IWorkbenchWindow window){
 		super("Hosts...");
 		this.setId(HostManagerAction.ID);
-		this.setImageDescriptor(Activator.getImageDescriptor("icons/alt_window_16.gif"));
+		this.setImageDescriptor(Activator.getImageDescriptor("icons/hosts.png"));
 	}
 	@Override
 	public void run(){

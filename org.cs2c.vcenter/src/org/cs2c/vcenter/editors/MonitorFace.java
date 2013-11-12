@@ -209,8 +209,8 @@ public class MonitorFace extends EditorPart {
 		this.procMemChart=new ProcessChart(grpProc,SWT.NONE,"Memory Usage");
 		procMemChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		this.getSite().getShell().getDisplay().asyncExec(this.updater);
-		
+		Thread thread=new Thread(this.updater);
+		thread.start();
 	}
 	public void update(){
 /*		Monitor monitor=this.input.getMiddlewareFactory().getMonitor();
@@ -270,8 +270,7 @@ public class MonitorFace extends EditorPart {
 		*/
 		this.cpuChart.setValue(30);
 		this.runningTasksLab.setText("1");
-		this.runningTasksLab.redraw();
-		this.runningTasksLab.update();
+		this.runningTasksLab.pack(true);
 		this.blockingTasksLab.setText("2");
 		this.contextSwitchLab.setText("3");
 		this.interruptCountLab.setText("4");

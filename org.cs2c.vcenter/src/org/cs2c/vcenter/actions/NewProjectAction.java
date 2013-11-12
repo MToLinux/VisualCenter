@@ -49,7 +49,7 @@ public class NewProjectAction extends Action {
 	public NewProjectAction(IWorkbenchWindow window){
 		super("New Mid-ware...");
 		this.setId(NewProjectAction.ID);
-		this.setImageDescriptor(Activator.getImageDescriptor("icons/alt_window_16.gif"));
+		this.setImageDescriptor(Activator.getImageDescriptor("icons/project_add.png"));
 	}
 	@Override
 	public void run(){

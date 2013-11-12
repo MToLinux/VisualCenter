@@ -24,7 +24,12 @@ public class MonitorFaceUpdater implements Runnable {
 	 */
 	@Override
 	public void run() {
-		this.monitor.update();
+		this.monitor.getSite().getShell().getDisplay().syncExec(new Runnable(){
+			@Override
+			public void run(){
+				monitor.update();
+			}
+		});
 	}
 
 }

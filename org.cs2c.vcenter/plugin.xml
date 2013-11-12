@@ -16,7 +16,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="org.cs2c.vcenter.Perspective"
-            icon="icons/alt_window_16.gif"
+            icon="icons/nginx.png"
             id="org.cs2c.vcenter.perspective"
             name="Nginx Perspective">
       </perspective>
@@ -26,7 +26,7 @@
          point="org.eclipse.ui.views">
       <view
             class="org.cs2c.vcenter.views.MiddlewareView"
-            icon="icons/alt_window_16.gif"
+            icon="icons/nginx_view.png"
             id="org.cs2c.vcenter.views.MiddlewareView"
             name="Middleware View"
             restorable="true">
@@ -86,31 +86,37 @@
             objectClass="org.cs2c.vcenter.views.models.IProject">
          <action
                class="org.cs2c.vcenter.popup.actions.StartAction"
+               icon="icons/start.png"
                id="org.cs2c.vcenter.StartAction"
                label="Start">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.ShutdownAction"
+               icon="icons/shutdown.png"
                id="org.cs2c.vcenter.ShutdownAction"
                label="Shutdown">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.RestartAction"
+               icon="icons/restart.png"
                id="org.cs2c.vcenter.RestartAction"
                label="Restart">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.ReloadConfigureAction"
+               icon="icons/reload.png"
                id="org.cs2c.vcenter.ReloadConfigureAction"
                label="Reload Configure">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.OpenMonitorAction"
+               icon="icons/monitor.png"
                id="org.cs2c.vcenter.OpenMonitorAction"
                label="Open Monitor">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.BasicConfigure"
+               icon="icons/configure.png"
                id="org.cs2c.vcenter.BasicConfigure"
                label="Configure...">
          </action>
@@ -129,11 +135,13 @@
          </menu>
          <action
                class="org.cs2c.vcenter.popup.actions.HttpConfigureAction"
+               icon="icons/configure.png"
                id="org.cs2c.vcenter.HttpConfigureAction"
                label="Configure...">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.NewServerAction"
+               icon="icons/server_add.png"
                id="org.cs2c.vcenter.NewServerAction"
                label="Server..."
                menubarPath="org.cs2c.vcenter.popup.HttpNewMenu/add">
@@ -145,22 +153,26 @@
             objectClass="org.cs2c.vcenter.views.models.IServer">
          <action
                class="org.cs2c.vcenter.popup.actions.DeployAction"
+               icon="icons/deploy.png"
                id="org.cs2c.vcenter.DeployAction"
                label="Deploy...">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteAction"
+               icon="icons/delete.png"
                id="org.cs2c.vcenter.DeleteAction"
                label="Delete...">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.NewLocationAction"
+               icon="icons/location_add.png"
                id="org.cs2c.vcenter.NewLocationAction"
                label="Location..."
                menubarPath="org.cs2c.vcenter.popup.ServerNewMenu/add">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.ServerConfigureAction"
+               icon="icons/configure.png"
                id="org.cs2c.vcenter.ServerConfigureAction"
                label="Configure...">
          </action>
@@ -178,11 +190,13 @@
             objectClass="org.cs2c.vcenter.views.models.ILocation">
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteLocationAction"
+               icon="icons/delete.png"
                id="org.cs2c.vcenter.DeleteLocationAction"
                label="Delete...">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.LocationConfigureAction"
+               icon="icons/configure.png"
                id="org.cs2c.vcenter.LocationConfigureAction"
                label="Configure...">
          </action>
@@ -193,11 +207,13 @@
             objectClass="org.cs2c.vcenter.views.models.IUpstreamInstance">
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteUpstreamAction"
+               icon="icons/delete.png"
                id="org.cs2c.vcenter.DeleteUpstreamAction"
                label="Delete...">
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.UpstreamConfigureAction"
+               icon="icons/configure.png"
                id="org.cs2c.vcenter.UpstreamConfigureAction"
                label="Configure...">
          </action>
@@ -208,6 +224,7 @@
             objectClass="org.cs2c.vcenter.views.models.IUpstream">
          <action
                class="org.cs2c.vcenter.popup.actions.NewUpstreamAction"
+               icon="icons/upstream_add.png"
                id="org.cs2c.vcenter.NewUpstreamAction"
                label="Upstream"
                menubarPath="org.cs2c.vcenter.popup.UpstreamNewMenu/add">
@@ -231,6 +248,7 @@
          </action>
          <action
                class="org.cs2c.vcenter.popup.actions.DeleteLogAction"
+               icon="icons/delete.png"
                id="org.cs2c.vcenter.DeleteLogAction"
                label="Delete...">
          </action>

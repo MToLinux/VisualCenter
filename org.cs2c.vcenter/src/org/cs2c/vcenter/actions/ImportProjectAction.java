@@ -52,7 +52,7 @@ public class ImportProjectAction extends Action {
 	public ImportProjectAction(IWorkbenchWindow window){
 		super("Import...");
 		this.setId(ImportProjectAction.ID);
-		this.setImageDescriptor(Activator.getImageDescriptor("icons/alt_window_16.gif"));
+		this.setImageDescriptor(Activator.getImageDescriptor("icons/project_import.png"));
 	}
 	@Override
 	public void run(){
