@@ -71,7 +71,7 @@ public class ImportProjectAction extends Action {
 		}
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
-		view.addProject("Nginx B", middle);
+		view.addProject("Nginx 10.1.50.4", middle);
 		view.addProject("Nginx C", middle);
 	}
 }
