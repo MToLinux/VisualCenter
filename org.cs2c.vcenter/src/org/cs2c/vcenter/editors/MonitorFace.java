@@ -213,7 +213,7 @@ public class MonitorFace extends EditorPart {
 		thread.start();
 	}
 	public void update(){
-/*		Monitor monitor=this.input.getMiddlewareFactory().getMonitor();
+		Monitor monitor=this.input.getMiddlewareFactory().getMonitor();
 		ProjectElement projectElement=(ProjectElement)this.input;
 		try {
 			CPUStatus cpuStatus=monitor.getCPUStatus();
@@ -222,11 +222,15 @@ public class MonitorFace extends EditorPart {
 			NetworkStatus networkStatus=monitor.getNetworkStatus();
 			this.cpuChart.setValue((cpuStatus.getSystemPercent()+cpuStatus.getUserPercent())*100);
 			this.runningTasksLab.setText(cpuStatus.getRunningNum()+"");
+			this.runningTasksLab.pack(true);
 			this.blockingTasksLab.setText(cpuStatus.getBlockingNum()+"");
+			this.blockingTasksLab.pack(true);
 			this.contextSwitchLab.setText(cpuStatus.getContextSwitchNum()+"");
+			this.contextSwitchLab.pack(true);
 			this.interruptCountLab.setText(cpuStatus.getInterruptNum()+"");
+			this.interruptCountLab.pack(true);
 			this.memChart.setValue(memStatus.getUsed(), memStatus.getBuffers(), memStatus.getCached(), memStatus.getFree());
-			//TODO lack total swap.
+			this.swapChart.setValue(memStatus.getUsedSwap(), memStatus.getTotalSwap()-memStatus.getUsedSwap());
 			Map<String,Number> datasetRead=new HashMap<String,Number>();
 			Map<String,Number> datasetWrite=new HashMap<String,Number>();
 			List<Device> devices=ioStatus.getDevices();
@@ -241,7 +245,7 @@ public class MonitorFace extends EditorPart {
 			datasetNetwork.put("Output", networkStatus.getOutputPerSec());
 			this.networkChart.addDataset(datasetNetwork);
 			
-			NginxStatus nginxStatus=monitor.getNginxStatus(projectElement.getStatusPath(), projectElement.getManagerUsername(), projectElement.getManagerPassword());
+			NginxStatus nginxStatus=monitor.getNginxStatus(true,projectElement.getStatusPath(), projectElement.getManagerUsername(), projectElement.getManagerPassword());
 			Map<String,Number> datasetConn=new HashMap<String,Number>();
 			datasetConn.put("Active", nginxStatus.getActiveConnections());
 			datasetConn.put("KeepAlive", nginxStatus.getKeepAliveConnections());
@@ -265,15 +269,8 @@ public class MonitorFace extends EditorPart {
 			this.procCpuChart.setDataset(datasetProcCpu);
 			this.procMemChart.setDataset(datasetProcMem);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			this.getEditorSite().getActionBars().getStatusLineManager().setMessage(e.getMessage());
 		}
-		*/
-		this.cpuChart.setValue(30);
-		this.runningTasksLab.setText("1");
-		this.runningTasksLab.pack(true);
-		this.blockingTasksLab.setText("2");
-		this.contextSwitchLab.setText("3");
-		this.interruptCountLab.setText("4");
 	}
 	@Override
 	public void dispose(){

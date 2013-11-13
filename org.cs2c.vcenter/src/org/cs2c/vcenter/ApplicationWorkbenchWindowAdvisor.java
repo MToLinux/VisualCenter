@@ -27,4 +27,9 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
         configurer.setTitle("VisualCenter"); //$NON-NLS-1$
         PlatformUI.getPreferenceStore().setValue(IWorkbenchPreferenceConstants.DOCK_PERSPECTIVE_BAR, IWorkbenchPreferenceConstants.TOP_RIGHT);
     }
+    @Override
+    public void postWindowCreate(){
+    	super.postWindowCreate();
+    	this.getWindowConfigurer().getWindow().getShell().setMaximized(true);
+    }
 }
