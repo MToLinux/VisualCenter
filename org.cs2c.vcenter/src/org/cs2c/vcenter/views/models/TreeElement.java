@@ -3,7 +3,6 @@
  */
 package org.cs2c.vcenter.views.models;
 import org.cs2c.nginlib.*;
-
 import java.util.*;
 /**
  * @author Administrator
@@ -40,3 +39,4 @@ public abstract class TreeElement {
 		return this.parent;
 	}
 }
+

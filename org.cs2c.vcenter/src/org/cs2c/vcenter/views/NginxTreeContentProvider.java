@@ -64,7 +64,6 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 		try {
 			children = pnode.getChildren();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(children==null){
