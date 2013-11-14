@@ -49,19 +49,18 @@ public class HttpElement extends TreeElement implements IHttp {
 
 		orc = (RecConfigurator) this.middleware.getConfigurator();
 //			String PathWithName = SetConfpath(); TODO dialog
-		String PathWithName = "D:\\eclipseWorkspace\\confpath\\";
-		orc.SetLocalConfpath(PathWithName);
 		blockName = "server";
 		list= orc.getBlocks(blockName, outerBlockNames);
 		
 		for(int i = 0;i<list.size();i++){
+//			System.out.println("list:"+list.size());
 			List<Directive> listdire = new ArrayList<Directive>();
 			listdire = list.get(i).getDirectives();
 			for(int j = 0;j<listdire.size(); j++){
 				if(listdire.get(j).getName().equals("server_name")){
 					RecStringParameter rsp = (RecStringParameter)listdire.get(j).getParameters().get(0);
 					lstserverName.add(rsp.getValue());
-					System.out.println(rsp.getValue());
+//					System.out.println(rsp.getValue());
 				}
 			}
 		}

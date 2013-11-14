@@ -7,9 +7,11 @@ import org.cs2c.nginlib.AuthInfo;
 import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.ctl.Controller;
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
@@ -20,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPart;
  *
  */
 public class StartAction implements IObjectActionDelegate {
+	private TreeElement element;
 	private Shell shell;
 	/**
 	 * 
@@ -63,17 +66,7 @@ public class StartAction implements IObjectActionDelegate {
 	}
 	
 	private void StartNginx() throws RemoteException{
-		
-		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
-
-		authInfo.setHost("10.1.50.4");
-		authInfo.setUsername("root");
-		authInfo.setPassword("cs2csolutions");
-		
-		MiddlewareFactory instance1 = null;
-		instance1 = MiddlewareFactory.getInstance(authInfo, "/usr/local/nginx/");
-
-		Controller reccontro=instance1.getController();
+		Controller reccontro=this.element.getMiddlewareFactory().getController();
 		if(reccontro==null)
 		{
 			throw new RemoteException("reccontro=null");
@@ -89,8 +82,8 @@ public class StartAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		IStructuredSelection ss=(IStructuredSelection)selection;
+		this.element=(TreeElement)ss.getFirstElement();
 	}
 
 	/* (non-Javadoc)

@@ -50,6 +50,7 @@ public class OpenMonitorAction implements IObjectActionDelegate {
 	public void selectionChanged(IAction action, ISelection selection) {
 		IStructuredSelection ss=(IStructuredSelection)selection;
 		this.element=(TreeElement)ss.getFirstElement();
+		
 	}
 
 }

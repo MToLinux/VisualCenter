@@ -34,7 +34,7 @@ public abstract class TreeElement {
 	
 	abstract public List<TreeElement> getChildren() throws RemoteException;
 	
-	abstract public boolean hasChildren();
+	abstract public boolean hasChildren() throws RemoteException;
 	
 	public TreeElement getParent(){
 		return this.parent;
