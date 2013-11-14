@@ -4,6 +4,8 @@
 package org.cs2c.vcenter.views;
 
 import java.util.*;
+
+import org.cs2c.nginlib.RemoteException;
 import org.cs2c.vcenter.views.models.*;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -58,7 +60,12 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 		TreeElement pnode=(TreeElement)parentElement;
-		List<TreeElement> children=pnode.getChildren();
+		List<TreeElement> children = null;
+		try {
+			children = pnode.getChildren();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		if(children==null){
 			return null;
 		}

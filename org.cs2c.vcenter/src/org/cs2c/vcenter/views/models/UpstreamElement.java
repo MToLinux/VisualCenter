@@ -27,6 +27,8 @@ public class UpstreamElement extends TreeElement implements IUpstream {
 		UpstreamInstanceElement upstreamInstance=new UpstreamInstanceElement(this);
 		upstreamInstance.init("upstream tomcat", this.middleware);
 		children.add(upstreamInstance);
+		
+		children.add(upstreamInstance);
 		return children;
 	}
 

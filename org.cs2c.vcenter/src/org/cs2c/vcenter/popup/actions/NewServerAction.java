@@ -3,8 +3,10 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.nginlib.RemoteException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -13,7 +15,7 @@ import org.eclipse.ui.IWorkbenchPart;
  *
  */
 public class NewServerAction implements IObjectActionDelegate {
-
+	private Shell shell;
 	/**
 	 * 
 	 */
@@ -27,9 +29,18 @@ public class NewServerAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		// TODO Auto-generated method stub
-
+		try {
+			NewServer();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
-
+	private void NewServer() throws RemoteException{
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
 	 */
@@ -45,7 +56,7 @@ public class NewServerAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		// TODO Auto-generated method stub
-
+		shell = targetPart.getSite().getShell();
 	}
 
 }
