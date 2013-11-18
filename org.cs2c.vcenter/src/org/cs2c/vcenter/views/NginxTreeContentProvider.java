@@ -87,7 +87,13 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 		TreeElement node=(TreeElement)element;
-		return node.hasChildren();
+		try {
+			return node.hasChildren();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 }
