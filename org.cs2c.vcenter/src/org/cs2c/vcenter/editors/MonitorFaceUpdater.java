@@ -39,5 +39,4 @@ public class MonitorFaceUpdater implements Runnable {
 			}
 		}
 	}
-
 }
