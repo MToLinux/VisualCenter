@@ -12,10 +12,13 @@ import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.ctl.Controller;
+import org.cs2c.vcenter.dialog.serverdialog;
+import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,6 +30,8 @@ import org.eclipse.ui.IWorkbenchPart;
 public class NewServerAction implements IObjectActionDelegate {
 	private TreeElement element;
 	private Shell shell;
+	private TreeViewer treeViewer=null;
+	
 	/**
 	 * 
 	 */
@@ -49,9 +54,17 @@ public class NewServerAction implements IObjectActionDelegate {
 		}
 	}
 	private void NewServer() throws RemoteException{
-		String sernameval = "newservername";
-		String listenval = "80";		
+		//open dialog
+		serverdialog dialog = new serverdialog(shell);
+	    dialog.open();
+	    String sernameval = dialog.getServername();
+	    String listenval = dialog.getListenParam();
 		
+	    if((null == sernameval)||
+	    	(null == listenval)){
+	    	return;
+	    }
+	    
 		//new a server block
 		String blockName = null;
 		String outerBlockNames = "";
@@ -81,9 +94,10 @@ public class NewServerAction implements IObjectActionDelegate {
 		List<Block> list= orc.getBlocks(blockName, outerBlockNames);
 		if(list.size()>0){
 			orc.append(newBlock, blockName);
+			
+			//server_name aoto show in treeview,do refresh
+			this.treeViewer.refresh();
 		}
-
-		//TODO server_name aoto show in treeview? refresh
 	}
 
 	/* (non-Javadoc)
@@ -102,6 +116,8 @@ public class NewServerAction implements IObjectActionDelegate {
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		// TODO Auto-generated method stub
 		shell = targetPart.getSite().getShell();
+		String ID = "org.cs2c.vcenter.views.MiddlewareView";
+		MiddlewareView meviewer = (MiddlewareView) targetPart.getSite().getWorkbenchWindow().getActivePage().findView(ID);
+		this.treeViewer = meviewer.getTreeViewer();
 	}
-
 }

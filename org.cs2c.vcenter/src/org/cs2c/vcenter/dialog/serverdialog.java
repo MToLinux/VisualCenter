@@ -16,11 +16,17 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
 
 public class serverdialog extends Dialog {
 	private Text text_sername;
 	private Text text_listen;
-
+	private Button button_ok;
+	private Button button_cancel;
+	
+	String Servername = null;
+	String ListenParam = null;
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -28,7 +34,13 @@ public class serverdialog extends Dialog {
 	public serverdialog(Shell parentShell) {
 		super(parentShell);
 	}
-
+	
+	public String getServername() {
+		return Servername;
+	}
+	public String getListenParam() {
+		return ListenParam;
+	}
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -54,6 +66,11 @@ public class serverdialog extends Dialog {
 		lblNewLabel.setText("server_name:");
 		
 		text_sername = new Text(container, SWT.BORDER);
+		text_sername.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				SetOkEnable();
+			}
+		});
 		GridData gd_text_sername = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_text_sername.widthHint = 210;
 		text_sername.setLayoutData(gd_text_sername);
@@ -65,11 +82,28 @@ public class serverdialog extends Dialog {
 		lblNewLabel_1.setText("listen:");
 		
 		text_listen = new Text(container, SWT.BORDER);
+		text_listen.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				SetOkEnable();
+			}
+		});
 		GridData gd_text_listen = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
 		gd_text_listen.widthHint = 211;
 		text_listen.setLayoutData(gd_text_listen);
 
 		return container;
+	}
+	
+	private void SetOkEnable() {
+		Servername = text_sername.getText().trim();
+		ListenParam = text_listen.getText().trim();
+		
+		if((null != Servername)&&(null != ListenParam)&&
+			("" != Servername)&&("" != ListenParam)){
+			button_ok.setEnabled(true);
+		}else{
+			button_ok.setEnabled(false);
+		}
 	}
 	
 	@Override
@@ -83,26 +117,24 @@ public class serverdialog extends Dialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		Button button_ok = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		button_ok = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
+		button_ok.setEnabled(false);
 		button_ok.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				System.out.println(text_sername.getText());
-				System.out.println(text_listen.getText());
+			public void mouseDown(MouseEvent e) {
+				Servername = text_sername.getText();
+				ListenParam = text_listen.getText();
 			}
 		});
-		button_ok.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				System.out.println(text_sername.getText());
-			}
-		});
-		Button button_cancel = createButton(parent, IDialogConstants.CANCEL_ID,
+
+		button_cancel = createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
-		button_cancel.addSelectionListener(new SelectionAdapter() {
+		button_cancel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
+				Servername = null;
+				ListenParam = null;
 			}
 		});
 	}
