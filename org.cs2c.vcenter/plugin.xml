@@ -5,7 +5,8 @@
    <extension
          id="application"
          point="org.eclipse.core.runtime.applications">
-      <application>
+      <application
+            icon="icons/vcenter-16.png">
          <run
                class="org.cs2c.vcenter.Application">
          </run>
@@ -44,6 +45,7 @@
       <editor
             class="org.cs2c.vcenter.editors.MonitorFace"
             default="false"
+            icon="icons/monitor.png"
             id="org.cs2c.vcenter.editors.MonitorFace"
             name="Host Monitor">
       </editor>
@@ -76,6 +78,13 @@
             default="false"
             id="org.cs2c.vcenter.editors.LogEditor"
             name="LogEditor">
+      </editor>
+      <editor
+            class="org.cs2c.vcenter.editors.LogBrowser"
+            default="false"
+            icon="icons/log.png"
+            id="org.cs2c.vcenter.editors.LogBrowser"
+            name="Log Browser">
       </editor>
    </extension>
    <extension
