@@ -50,9 +50,14 @@ public class MiddlewareView extends ViewPart {
 		initializeToolBar();
 		initializeMenu();
 	}
+	
+	public TreeViewer getTreeViewer(){
+		return this.treeViewer;
+	}
+	
 	public void addProject(String name, MiddlewareFactory middleware){
 		ProjectElement project=new ProjectElement(null);
-		project.init(name, middleware);
+		project.init(name, "main","0","", middleware);
 		this.projectList.add(project);
 		this.treeViewer.setInput(projectList);
 	}

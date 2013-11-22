@@ -34,7 +34,11 @@ public class UpstreamElement extends TreeElement implements IUpstream {
 		for(int i = 0;i<lisloName.size();i++){
 			UpstreamInstanceElement upstreamInstance=new UpstreamInstanceElement(this);
 			String sername = new String(lisloName.get(i));
-			upstreamInstance.init(sername, this.middleware);
+			//TODO
+			String blIndex = null;
+			String outerBlNames = null;
+			upstreamInstance.init(sername, "server",blIndex,outerBlNames, this.middleware);
+//			upstreamInstance.init(sername, this.middleware);
 //			System.out.println(sername);
 			children.add(upstreamInstance);
 		}

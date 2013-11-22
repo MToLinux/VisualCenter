@@ -53,13 +53,13 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 	public List<TreeElement> getChildren() {
 		List<TreeElement> elements=new LinkedList<TreeElement>();
 		HttpElement http=new HttpElement(this);
-		http.init("Http", this.middleware);
+		http.init("Http","http","0","", this.middleware);
 		UpstreamElement upstream=new UpstreamElement(this);
-		upstream.init("Upstream", this.middleware);
+		upstream.init("Upstream","upstream","0","", this.middleware);
 		ModuleElement module=new ModuleElement(this);
-		module.init("Module", this.middleware);
+		module.init("Module","","","", this.middleware);
 		LogElement log=new LogElement(this);
-		log.init("Log", this.middleware);
+		log.init("Log","","","", this.middleware);
 		elements.add(http);
 		elements.add(upstream);
 		elements.add(module);

@@ -3,17 +3,25 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.views.MiddlewareView;
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
  *
  */
 public class DeleteLogAction implements IObjectActionDelegate {
-
+	private TreeElement element;
+//	private Shell shell;
+	private TreeViewer treeViewer=null;
 	/**
 	 * 
 	 */
@@ -27,7 +35,8 @@ public class DeleteLogAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		// TODO Auto-generated method stub
-
+		//aoto show in treeview,do refresh
+		this.treeViewer.refresh();
 	}
 
 	/* (non-Javadoc)
@@ -35,8 +44,8 @@ public class DeleteLogAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		IStructuredSelection ss=(IStructuredSelection)selection;
+		this.element=(TreeElement)ss.getFirstElement();
 	}
 
 	/* (non-Javadoc)
@@ -44,8 +53,8 @@ public class DeleteLogAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
-
+		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
+		this.treeViewer = meviewer.getTreeViewer();
 	}
 
 }
