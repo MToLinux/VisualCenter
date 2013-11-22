@@ -3,7 +3,12 @@
  */
 package org.cs2c.vcenter.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cs2c.vcenter.Activator;
+import org.cs2c.vcenter.dialog.Importmiddleware;
+import org.cs2c.vcenter.dialog.deploydialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -17,6 +22,7 @@ import org.cs2c.nginlib.*;
  */
 public class ImportProjectAction extends Action {
 	static public final String ID="org.cs2c.vcenter.actions.ImportProjectAction";
+	private IWorkbenchWindow window; 
 	/**
 	 * 
 	 */
@@ -56,8 +62,17 @@ public class ImportProjectAction extends Action {
 	}
 	@Override
 	public void run(){
-		// call ImportProject Dialog
 		//  get liu qin return list 1.2.3
+	    List<String> list = new ArrayList<String>();
+	    list.add("Nginx 10.1.50.4");
+		// call Import Project Dialog
+		// open dialog
+		Importmiddleware dialog = new Importmiddleware(window.getShell());
+		dialog.init(list);
+	    dialog.open();
+	    
+	    
+
 		// gethostinfo
 		
 		// get middleware instance based on user input
@@ -77,4 +92,6 @@ public class ImportProjectAction extends Action {
 		view.addProject("Nginx 10.1.50.4", middle);
 		view.addProject("Nginx C", middle);
 	}
+	
+	
 }
