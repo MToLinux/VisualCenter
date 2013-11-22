@@ -56,7 +56,6 @@ public class NewLocationAction implements IObjectActionDelegate {
 	}
 
 	private void NewLocation() throws RemoteException {
-		String locationname = null;
 		String blockName = null;
 		RecConfigurator orc = null;
 
@@ -78,7 +77,11 @@ public class NewLocationAction implements IObjectActionDelegate {
 				validator ); //validator to use
 		inputDialog.open();
 		
-		//new a block	TODO
+		//new a block
+		//check
+		if((null ==inputDialog.getValue())||("" ==inputDialog.getValue().trim())){
+			return;
+		}
 		orc = (RecConfigurator) this.element.getMiddlewareFactory().getConfigurator();
 		Block newBlock = orc.newBlock();
 		newBlock.setName("location "+inputDialog.getValue()+" ");

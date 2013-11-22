@@ -4,6 +4,7 @@
 package org.cs2c.vcenter.views.models;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
@@ -29,23 +30,30 @@ public class HttpElement extends TreeElement implements IHttp {
 	@Override
 	public List<TreeElement> getChildren() throws RemoteException {
 		List<TreeElement> children=new LinkedList<TreeElement>();
-
-		List<String> lisSerName =  getServerName();
-		for(int i = 0;i<lisSerName.size();i++){
+		String blIndex = null;
+		
+		Map<String, String> SerMap =  getServerName();
+//		Set set = SerMap.entrySet();
+		Iterator<Entry<String, String>> it = SerMap.entrySet().iterator();
+		while(it.hasNext()){
+			Entry entry = (Entry)it.next();
+			blIndex = entry.getKey().toString();
+			String sername = entry.getValue().toString();
 			ServerElement server=new ServerElement(this);
-			String sername = lisSerName.get(i);
-			server.init(sername, this.middleware);
+//			String sername = lisSerName.get(i).;	//TODO
+			String outerBlNames = "http:0";
+			server.init(sername,"server",blIndex,outerBlNames, this.middleware);
 			children.add(server);
 		}
 		return children;
 	}
 	
-	private List<String> getServerName() throws RemoteException{
+	private Map<String, String> getServerName() throws RemoteException{
 		String blockName = null;
 		String outerBlockNames = "http:0";
 		List<Block> list= null;
 		RecConfigurator orc = null;
-		List<String> lstserverName = new ArrayList<String>();
+		Map<String,String> lstserverName = new HashMap<String,String>();
 
 		orc = (RecConfigurator) this.middleware.getConfigurator();
 //			String PathWithName = SetConfpath(); TODO dialog
@@ -59,7 +67,7 @@ public class HttpElement extends TreeElement implements IHttp {
 			for(int j = 0;j<listdire.size(); j++){
 				if(listdire.get(j).getName().equals("server_name")){
 					RecStringParameter rsp = (RecStringParameter)listdire.get(j).getParameters().get(0);
-					lstserverName.add(rsp.getValue());
+					lstserverName.put(Integer.toString(i), rsp.getValue());
 //					System.out.println(rsp.getValue());
 				}
 			}

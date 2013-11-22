@@ -36,7 +36,6 @@ public class NewServerAction implements IObjectActionDelegate {
 	 * 
 	 */
 	public NewServerAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +43,6 @@ public class NewServerAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
 		try {
 			NewServer();
 		} catch (RemoteException e) {
@@ -114,7 +112,6 @@ public class NewServerAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
 		shell = targetPart.getSite().getShell();
 		String ID = "org.cs2c.vcenter.views.MiddlewareView";
 		MiddlewareView meviewer = (MiddlewareView) targetPart.getSite().getWorkbenchWindow().getActivePage().findView(ID);

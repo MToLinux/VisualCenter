@@ -26,7 +26,7 @@ public class LogElement extends TreeElement implements ILogs {
 	public List<TreeElement> getChildren() {
 		List<TreeElement> children=new LinkedList<TreeElement>();
 		LogInstanceElement logInstance=new LogInstanceElement(this);
-		logInstance.init("error.log", this.middleware);
+		logInstance.init("error.log","","","", this.middleware);
 		children.add(logInstance);
 		return children;
 	}
