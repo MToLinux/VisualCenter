@@ -3,9 +3,13 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.nginlib.RemoteException;
+import org.cs2c.nginlib.log.Logger;
+import org.cs2c.vcenter.views.models.LogInstanceElement;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -34,7 +38,16 @@ public class DeleteLogAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
+		Shell shell=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+		boolean ok=MessageDialog.openConfirm(shell, "Delete Confirm", "Do you really delete it from remote file system?");
+		if(ok){
+			Logger logger=this.element.getMiddlewareFactory().getLogger();
+			try {
+				logger.delete(((LogInstanceElement)this.element).getLog().getName());
+			} catch (RemoteException e) {
+				MessageDialog.openError(shell, "Delete Error", e.getMessage());
+			}
+		}
 		//aoto show in treeview,do refresh
 		this.treeViewer.refresh();
 	}

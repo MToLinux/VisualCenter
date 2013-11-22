@@ -106,9 +106,6 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 	
 	@Override
 	public boolean equals(Object obj){
-		if(super.equals(obj)){
-			return true;
-		}
 		if(obj instanceof ProjectElement){
 			ProjectElement element=(ProjectElement)obj;
 			return this.name==element.name;
