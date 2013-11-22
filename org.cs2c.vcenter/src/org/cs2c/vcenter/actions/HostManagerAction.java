@@ -4,6 +4,7 @@
 package org.cs2c.vcenter.actions;
 
 import org.cs2c.vcenter.Activator;
+import org.cs2c.vcenter.dialog.HostsManagerDialog;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -16,6 +17,8 @@ public class HostManagerAction extends Action {
 	/**
 	 * 
 	 */
+	private IWorkbenchWindow window;//abliuqin
+	
 	public HostManagerAction() {
 		// TODO Auto-generated constructor stub
 	}
@@ -47,11 +50,13 @@ public class HostManagerAction extends Action {
 	}
 	public HostManagerAction(IWorkbenchWindow window){
 		super("Hosts...");
+		this.window=window;
 		this.setId(HostManagerAction.ID);
 		this.setImageDescriptor(Activator.getImageDescriptor("icons/hosts.png"));
 	}
 	@Override
 	public void run(){
-		
+		HostsManagerDialog dg  =   new  HostsManagerDialog(window.getShell());
+        dg.open();
 	}
 }

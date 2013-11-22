@@ -32,7 +32,7 @@ public class LogElement extends TreeElement implements ILogs {
 		List<LogProfile> logs=logger.getLogFileNames();
 		for(LogProfile log: logs){
 			LogInstanceElement logInstance=new LogInstanceElement(this);
-			logInstance.init(log.getName()+" -- "+log.getSize()+"Bytes", this.middleware);
+			logInstance.init(log.getName()+" -- "+log.getSize()+"Bytes", "","","", this.middleware);
 			logInstance.setLog(log);
 			children.add(logInstance);
 		}

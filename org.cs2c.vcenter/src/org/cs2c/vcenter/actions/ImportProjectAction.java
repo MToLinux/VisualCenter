@@ -57,6 +57,9 @@ public class ImportProjectAction extends Action {
 	@Override
 	public void run(){
 		// call ImportProject Dialog
+		//  get liu qin return list 1.2.3
+		// gethostinfo
+		
 		// get middleware instance based on user input
 		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
 		authInfo.setHost("10.1.50.4");

@@ -6,11 +6,13 @@ package org.cs2c.vcenter.popup.actions;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.log.Logger;
 import org.cs2c.vcenter.views.models.LogInstanceElement;
+import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
@@ -22,6 +24,8 @@ import org.eclipse.ui.PlatformUI;
  */
 public class DeleteLogAction implements IObjectActionDelegate {
 	private TreeElement element;
+//	private Shell shell;
+	private TreeViewer treeViewer=null;
 	/**
 	 * 
 	 */
@@ -44,6 +48,8 @@ public class DeleteLogAction implements IObjectActionDelegate {
 				MessageDialog.openError(shell, "Delete Error", e.getMessage());
 			}
 		}
+		//aoto show in treeview,do refresh
+		this.treeViewer.refresh();
 	}
 
 	/* (non-Javadoc)
@@ -60,8 +66,8 @@ public class DeleteLogAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
-
+		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
+		this.treeViewer = meviewer.getTreeViewer();
 	}
 
 }

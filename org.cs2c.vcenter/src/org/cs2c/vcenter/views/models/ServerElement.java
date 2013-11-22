@@ -36,7 +36,10 @@ public class ServerElement extends TreeElement implements IServer {
 		for(int i = 0;i<lisloName.size();i++){
 			LocationElement location=new LocationElement(this);
 			String sername = new String(lisloName.get(i));
-			location.init(sername, this.middleware);
+			//TODO
+			String blIndex = null;
+			String outerBlNames = null;
+			location.init(sername, "server",blIndex,outerBlNames, this.middleware);
 //			System.out.println(sername);
 			children.add(location);
 		}
