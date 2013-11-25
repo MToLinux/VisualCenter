@@ -119,9 +119,9 @@ public class DOMParser {
 				if (nodeList.item(i).getParentNode()
 						.removeChild(nodeList.item(i)) != null) {
 					// delete the blank line
-					System.out.println(rootElement.getElementsByTagName("host")
-							.getLength());
-
+					//System.out.println(rootElement.getElementsByTagName("host")
+					//		.getLength());
+					
 					return true;
 				}
 			}
@@ -177,12 +177,26 @@ public class DOMParser {
 	}
 
 	public boolean saveXml(Document document, String filename) {
+		
+		
+		Element rootElement = document.getDocumentElement();
+		NodeList nodeList = rootElement.getElementsByTagName("host");
+		System.out
+				.println(rootElement.getElementsByTagName("host").getLength());
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			System.out.println(element.getAttribute(i+"name"));
+		}
+		
+		
 		// TODO Auto-generated method stub
 		boolean flag = true;
 		try {
+			
 			/** 将document中的内容写入文件中 */
 			TransformerFactory tFactory = TransformerFactory.newInstance();
 			Transformer transformer = tFactory.newTransformer();
+			//transformer.setoutpu
 			/** 编码 */
 			// transformer.setOutputProperty(OutputKeys.ENCODING, "GB2312");
 			DOMSource source = new DOMSource(document);
