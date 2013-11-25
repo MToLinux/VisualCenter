@@ -21,29 +21,32 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class MetaManager {
-	DocumentBuilderFactory domFactory=null;
-	Document doc=null;
-	
-	public MetaManager() {
+	DocumentBuilderFactory domFactory = null;
+	Document doc = null;
+
+	private static class MetaManagerHoder {
+		private static MetaManager instance = new MetaManager();
+	}
+
+	public static MetaManager getInstance() {
+		return MetaManagerHoder.instance;
+	}
+
+	private MetaManager() {
+		//System.out.println("create metamanager");
 		domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true); // never forget this!
 		try {
-			 doc = domFactory.newDocumentBuilder().parse("conf/element.xml");
+			doc = domFactory.newDocumentBuilder().parse("conf/element.xml");
 		} catch (SAXException | IOException | ParserConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
-	}
 
-	public MetaManager getInstance() {
-		MetaManager metaManagerInstance = new MetaManager();
-		return metaManagerInstance;
 	}
 
 	public BlockMeta getBlockMeta(String blockName) {
-		
-	
+
 		BlockMeta blockMetaResult = new BlockMeta();
 		blockMetaResult.setName(blockName);
 		try {
@@ -54,59 +57,61 @@ public class MetaManager {
 		}
 
 		try {
-			blockMetaResult.setDirectiveMeta(FetchDirectivesofBlock( blockName));
+			blockMetaResult.setDirectiveMeta(FetchDirectivesofBlock(blockName));
 		} catch (ParserConfigurationException | SAXException
 				| XPathExpressionException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return blockMetaResult;
 	}
 
-	
-
-	private List<BlockMeta> FetchBlock(String blockName) throws ParserConfigurationException,
-			SAXException, IOException, XPathExpressionException {
+	private List<BlockMeta> FetchBlock(String blockName)
+			throws ParserConfigurationException, SAXException, IOException,
+			XPathExpressionException {
 
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		String comstr = null;
-		
+
 		comstr = "//block[contains(@scope,\"" + blockName + "\")]";
-		
+
 		XPathExpression expr = xpath.compile(comstr);
 
 		List<BlockMeta> blockMetaList = new ArrayList<BlockMeta>(0);
-		
+
 		Object result = expr.evaluate(doc, XPathConstants.NODESET);
 		NodeList nodes = (NodeList) result;
 		for (int i = 0; i < nodes.getLength(); i++) {
 			BlockMeta blockMetaResult = new BlockMeta();
 			Element element = (Element) nodes.item(i);
-			blockMetaResult.setName(decreaseBlank(element.getAttribute("name")));
-			blockMetaResult.setTips(decreaseBlank(element.getAttribute("tips")));
-			blockMetaResult.setGroup(decreaseBlank(element.getAttribute("group")));
-			if(decreaseBlank(element.getAttribute("reused"))=="true")
+			blockMetaResult
+					.setName(decreaseBlank(element.getAttribute("name")));
+			blockMetaResult
+					.setTips(decreaseBlank(element.getAttribute("tips")));
+			blockMetaResult.setGroup(decreaseBlank(element
+					.getAttribute("group")));
+			if (decreaseBlank(element.getAttribute("reused")) == "true")
 				blockMetaResult.setReused(true);
 			else
 				blockMetaResult.setReused(false);
 			blockMetaList.add(blockMetaResult);
-			
+
 		}
-		
+
 		return blockMetaList;
 	}
 
 	private List<DirectiveMeta> FetchDirectivesofBlock(String blockName)
 			throws ParserConfigurationException, SAXException, IOException,
 			XPathExpressionException {
-		
+
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		String comstr = null;
-		
+
 		comstr = "//directive[contains(@scope,\"" + blockName + "\")]";
-		
+
 		XPathExpression expr = xpath.compile(comstr);
 
 		List<DirectiveMeta> directiveMetaList = new ArrayList<DirectiveMeta>(0);
@@ -116,9 +121,12 @@ public class MetaManager {
 		for (int i = 0; i < nodes.getLength(); i++) {
 			DirectiveMeta directiveMetaResult = new DirectiveMeta();
 			Element element = (Element) nodes.item(i);
-			directiveMetaResult.setName(decreaseBlank(element.getAttribute("name")));
-			directiveMetaResult.setTips(decreaseBlank(element.getAttribute("tips")));
-			directiveMetaResult.setGroup(decreaseBlank(element.getAttribute("group")));
+			directiveMetaResult.setName(decreaseBlank(element
+					.getAttribute("name")));
+			directiveMetaResult.setTips(decreaseBlank(element
+					.getAttribute("tips")));
+			directiveMetaResult.setGroup(decreaseBlank(element
+					.getAttribute("group")));
 			Set<String> tmpscope = new HashSet<String>();
 
 			if (element.getAttribute("scope").indexOf(":") == -1) {
@@ -135,28 +143,29 @@ public class MetaManager {
 				}
 				directiveMetaResult.setScope(tmpscope);
 			}
-			
-			 if(decreaseBlank(element.getAttribute("reused"))=="true")
+
+			if (decreaseBlank(element.getAttribute("reused")) == "true")
 				directiveMetaResult.setReused(true);
-			 else
-				 directiveMetaResult.setReused(false);
+			else
+				directiveMetaResult.setReused(false);
 			// ParameterMeta tmpParaMeta=new ParameterMeta();
 			List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
 			tmpParaList = FetchParamofDirective(
-					decreaseBlank(element.getAttribute("name")), decreaseBlank(element.getAttribute("group")));
+					decreaseBlank(element.getAttribute("name")),
+					decreaseBlank(element.getAttribute("group")));
 
 			directiveMetaResult.setOptions(tmpParaList);
 
 			directiveMetaList.add(directiveMetaResult);
 		}
-		
+
 		return directiveMetaList;
 	}
 
-	private List<ParameterMeta> FetchParamofDirective(String directiveName,String groupName)
-			throws ParserConfigurationException, SAXException, IOException,
-			XPathExpressionException {
-		
+	private List<ParameterMeta> FetchParamofDirective(String directiveName,
+			String groupName) throws ParserConfigurationException,
+			SAXException, IOException, XPathExpressionException {
+
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 
@@ -173,26 +182,32 @@ public class MetaManager {
 			ParameterMeta tmpParaMeta = new ParameterMeta();
 			Element recuroneelement = (Element) recuronenodes.item(j);
 
-			tmpParaMeta.setName(decreaseBlank(recuroneelement.getAttribute("name")));
-			tmpParaMeta.setValue(decreaseBlank(recuroneelement.getAttribute("value")));
-			tmpParaMeta.setClassName(decreaseBlank(recuroneelement.getAttribute("class")));
-			if ((decreaseBlank(recuroneelement.getAttribute("min")) == "")||(decreaseBlank(recuroneelement.getAttribute("min")) == null))
+			tmpParaMeta.setName(decreaseBlank(recuroneelement
+					.getAttribute("name")));
+			tmpParaMeta.setValue(decreaseBlank(recuroneelement
+					.getAttribute("value")));
+			tmpParaMeta.setClassName(decreaseBlank(recuroneelement
+					.getAttribute("class")));
+			if ((decreaseBlank(recuroneelement.getAttribute("min")) == "")
+					|| (decreaseBlank(recuroneelement.getAttribute("min")) == null))
 				tmpParaMeta.setMin(-2);
 			else
 				tmpParaMeta.setMin(Long.parseLong(decreaseBlank(recuroneelement
 						.getAttribute("min"))));
-			if ((decreaseBlank(recuroneelement.getAttribute("max")) == "")||(decreaseBlank(recuroneelement.getAttribute("max")) == null))
+			if ((decreaseBlank(recuroneelement.getAttribute("max")) == "")
+					|| (decreaseBlank(recuroneelement.getAttribute("max")) == null))
 				tmpParaMeta.setMax(-2);
 			else
 				tmpParaMeta.setMax(Long.parseLong(decreaseBlank(recuroneelement
 						.getAttribute("max"))));
-			
+
 			tmpParaMeta.setTips(recuroneelement.getAttribute("tips"));
 
 			if (decreaseBlank(recuroneelement.getAttribute("items")) != "") {
 				if (recuroneelement.getAttribute("items").indexOf(":") == -1) {
 					List<String> tmpitems = new ArrayList<String>();
-					tmpitems.add(decreaseBlank(recuroneelement.getAttribute("items")));
+					tmpitems.add(decreaseBlank(recuroneelement
+							.getAttribute("items")));
 					tmpParaMeta.setItems(tmpitems);
 				} else {
 					// recuroneelement.getAttribute("items").to
@@ -207,10 +222,11 @@ public class MetaManager {
 				}
 			} else
 				tmpParaMeta.setItems(null);
-			if (decreaseBlank(recuroneelement.getAttribute("unit") )!= "") {
+			if (decreaseBlank(recuroneelement.getAttribute("unit")) != "") {
 				if (recuroneelement.getAttribute("unit").indexOf(":") == -1) {
 					List<String> tmpunits = new ArrayList<String>();
-					tmpunits.add(decreaseBlank(recuroneelement.getAttribute("unit")));
+					tmpunits.add(decreaseBlank(recuroneelement
+							.getAttribute("unit")));
 					tmpParaMeta.setUnits(tmpunits);
 				} else {
 					String unitsvalue[] = recuroneelement.getAttribute("unit")
@@ -225,22 +241,20 @@ public class MetaManager {
 				tmpParaMeta.setUnits(null);
 			tmpParaList.add(tmpParaMeta);
 		}
-		
+
 		return tmpParaList;
 	}
 
-	private  String decreaseBlank(String str)
-	{
-		
-		 if(str==null)
+	private String decreaseBlank(String str) {
+
+		if (str == null)
 			return null;
-		 else if (!str.isEmpty())
-			{
-				return str.replaceAll(" ", "");
-			}
-		else return "";
+		else if (!str.isEmpty()) {
+			return str.replaceAll(" ", "");
+		} else
+			return "";
 	}
 
-	
+
 
 }

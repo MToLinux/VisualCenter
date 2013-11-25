@@ -38,7 +38,8 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = new DOMParser("conf/host.xml");
+		hostXml = DOMParser.getInstance();
+		
 		//hostXml=org.cs2c.vcenter.Application.domparser;
 
 	}
