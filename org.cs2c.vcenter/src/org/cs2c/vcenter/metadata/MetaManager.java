@@ -28,8 +28,8 @@ public class MetaManager {
 		domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true); // never forget this!
 		try {
-			 doc = domFactory.newDocumentBuilder().parse("ele.xml");
-		} catch (Exception e1) {
+			 doc = domFactory.newDocumentBuilder().parse("conf/element.xml");
+		} catch (SAXException | IOException | ParserConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -48,13 +48,15 @@ public class MetaManager {
 		blockMetaResult.setName(blockName);
 		try {
 			blockMetaResult.setBlockMeta(FetchBlock(blockName));
-		} catch (Exception e) {
+		} catch (ParserConfigurationException | SAXException
+				| XPathExpressionException | IOException e) {
 			e.printStackTrace();
 		}
 
 		try {
 			blockMetaResult.setDirectiveMeta(FetchDirectivesofBlock( blockName));
-		} catch (Exception e) {
+		} catch (ParserConfigurationException | SAXException
+				| XPathExpressionException | IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -250,8 +252,6 @@ public class MetaManager {
 	{
 		for(int i=0;i<directivelist.size();i++)
 		{
-			//System.out.println("name="+directivelist.get(i).getName());
-			//System.out.println("tips="+directivelist.get(i).getTips());
 			System.out.println("scope="+directivelist.get(i).getScope());
 			for(int j=0;j<directivelist.get(i).getOptions().size();j++)
 			{
