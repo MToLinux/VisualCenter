@@ -1,7 +1,7 @@
 package org.cs2c.vcenter.dialog;
 
 import java.util.ArrayList;
-
+import org.cs2c.vcenter.Application;
 import org.cs2c.vcenter.metadata.DOMParser;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -39,6 +39,7 @@ public class HostsManagerDialog extends Dialog {
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
 		hostXml = new DOMParser("conf/host.xml");
+		//hostXml=org.cs2c.vcenter.Application.domparser;
 
 	}
 

@@ -86,9 +86,14 @@ public class MetaManager {
 			blockMetaResult.setName(decreaseBlank(element.getAttribute("name")));
 			blockMetaResult.setTips(decreaseBlank(element.getAttribute("tips")));
 			blockMetaResult.setGroup(decreaseBlank(element.getAttribute("group")));
+			if(decreaseBlank(element.getAttribute("reused"))=="true")
+				blockMetaResult.setReused(true);
+			else
+				blockMetaResult.setReused(false);
 			blockMetaList.add(blockMetaResult);
+			
 		}
-		printblock(blockMetaList);
+		
 		return blockMetaList;
 	}
 
@@ -130,7 +135,11 @@ public class MetaManager {
 				}
 				directiveMetaResult.setScope(tmpscope);
 			}
-
+			
+			 if(decreaseBlank(element.getAttribute("reused"))=="true")
+				directiveMetaResult.setReused(true);
+			 else
+				 directiveMetaResult.setReused(false);
 			// ParameterMeta tmpParaMeta=new ParameterMeta();
 			List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
 			tmpParaList = FetchParamofDirective(
@@ -140,7 +149,7 @@ public class MetaManager {
 
 			directiveMetaList.add(directiveMetaResult);
 		}
-		printdirective(directiveMetaList);
+		
 		return directiveMetaList;
 	}
 
@@ -177,6 +186,7 @@ public class MetaManager {
 			else
 				tmpParaMeta.setMax(Long.parseLong(decreaseBlank(recuroneelement
 						.getAttribute("max"))));
+			
 			tmpParaMeta.setTips(recuroneelement.getAttribute("tips"));
 
 			if (decreaseBlank(recuroneelement.getAttribute("items")) != "") {
@@ -230,51 +240,7 @@ public class MetaManager {
 			}
 		else return "";
 	}
-	private static void printblock(List<BlockMeta> blocklist)
-	{
-		System.out.println("blocknum="+blocklist.size());
-	}
-	private static void printblock1(List<BlockMeta> blocklist)
-	{
-		for(int i=0;i<blocklist.size();i++)
-		{
-			System.out.println(blocklist.get(i).getName());
-			System.out.println(blocklist.get(i).getTips());
-		}
-		
-	}
-	private static void printdirective(List<DirectiveMeta> directivelist)
-	{
 
-		System.out.println("directivenum="+directivelist.size());
-	}
-	private static void printdirective1(List<DirectiveMeta> directivelist)
-	{
-		for(int i=0;i<directivelist.size();i++)
-		{
-			System.out.println("scope="+directivelist.get(i).getScope());
-			for(int j=0;j<directivelist.get(i).getOptions().size();j++)
-			{
-				System.out.println("class="+directivelist.get(i).getOptions().get(j).getClassName());
-				//System.out.println("name="+directivelist.get(i).getOptions().get(j).getName());
-				//System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin());
-				//System.out.println("max="+directivelist.get(i).getOptions().get(j).getMax());
-				//System.out.println("unit="+directivelist.get(i).getOptions().get(j).getUnit());
-				//System.out.println("items="+directivelist.get(i).getOptions().get(j).getItems());
-			}
-		}
-		
-		
-	}
-	public static void main(String[] args) {
-		MetaManager manager = new MetaManager();
-		BlockMeta blockMetaResult = new BlockMeta();
-		blockMetaResult = manager.getBlockMeta("http");
-		System.out.println(blockMetaResult.getGroups());
-		printblock1(blockMetaResult.getBlockMeta(blockMetaResult.getGroups().get(0)));
-		printdirective1(blockMetaResult.getDirectiveMeta(blockMetaResult.getGroups().get(0)));
-
-	}
 	
 
 }
