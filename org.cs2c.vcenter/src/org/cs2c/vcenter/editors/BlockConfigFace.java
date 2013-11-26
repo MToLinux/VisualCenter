@@ -118,7 +118,10 @@ public class BlockConfigFace extends EditorPart {
 		//			d、将新建的子组名与TabItem和BlockInput保存至Hashtable中。
 
 		//Step 1
-		this.blockType = input.getBlocktype();
+		//this.blockType = input.getBlocktype();
+		//Just for test!!! begin by yanbin.jia
+		this.blockType = "main";
+		//Just for test!!! end by yanbin.jia
 		
 		//Step 2
 		MetaManager mmanager = new MetaManager();
@@ -127,7 +130,7 @@ public class BlockConfigFace extends EditorPart {
 		
 		//Step 3
 		int countGroups = 0;
-		if(blockGroups != null && !blockGroups.isEmpty())
+		if(blockGroups == null && blockGroups.isEmpty())
 		{
 			return;
 		}

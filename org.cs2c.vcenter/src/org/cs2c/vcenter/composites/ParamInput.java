@@ -10,7 +10,7 @@ import org.cs2c.vcenter.metadata.ParameterMeta;
  * @author CS2C
  *
  */
-public interface ParamInput {
+public interface ParamInput  {
 
 	void setMeta(ParameterMeta meta);
 	

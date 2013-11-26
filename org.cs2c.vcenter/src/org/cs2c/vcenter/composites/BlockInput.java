@@ -49,6 +49,8 @@ public class BlockInput extends Composite {
 	private String blockIndex = null;
 	private Configurator orc = null;
 	
+	final String strBlockMark = " {...}";
+
 	//Metadata
 	private BlockMeta bMeta = new BlockMeta();
 	
@@ -113,14 +115,16 @@ public class BlockInput extends Composite {
 				
 				//执行步骤:
 				//1、获取对应本Block的元数据信息(directiveMetas,blockMetas);
-				//2、根据directiveMetas和blockMetas，创建Name List(包含所有directiveMetas和blockMetas的名字的List);
-				//3、将已添加到本Block的Directive，Block的名字从Name List中删除，从而生成可添加的Name List;
+				//2、创建Name List，将Block现有的Directive添加到Name List;(包含所有directiveMetas和blockMetas的名字的List)
+				//3、根据directiveMetas和blockMetas，对每个Meta进行如下操作从而生成可添加的Name List:
+				//		(1)若Meta不在Name List中，则将其添加到Name List;
+				//		(2)若Meta在Name List中，且该directive不可重复使用(DirectiveMeta::getgetReused()==TRUE)，则将其从Name List删除;否则，不做任何处理。
 				//4、以可添加的Name List为数据源，创建ElementSelector;
 				//5、若ElementSelector::open()返回OK，即点击OK按钮导致ElementSelector退出，则根据所选Directive，Block的Name和组创建参数设置对话框ElementSetDialog;
 				//6、若ElementSetDialog::open()返回OK，即点击OK按钮导致ElementSetDialog退出，则根据所设置的Directive，Block参数值更新Block,并更新List.
 				//7、若添加Directive，Block成功，则更新flagChanged为TRUE。
 				
-				//Step 1 --- 上述Step-3
+				//Step 1
 				java.util.List<DirectiveMeta> directiveMetas = new ArrayList<DirectiveMeta>();
 				java.util.List<BlockMeta> blockMetas = new ArrayList<BlockMeta>();
 				directiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
@@ -131,53 +135,60 @@ public class BlockInput extends Composite {
 				
 				int count = 0;
 				int i = 0;
+				
+				if(directives != null && !directives.isEmpty())
+				{
+					count = directives.size();
+					i = 0;
+					while(i < count)
+					{
+						elementNames.add(directives.get(i).getName());
+						i++;
+					}
+				}
+				if(blocks != null && !blocks.isEmpty())
+				{
+					count = blocks.size();
+					i = 0;
+					while(i < count)
+					{
+						elementNames.add(blocks.get(i).getName()+strBlockMark);
+						i++;
+					}
+				}
+				
+				//Step 3
 				if(directiveMetas != null && !directiveMetas.isEmpty())
 				{
 					count = directiveMetas.size();
 					i = 0;
 					while(i<count)
 					{
-						elementNames.add(directiveMetas.get(i).getName());
+						if(!elementNames.contains(directiveMetas.get(i).getName()))
+						{
+							elementNames.add(directiveMetas.get(i).getName());
+						}
+						else if(!directiveMetas.get(i).getReused())
+						{
+							elementNames.remove(directiveMetas.get(i).getName());
+						}
 						i++;
 					}
 				}
-				count = 0;
-				i = 0;
 				if(blockMetas != null && !blockMetas.isEmpty())
 				{
 					count = blockMetas.size();
 					i = 0;
 					while(i<count)
 					{
-						elementNames.add(blockMetas.get(i).getName()+" {...}");
-						i++;
-					}
-				}
-				
-				//Step 3
-				count = 0;
-				i = 0;
-				if(directives != null && !directives.isEmpty())
-				{
-					count = directives.size();
-					while(i<count)
-					{
-						//判断是否可重复！！！
-						//判断是否可重复！！！
-						elementNames.remove(directives.get(i).getName());
-						i++;
-					}
-				}
-				count = 0;
-				i = 0;
-				if(blocks != null && !blocks.isEmpty())
-				{
-					count = blocks.size();
-					while(i<count)
-					{
-						//判断是否可重复！！！
-						//判断是否可重复！！！
-						elementNames.remove(blocks.get(i).getName()+" {...}");
+						if(!elementNames.contains(blockMetas.get(i).getName()+strBlockMark))
+						{
+							elementNames.add(blockMetas.get(i).getName()+strBlockMark);
+						}
+						//else if(!blockMetas.get(i).getReused())
+						//{
+							elementNames.remove(blockMetas.get(i).getName()+strBlockMark);
+						//}
 						i++;
 					}
 				}
@@ -198,19 +209,37 @@ public class BlockInput extends Composite {
 					
 					//Step 2
 					int len = selEleName.length();
-					if(len > 6 && selEleName.substring(selEleName.length()-6,selEleName.length()).equals(" {...}"))
+					if(len > 6 && selEleName.substring(selEleName.length()-6,selEleName.length()).equals(strBlockMark))
 					{
+						//编辑Block
 						BlockInput bInput = null;
 					}
 					else
 					{
-						DirectiveInput eldlg = new DirectiveInput(new Shell(), selEleName);
+						DirectiveMeta dMeta = null;
+						count = directiveMetas.size();
+						i = 0;
+						while(i < count)
+						{
+							dMeta = directiveMetas.get(i);
+							if(selEleName == dMeta.getName())
+							{
+								break;
+							}
+							i++;
+						}
+						if(dMeta == null)
+						{
+							return;
+						}
+						
+						DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);
 					
 						//Step 6
-						if(Window.OK == eldlg.open())
+						if(Window.OK == dInput.open())
 						{
 							//获取设置的Directive信息
-							//Stirng selEleValue = eldlg.getEleValue();
+							//Stirng selEleValue = dInput.getEleValue();
 							String selEleValue = "DefaultValue";
 							
 							RecDirective dirct = new RecDirective();
@@ -263,18 +292,38 @@ public class BlockInput extends Composite {
 				String directiveName = dirct.getName();
 				
 				//Step 2
-				DirectiveInput eldlg = new DirectiveInput(new Shell(), directiveString);
+				java.util.List<DirectiveMeta> directiveMetas = new ArrayList<DirectiveMeta>();
+				directiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
+				
+				DirectiveMeta dMeta = null;
+				int count = directiveMetas.size();
+				int i = 0;
+				while(i < count)
+				{
+					dMeta = directiveMetas.get(i);
+					if(directiveName == dMeta.getName())
+					{
+						break;
+					}
+					i++;
+				}
+				if(dMeta == null)
+				{
+					return;
+				}
+				
+				DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);
 				
 				//Step 3
-				if(Window.OK == eldlg.open())
+				if(Window.OK == dInput.open())
 				{
 					//获取设置的Directive信息
-					//Stirng selEleValue = eldlg.get...();
+					//Stirng selEleValue = dInput.getEleValue();
 					String selEleValue = "DefaultValue";
 					
 					directives.remove(dirct);
 					dirct.SetDirectiveText(directiveName+selEleValue);
-					int count = directives.size();
+					count = directives.size();
 					directives.add(count, dirct);
 					UpdateListCtl();
 					

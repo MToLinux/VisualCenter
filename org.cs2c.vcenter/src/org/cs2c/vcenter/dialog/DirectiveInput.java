@@ -1,99 +1,44 @@
 package org.cs2c.vcenter.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.cs2c.vcenter.composites.IntParamInput;
+import org.cs2c.vcenter.composites.OptionIntParamInput;
+import org.cs2c.vcenter.composites.OptionStringParamInput;
+import org.cs2c.vcenter.composites.SelectParamInput;
+import org.cs2c.vcenter.composites.StringParamInput;
+import org.cs2c.vcenter.composites.TagParamInput;
+import org.cs2c.vcenter.metadata.DirectiveMeta;
+import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 public class DirectiveInput extends Dialog {
 	
+	private DirectiveMeta dMeta = null;
 	private String directiveString = null;
 	
-	private org.eclipse.swt.widgets.List ctlList;
-	private Button btnAdd;
-	private Button btnEdit;
-	private Button btnDelete;
-	
-	private Text textParam;
-
+	private String directiveName = null;
+	private String directiveValue = null;
 	/**
 	 * @wbp.parser.constructor
 	 */
 	
-	public DirectiveInput(Shell parent, String directiveString) {
+	public DirectiveInput(Shell parent, DirectiveMeta dMeta) {
 		super(parent);
-		this.directiveString = directiveString;
+		
+		this.dMeta = dMeta;
+		this.directiveString = dMeta.getName();
 
 	}
 	
 	protected Control createDialogArea(Composite parent) {
-		
-		//Composite
-		Composite composite = (Composite)super.createDialogArea(parent);
-
-		//Layout
-		composite.layout(true);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		composite.setLayout(new GridLayout(3,false));
-	    
-		//1
-		ctlList = new List(composite, SWT.BORDER | SWT.V_SCROLL);
-		ctlList.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		GridData gridDataList=new GridData(GridData.FILL_BOTH);
-	    gridDataList.verticalSpan=6;
-	    ctlList.setLayoutData(gridDataList);
-		
-	    //2
-		new Label(composite, SWT.NONE);
-		
-		//3
-		btnAdd = new Button(composite,SWT.NONE);
-			
-		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnAdd.setText("Add...");
-		
-		//4
-		new Label(composite, SWT.NONE);
-		
-		//5
-		new Label(composite, SWT.NONE);
-		
-		//6
-		new Label(composite, SWT.NONE);
-		
-		//7
-		this.btnEdit = new Button(composite,SWT.NONE);
-		
-		this.btnEdit.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		this.btnEdit.setText("Edit...");
-		
-		//8
-		new Label(composite, SWT.NONE);
-		
-		//9
-		new Label(composite, SWT.NONE);
-		
-		//10
-		new Label(composite, SWT.NONE);
-		
-		//11
-		btnDelete = new Button(composite,SWT.NONE);
-		
-		btnDelete.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnDelete.setText("   Delete   ");
-		
-		//12
-		new Label(composite, SWT.NONE);
-		
-		//13
-		new Label(composite, SWT.NONE);
 		
 		//StringParamInput
 		//        以普通字符串作为指令参数。
@@ -105,15 +50,84 @@ public class DirectiveInput extends Dialog {
 		//        以“[name]=[value]”形式的指令参数，其中[value]需提供spinner获取整数值，可能有单位，如open_file_cache max=1000 inactive=20s
 		//OptionStringParamInput
 		//         以“[name]=[value]”形式的指令参数，其中[value]需提供Text获取普通字符串值。
-		//DirectiveInput
-		//         负责对某个指令进行输入，指令可能具有一个或者多个参数，而参数需要特定自定义控件获取用户的输入，具体的控件类型依据meta对象而定。
-		//BlockInput
-		//        负责输入一个Block在内的各种指令。包括一个List 框，添加按钮，编辑按钮，删除按钮。
-		//ElementSelector
-		//        类似于Eclipse中接口和类选择时的选择器，允许搜索。
 		
-		//1、StringParamInput
-		textParam = new Text(parent, SWT.NONE);
+		
+		//Composite
+		Composite composite = (Composite)super.createDialogArea(parent);
+
+		//Layout
+		composite.layout(true);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayout(new GridLayout(1,false));
+		
+		List<ParameterMeta> listParamMetas = new ArrayList<ParameterMeta>();
+		listParamMetas = dMeta.getOptions();
+		if(listParamMetas!=null && !listParamMetas.isEmpty())
+		{
+			int count = listParamMetas.size();
+			int i = 0;
+			while(i < count)
+			{
+				ParameterMeta pMeta = listParamMetas.get(i);
+				String strClassName = pMeta.getClassName();
+				if(strClassName == "OptionIntParamInput")
+				{
+					//OptionIntParamInput
+					OptionIntParamInput oppInput = new OptionIntParamInput(composite, SWT.NONE);
+					oppInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
+					gridDataList_opp.verticalSpan=1;
+				    oppInput.setLayoutData(gridDataList_opp);
+				}
+				else if(strClassName == "OptionIntParamInput")
+				{
+					//OptionStringParamInput
+					OptionStringParamInput ospInput = new OptionStringParamInput(composite, SWT.NONE);
+				    ospInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_osp=new GridData(GridData.FILL_BOTH);
+					gridDataList_osp.verticalSpan=1;
+				    ospInput.setLayoutData(gridDataList_osp);
+				}
+				else if(strClassName == "OptionIntParamInput")
+				{
+					//IntParamInput
+					IntParamInput ipInput = new IntParamInput(composite, SWT.NONE);
+				    ipInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_ip=new GridData(GridData.FILL_BOTH);
+					gridDataList_ip.verticalSpan=1;
+					ipInput.setLayoutData(gridDataList_ip);
+				}
+				else if(strClassName == "OptionIntParamInput")
+				{
+					//StringParamInput
+					StringParamInput strpInput = new StringParamInput(composite, SWT.NONE);
+					strpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_strp=new GridData(GridData.FILL_BOTH);
+					gridDataList_strp.verticalSpan=1;
+					strpInput.setLayoutData(gridDataList_strp);
+				}
+				else if(strClassName == "OptionIntParamInput")
+				{
+					//SelectParamInput
+					SelectParamInput slctpInput = new SelectParamInput(composite, SWT.NONE);
+					slctpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_slctp=new GridData(GridData.FILL_BOTH);
+					gridDataList_slctp.verticalSpan=1;
+					slctpInput.setLayoutData(gridDataList_slctp);
+				}
+				else if(strClassName == "OptionIntParamInput")
+				{
+					//TagParamInput
+					TagParamInput tagpInput = new TagParamInput(composite, SWT.NONE);
+					tagpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+					GridData gridDataList_tagp=new GridData(GridData.FILL_BOTH);
+					gridDataList_tagp.verticalSpan=1;
+					tagpInput.setLayoutData(gridDataList_tagp);
+				}
+				
+				i++;
+			}
+		}
 		
 	    return composite;
    }
