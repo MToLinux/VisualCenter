@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -15,7 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -26,13 +27,27 @@ public class DOMParser {
 	String hostName = null;
 	String userName = null;
 	String passWord = null;
+	private static class DOMParserHoder{
+		
+		private static DOMParser instance=new DOMParser("conf/host.xml");
+		
+	}
+	
+	
 
-	public DOMParser(String filePath) {
+	public static  DOMParser getInstance(){
+		return DOMParserHoder.instance; 
+
+			 
+	}
+	private DOMParser(String filePath) {
+		//System.out.println("create domparser");
 		document = parseXml(filePath);
 	}
 
 	public  Document getDocument()
 	{
+		
 		return document;
 	}
 	// Load and parse XML file into DOM
@@ -74,8 +89,8 @@ public class DOMParser {
 		HostInfo hostInfo = new HostInfo();
 
 		String host[] = mainHostInfo.split("-", 2);
-		System.out.println(host[0]);
-		System.out.println(host[1]);
+		//System.out.println(host[0]);
+		//System.out.println(host[1]);
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
@@ -104,8 +119,8 @@ public class DOMParser {
 
 	public boolean deleteHostInfo(String mainHostInfo) {
 		String host[] = mainHostInfo.split("-", 2);
-		System.out.println(host[0]);
-		System.out.println(host[1]);
+		//System.out.println(host[0]);
+		//System.out.println(host[1]);
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
@@ -119,14 +134,14 @@ public class DOMParser {
 				if (nodeList.item(i).getParentNode()
 						.removeChild(nodeList.item(i)) != null) {
 					// delete the blank line
-					System.out.println(rootElement.getElementsByTagName("host")
-							.getLength());
-
+					//System.out.println(rootElement.getElementsByTagName("host")
+					//		.getLength());
+					
 					return true;
 				}
 			}
 		}
-		System.out.println("112");
+		//System.out.println("112");
 		return false;
 	}
 
@@ -177,12 +192,26 @@ public class DOMParser {
 	}
 
 	public boolean saveXml(Document document, String filename) {
+		
+		
+		Element rootElement = document.getDocumentElement();
+		NodeList nodeList = rootElement.getElementsByTagName("host");
+		System.out
+				.println(rootElement.getElementsByTagName("host").getLength());
+		for (int i = 0; i < nodeList.getLength(); i++) {
+			Element element = (Element) nodeList.item(i);
+			//System.out.println(element.getAttribute(i+"name"));
+		}
+		
+		
 		// TODO Auto-generated method stub
 		boolean flag = true;
 		try {
+			
 			/** 将document中的内容写入文件中 */
 			TransformerFactory tFactory = TransformerFactory.newInstance();
 			Transformer transformer = tFactory.newTransformer();
+			//transformer.setoutpu
 			/** 编码 */
 			// transformer.setOutputProperty(OutputKeys.ENCODING, "GB2312");
 			DOMSource source = new DOMSource(document);
@@ -196,27 +225,5 @@ public class DOMParser {
 		return flag;
 	}
 
-	public static void main(String[] args) {
-		DOMParser parser = new DOMParser("d:/host.xml");
-		/*
-		 * if(parser.deleteHostInfo("host.xml","Nginx-10.1.50.4"))
-		 * System.out.println("ok");
-		 */
-
-		HostInfo hostInfo = null;
-		hostInfo = new HostInfo();
-		hostInfo.setManagerPassWord("10.1.50.5");
-		hostInfo.setHome("112");
-		hostInfo.setManagerPassWord("111");
-		hostInfo.setManagerUserName("Nginx");
-		hostInfo.setPassWord("111");
-		hostInfo.setUserName("111");
-		hostInfo.setMiddleware("111");
-		hostInfo.setHostName("23");
-
-		if (parser.saveHostInfo("d:/host.xml", hostInfo) == true)
-			System.out.println("ok");
-
-		System.out.println(parser.getMainHostInfo());
-	}
+	
 }

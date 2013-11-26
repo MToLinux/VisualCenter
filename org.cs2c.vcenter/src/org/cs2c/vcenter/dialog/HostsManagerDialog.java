@@ -1,7 +1,7 @@
 package org.cs2c.vcenter.dialog;
 
 import java.util.ArrayList;
-
+import org.cs2c.vcenter.Application;
 import org.cs2c.vcenter.metadata.DOMParser;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -38,7 +38,9 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = new DOMParser("d:/host.xml");
+		hostXml = DOMParser.getInstance();
+		
+		//hostXml=org.cs2c.vcenter.Application.domparser;
 
 	}
 
@@ -108,7 +110,7 @@ public class HostsManagerDialog extends Dialog {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 
-		btnNewButton_1.setEnabled(false);
+		
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -132,14 +134,14 @@ public class HostsManagerDialog extends Dialog {
 		btnNewButton_1.setText("Edit");
 		new Label(container, SWT.NONE);
 
-		btnNewButton_2.setEnabled(false); 
+		
 		btnNewButton_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 2, 1));
 		btnNewButton_2.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				hostXml.deleteHostInfo(list.getSelection()[0]);		
-				hostXml.saveXml(hostXml.getDocument(), "d:/host.xml");
+				hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
 				
 				getHostsInfoFromXml();
 

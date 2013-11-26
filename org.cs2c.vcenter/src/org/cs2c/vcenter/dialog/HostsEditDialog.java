@@ -110,9 +110,10 @@ public class HostsEditDialog extends Dialog {
 		btnOk.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				hostXml.saveHostInfo("d:/host.xml", hostInfo);
+				
 				if(contentIsValid())
 				{
+					hostXml.saveHostInfo("conf/host.xml", hostInfo);
 					setReturnCode(OK);
 					close();
 				}
@@ -121,7 +122,7 @@ public class HostsEditDialog extends Dialog {
 		});
 
 		btnOk.setText("   OK   ");
-		btnOk.setEnabled(false);
+		//btnOk.setEnabled(false);
 		new Label(container, SWT.NONE);
 
 		Group grpMiddlewareinfo = new Group(container, SWT.NONE);
@@ -197,48 +198,41 @@ public class HostsEditDialog extends Dialog {
 		text_1.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setUserName(text_1.getText());
-				//contentIsValid();
 			}
 		});
 
 		text_2.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setPassWord(text_2.getText());
-				//contentIsValid();
 			}
 		});
 
 		text_4.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setMiddleware(text_4.getText());
-				//contentIsValid();
 			}
 		});
 
 		text_5.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setHome(text_5.getText());
-				//contentIsValid();
 			}
 		});
 
 		text_6.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setStatusPath(text_6.getText());
-				//contentIsValid();
 			}
 		});
 
 		text_7.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setManagerUserName(text_7.getText());
-				//contentIsValid();
 			}
 		});
 		text_8.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				hostInfo.setManagerPassWord(text_8.getText());
-				//contentIsValid();
 			}
 		});
 
@@ -283,53 +277,126 @@ public class HostsEditDialog extends Dialog {
 		return new Point(515, 513);
 	}
 
+	
 	private boolean contentIsValid() {
-		if (!(text_5.getText().isEmpty() || text_4.getText().isEmpty()
-				|| text_2.getText().isEmpty() || text_1.getText().isEmpty()
-				|| text.getText().isEmpty() )) {
+		
+		if(text.getText().isEmpty())
 		{
-			btnOk.setEnabled(true);
-			if(isPathValid(text_5.getText())==false)
-			{
-				MessageDialog.openWarning(null, "Warning", "Home is invalid");
-			}
+			MessageDialog.openWarning(getParentShell(), "Warning", "HostName is empty");
+			return false;
 		}
-
-		} else
-			btnOk.setEnabled(false);
+		if(text_1.getText().isEmpty())
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Username is empty");
+			return false;
+		}
+		if(text_2.getText().isEmpty())
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Password is empty");
+			return false;
+		}
+		if(text_4.getText().isEmpty())
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Middleware is empty");
+			return false;
+		}
+		if(text_5.getText().isEmpty())
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Home is empty");
+			return false;
+		}
+		if(!(isIPValid(text.getText())||isHostNameValid(text.getText())))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "HostName is invalid");
+			return false;
+		}
+		if(!isUserNameValid(text_1.getText()))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "UserName is invalid");
+			return false;
+		}
+		if(!isPassWordValid(text_2.getText()))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "PassWord is invalid");
+			return false;
+		}
+		if(!isMiddlewareNameValid(text_4.getText()))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "MiddlewareName is invalid");
+			return false;
+		}
+		if(!isPathValid(text_5.getText()))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Path is invalid");
+			return false;
+		}
+		if((!text_6.getText().isEmpty())&&(!isPathValid(text_6.getText())))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "Path for manager is invalid");
+			return false;
+		}
+		if((!text_7.getText().isEmpty())&&(!isUserNameValid(text_7.getText())))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "UserName for manager is invalid");
+			return false;
+		}
+		if((!text_8.getText().isEmpty())&&(!isPassWordValid(text_8.getText())))
+		{
+			MessageDialog.openWarning(getParentShell(), "Warning", "PassWord for manager is invalid");
+			return false;
+		}
 		return true;
+		
 	}
 	
 	private boolean isIPValid(String str)
 	{
-		
-			Pattern pattern = Pattern.compile("//b((?!//d//d//d)//d+|1//d//d|2[0-4]//d|25[0-5])//.((?!//d//d//d)//d+|1//d//d|2[0-4]//d|25[0-5])//.((?!//d//d//d)//d+|1//d//d|2[0-4]//d|25[0-5])//.((?!//d//d//d)//d+|1//d//d|2[0-4]//d|25[0-5])//b");
+		   /*
+			Pattern pattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
 			Matcher matcher = pattern.matcher(str);
 			return matcher.matches();
-		
-		
+			*/
+		return true;
 	}
 	
 	private boolean isHostNameValid(String str)
 	{
-		Pattern pattern = Pattern.compile("\b[a-zA-Z-]|[-]{1}[0-9a-zA-Z-]|[-]{5-20}");
+		/*
+		Pattern pattern = Pattern.compile("\b(([a-zA-Z0-9]\\w{0,61}?[a-zA-Z0-9]|[a-zA-Z0-9]).){1,2}(com|edu|gov|int|mil|net|org|biz|info|name|museum|coop|aero|[a-z][a-z])(.[a-z][a-z]){0,1}\b");		
+		Matcher matcher = pattern.matcher(str);
+		return matcher.matches();
+		*/
+		return true;
+	}
+	
+	private boolean isUserNameValid(String str)
+	{
+		Pattern pattern = Pattern.compile("[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]?");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
-	
 	private boolean isPathValid(String str)
 	{
-		Pattern pattern = Pattern.compile( "\b/[0-9a-zA-Z]|[-_]+[/]+$");
+		//Pattern pattern = Pattern.compile( "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
+		Pattern pattern = Pattern.compile( "(\\/([0-9a-zA-Z]+))+/");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
 	
 	private boolean isPassWordValid(String str)
 	{
-		//Pattern pattern = Pattern.compile("\b[0-9a-zA-Z][0-9a-zA-Z_]{7-20}" );
-		Pattern pattern = Pattern.compile("^W+$" );
-		
+		Pattern pattern = Pattern.compile("^[a-zA-Z]\\w*$" );				
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
+	private boolean isMiddlewareNameValid(String str)
+	{
+		/*
+		Pattern pattern = Pattern.compile("[A-Za-z][A-Za-z0-9_.]*[A-Za-z0-9_.$-]?" );		
+		Matcher matcher = pattern.matcher(str);
+		return matcher.matches();
+		*/
+		return true;
+	}
+	
 }
