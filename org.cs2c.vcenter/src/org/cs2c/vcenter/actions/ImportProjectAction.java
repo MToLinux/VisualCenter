@@ -59,6 +59,7 @@ public class ImportProjectAction extends Action {
 		super("Import...");
 		this.setId(ImportProjectAction.ID);
 		this.setImageDescriptor(Activator.getImageDescriptor("icons/project_import.png"));
+		this.window = window;
 	}
 	@Override
 	public void run(){
@@ -70,8 +71,10 @@ public class ImportProjectAction extends Action {
 		Importmiddleware dialog = new Importmiddleware(window.getShell());
 		dialog.init(list);
 	    dialog.open();
-	    
-	    
+	    String selectitem = dialog.getServername();
+	    if((null == selectitem)||("" == selectitem.trim())){
+	    	return;
+	    }
 
 		// gethostinfo
 		
@@ -87,6 +90,7 @@ public class ImportProjectAction extends Action {
 			e.printStackTrace();
 			return;
 		}
+		
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
 		view.addProject("Nginx 10.1.50.4", middle);
