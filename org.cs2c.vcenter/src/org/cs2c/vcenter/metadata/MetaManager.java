@@ -38,7 +38,7 @@ public class MetaManager {
 		domFactory.setNamespaceAware(true); // never forget this!
 		try {
 			doc = domFactory.newDocumentBuilder().parse("conf/element.xml");
-		} catch (SAXException | IOException | ParserConfigurationException e1) {
+		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
@@ -51,15 +51,13 @@ public class MetaManager {
 		blockMetaResult.setName(blockName);
 		try {
 			blockMetaResult.setBlockMeta(FetchBlock(blockName));
-		} catch (ParserConfigurationException | SAXException
-				| XPathExpressionException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		try {
 			blockMetaResult.setDirectiveMeta(FetchDirectivesofBlock(blockName));
-		} catch (ParserConfigurationException | SAXException
-				| XPathExpressionException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
