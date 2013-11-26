@@ -98,9 +98,9 @@
 </directive> 
 <directive name="open_log_file_cache" tips="Sets the path, format, and configuration for a buffered log write " scope="http:server:location" group="gzip">
 <param class="OptionIntParamInput" name="max" min="0" max="9999999" unit="" tip="'0' is off"/>
-<param class=" OptionIntParamInput " name="inactive" min="1" max="9999999" unit="s" default="10"/>
-<param class=" OptionIntParamInput " name="min_user"  min="1" max="9999999" unit="" default="1"/>
-<param class=" OptionIntParamInput " name="valid" min="1" max="9999999" unit="s" default="60"/>
+<param class="OptionIntParamInput " name="inactive" min="1" max="9999999" unit="s" default="10"/>
+<param class="OptionIntParamInput " name="min_user"  min="1" max="9999999" unit="" default="1"/>
+<param class="OptionIntParamInput " name="valid" min="1" max="9999999" unit="s" default="60"/>
 </directive> 
 <directive name="add_before_body" tips="Adds the text returned as a result of processing a given subrequest before the response body." scope="http:server:location" group="others">
 <param class="StringParamInput" tip="An empty string means to cancel addition inherited from the previous configuration level " />
@@ -164,10 +164,10 @@
 <param class="StringParamInput" tip="" />
 </directive> 
 <directive name="directio" tips="Enables the use of the O_DIRECT flag (FreeBSD, Linux), the F_NOCACHE flag (Mac OS X), or the directio() function (Solaris), when reading files that are larger than or equal to the specified size-------appeared in version 0.7.7" scope="http:server :location" group="gzip">
-<param class=" OptionIntParamInput " name="max" min="0" max="9999999" unit="M" tip="'0' means off"/>
+<param class="OptionIntParamInput " name="max" min="0" max="9999999" unit="M" tip="'0' means off"/>
 </directive>
 <directive name="direction_alignment" tips="Sets the alignment for directio----appeared in version 0.8.11" scope="http:server :location" group="gzip">
-<param class=" OptionIntParamInput " name="max" min="0" max="9999999" unit="M" />
+<param class="OptionIntParamInput " name="max" min="0" max="9999999" unit="M" />
 </directive> 
 <directive name="disable_symlinks" tips="Determines how symbolic links should be treated when opening files------appeared in version 1.1.15" scope=" http:server:location" group="gzip">
 <param class="SelectParamInput" items="on:off:if_not_owner"/>
@@ -198,7 +198,7 @@
 </directive> 
 <directive name="keepalive_timeout" tips="The first parameter sets a timeout during which a keep-alive client connection will stay open on the server side. The zero value disables keep-alive client connections. The optional second parameter sets a value in the 'Keep-Alive: timeout=time' response header field. Two parameters may differ. " scope=" http:server:location " group="client">
 <param class="IntParamInput" min="0" max="9999999" unit="s" />
-<param class="OptionIntParamInput" min="0" max="9999999" unit="s" tips="optional"/>
+<param class="IntParamInput" min="0" max="9999999" unit="s" tips="optional"/>
 </directive> 
 <directive name="large_client_header_buffers" tips="Sets the maximum number and size of buffers used for reading large client request header. " scope="http:server" group="client">
 <param class="IntParamInput" min="0" max="9999999" unit=""/>
@@ -244,8 +244,8 @@
 <param class="SelectParamInput" items="off" tip=""/>
 </directive> 
 <directive name="open_file_cache" tips="Configures a cache that can store" scope="http:server:location " group="gzip">
-<param name="max" class="OptionIntParamInput" min="0" max="999" unit=""/>
-<param name="inactive" class="OptionIntParamInput" min="0" max="999" unit="s" tips="optional"/>
+<param name="max" class="IntParamInput" min="0" max="999" unit=""/>
+<param name="inactive" class="IntParamInput" min="0" max="999" unit="s" tips="optional"/>
 </directive> 
 <directive name="open_file_cache_errors" tips="Enables or disables caching of file lookup errors by open_file_cache." scope="http:server:location " group="gzip">
 <param class="SelectParamInput" items="off:on" />
@@ -276,7 +276,7 @@
 </directive> 
 <directive name="resolver" tips="Configures name servers used to resolve names of upstream servers into addresses" scope=" http:server:location " group="others">
 <param class="StringParamInput" tip="as 127.0.0.1 [::1]:5353"/>
-<param name="valid" class="OptionIntParamInput" min="0" max="999" unit="s"/>
+<param name="valid" class="IntParamInput" min="0" max="999" unit="s"/>
 </directive> 
 <directive name="resolver_timeout" tips="Sets a timeout for name resolution" scope=" http:server:location " group="others">
 <param class="IntParamInput" min="1" max="99999" unit="s"/>
@@ -699,8 +699,8 @@
 <param name="interval" class="OptionIntParamInput" min="1" max="9999999" unit="s" tips="optional"/>
 <param name="fails" class="OptionIntParamInput" min="0" max="9999999" unit="" tips="optional"/>
 <param name="passes " class="OptionIntParamInput" min="1" max="999" unit="" tips="optional"/>
-<param name="uri" class="StringParamInput" tips="optional" />
-<param name="match" class="StringParamInput" tips="optional" />
+<param name="uri" class="OptionStringParamInput" tips="optional" />
+<param name="match" class="OptionStringParamInput" tips="optional" />
 </directive>
 <block name="match" tips="Defines the named test set used to verify responses to health check requests." scope="location"  group="basic">
 <param class="StringParamInput"/>
@@ -708,8 +708,8 @@
 <directive name="sticky_cookie_insert" tips="Enables session affinity, which causes requests from the same client to be passed to the same server in a group of servers. " scope="upstream"  group="basic">
 <param class="StringParamInput"/>
 <param name="expires" class="OptionIntParamInput" min="1" max="999" unit="s" tips="optional"/>
-<param name="domain" class="StringParamInput" tips="optional"/>
-<param name="path" class="StringParamInput" tips="optional"/>
+<param name="domain" class="OptionStringParamInput" tips="optional"/>
+<param name="path" class="OptionStringParamInput" tips="optional"/>
 </directive>
 <directive name="upstream_conf " scope="location" tips="Turns on the HTTP interface of upstream configuration in the surrounding location. " group="basic">
 </directive>

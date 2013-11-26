@@ -7,6 +7,7 @@ import java.util.Set;
 public class BlockMeta {
 	private String name;
 	private String tips;
+	private boolean reused=false;
 	private List<DirectiveMeta> directiveMeta=null;
 	private List<BlockMeta> blockMeta=null;
 	private String group=null;
@@ -96,5 +97,13 @@ public class BlockMeta {
 			}
 		}
 		return tmpBlockList;
+	}
+	public boolean getReused()
+	{
+		return this.reused;
+	}
+	public void setReused(boolean para)
+	{
+		reused=para;
 	}
 }

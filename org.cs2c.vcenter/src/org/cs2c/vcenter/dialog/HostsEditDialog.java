@@ -378,7 +378,7 @@ public class HostsEditDialog extends Dialog {
 	private boolean isPathValid(String str)
 	{
 		//Pattern pattern = Pattern.compile( "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
-		Pattern pattern = Pattern.compile( "(\\/([0-9a-zA-Z]+))+");
+		Pattern pattern = Pattern.compile( "(\\/([0-9a-zA-Z]+))+/");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
