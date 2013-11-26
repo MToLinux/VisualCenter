@@ -10,8 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 
 public class SelectParamInput extends Composite implements ParamInput {
 
-	//以Combo指定的可选值中选择作为指令的参数
-	
 	String strParam;
 	Combo ctlCombo;
 	

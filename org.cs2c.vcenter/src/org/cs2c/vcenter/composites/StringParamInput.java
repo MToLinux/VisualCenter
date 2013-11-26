@@ -15,8 +15,6 @@ public class StringParamInput extends Composite implements ParamInput {
 	String strPara;
 	Text ctlText;
 
-	//以普通字符串作为指令参数
-	
 	public StringParamInput(Composite parent, int style) {
 		super(parent, style);
 
@@ -26,7 +24,6 @@ public class StringParamInput extends Composite implements ParamInput {
 		
 		ctlText = new Text(this,SWT.NONE);
 		ctlText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		//ctlText.setText("StringParamInput");
 	
 	}
 

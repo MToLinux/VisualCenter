@@ -3,6 +3,8 @@ package org.cs2c.vcenter.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cs2c.nginlib.config.Parameter;
+import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.vcenter.composites.IntParamInput;
 import org.cs2c.vcenter.composites.OptionIntParamInput;
 import org.cs2c.vcenter.composites.OptionStringParamInput;
@@ -20,6 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
 public class DirectiveInput extends Dialog {
+	
+	List<Parameter> listParam = new ArrayList<Parameter>();
 	
 	private DirectiveMeta dMeta = null;
 	private String directiveString = null;
@@ -39,18 +43,6 @@ public class DirectiveInput extends Dialog {
 	}
 	
 	protected Control createDialogArea(Composite parent) {
-		
-		//StringParamInput
-		//        以普通字符串作为指令参数。
-		//IntParamInput
-		//        以Spinner获取的整数作为指令参数，可有单位，单位提供Combo进行选择。
-		//SelectParamInput
-		//        以Combo指定的可选值中选择作为指令的参数
-		//OptionIntParamInput
-		//        以“[name]=[value]”形式的指令参数，其中[value]需提供spinner获取整数值，可能有单位，如open_file_cache max=1000 inactive=20s
-		//OptionStringParamInput
-		//         以“[name]=[value]”形式的指令参数，其中[value]需提供Text获取普通字符串值。
-		
 		
 		//Composite
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -132,9 +124,9 @@ public class DirectiveInput extends Dialog {
 	    return composite;
    }
 	
-	public String getEleValue()
+	public List<Parameter> getParams()
 	{
-		return directiveString;
+		return listParam;
 	}
 
 }

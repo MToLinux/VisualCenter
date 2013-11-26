@@ -7,19 +7,24 @@ import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Configurator;
 import org.cs2c.nginlib.config.Directive;
+import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.nginlib.config.RecDirective;
+import org.cs2c.nginlib.config.RecStringParameter;
+import org.cs2c.vcenter.dialog.BlockInputDialog;
 import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.dialog.ElementSelector;
 import org.cs2c.vcenter.metadata.BlockMeta;
 import org.cs2c.vcenter.metadata.DirectiveMeta;
 import org.cs2c.vcenter.metadata.MetaManager;
+import org.cs2c.vcenter.views.models.HttpElement;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
@@ -29,8 +34,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 
 public class BlockInput extends Composite {
-	
-	//负责输入一个Block在内的各种指令。包括一个List 框，添加按钮，编辑按钮，删除按钮。
 	
 	private org.eclipse.swt.widgets.List ctlList;
 	private Button btnAdd;
@@ -62,14 +65,7 @@ public class BlockInput extends Composite {
 	
 	public BlockInput(Composite parent, int style, TreeElement input, BlockMeta blkMeta, String blkSubGroup) {
 		super(parent, style);
-		
-		//执行步骤:
-		//1、初始化input、middleware，Block Name，Block Type，Block OutNames，Block Index，Configurator(连接)，Block Meta，子组(Block Sub Group)等信息;
-		//2、根据Block Name、Block Type、Block Index获取Block;
-		//3、页面布局,并添加按钮响应(3-1,3-2,3-3);
-		//4、更新List;
-		
-		//Step 1
+
 		this.input = input;
 		this.middleware = input.getMiddlewareFactory();
 		this.blockName = input.getName();
@@ -80,7 +76,6 @@ public class BlockInput extends Composite {
 		this.bMeta = blkMeta;
 		this.blockSubGroup = blkSubGroup;
 		
-		//Step 2
 		try {
 			if(this.blockType == "main")
 			{
@@ -94,7 +89,6 @@ public class BlockInput extends Composite {
 			e.printStackTrace();
 		}
 		
-		//Step 3
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		this.setLayout(new GridLayout(3,false));
@@ -108,29 +102,15 @@ public class BlockInput extends Composite {
 		new Label(this, SWT.NONE);
 		this.btnAdd = new Button(this,SWT.NONE);
 		
-		//Step 3-1
 		btnAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
-				//执行步骤:
-				//1、获取对应本Block的元数据信息(directiveMetas,blockMetas);
-				//2、创建Name List，将Block现有的Directive添加到Name List;(包含所有directiveMetas和blockMetas的名字的List)
-				//3、根据directiveMetas和blockMetas，对每个Meta进行如下操作从而生成可添加的Name List:
-				//		(1)若Meta不在Name List中，则将其添加到Name List;
-				//		(2)若Meta在Name List中，且该directive不可重复使用(DirectiveMeta::getgetReused()==TRUE)，则将其从Name List删除;否则，不做任何处理。
-				//4、以可添加的Name List为数据源，创建ElementSelector;
-				//5、若ElementSelector::open()返回OK，即点击OK按钮导致ElementSelector退出，则根据所选Directive，Block的Name和组创建参数设置对话框ElementSetDialog;
-				//6、若ElementSetDialog::open()返回OK，即点击OK按钮导致ElementSetDialog退出，则根据所设置的Directive，Block参数值更新Block,并更新List.
-				//7、若添加Directive，Block成功，则更新flagChanged为TRUE。
-				
-				//Step 1
 				java.util.List<DirectiveMeta> directiveMetas = new ArrayList<DirectiveMeta>();
 				java.util.List<BlockMeta> blockMetas = new ArrayList<BlockMeta>();
 				directiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
 				blockMetas = bMeta.getBlockMeta(blockSubGroup);
 				
-				//Step 2
 				java.util.List<String> elementNames = new ArrayList<String>();
 				
 				int count = 0;
@@ -157,7 +137,6 @@ public class BlockInput extends Composite {
 					}
 				}
 				
-				//Step 3
 				if(directiveMetas != null && !directiveMetas.isEmpty())
 				{
 					count = directiveMetas.size();
@@ -185,34 +164,30 @@ public class BlockInput extends Composite {
 						{
 							elementNames.add(blockMetas.get(i).getName()+strBlockMark);
 						}
-						//else if(!blockMetas.get(i).getReused())
-						//{
+						else if(!blockMetas.get(i).getReused())
+						{
 							elementNames.remove(blockMetas.get(i).getName()+strBlockMark);
-						//}
+						}
 						i++;
 					}
 				}
 				
-				//Step 4
 				ElementSelector eleSelector = new ElementSelector(new Shell(), elementNames);
 				
-				//Step 5
 				if(Window.OK == eleSelector.open())
 				{
-					//1、获取选中的Element名selEleName;
-					//2、判断selEleName中是否包含" {...}";若有则为Block，若没有则为Directive;
-					//3、
-					//4、
-					
-					//Step 1
 					String selEleName = eleSelector.getSelectedElementName();
 					
-					//Step 2
 					int len = selEleName.length();
 					if(len > 6 && selEleName.substring(selEleName.length()-6,selEleName.length()).equals(strBlockMark))
 					{
-						//编辑Block
-						BlockInput bInput = null;
+						Block blk = orc.newBlock();
+						blk.setName(selEleName.substring(0, selEleName.length()-6));
+						try {
+							block.addBlock(blk);
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+						}
 					}
 					else
 					{
@@ -226,6 +201,7 @@ public class BlockInput extends Composite {
 							{
 								break;
 							}
+							dMeta = null;
 							i++;
 						}
 						if(dMeta == null)
@@ -235,29 +211,40 @@ public class BlockInput extends Composite {
 						
 						DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);
 					
-						//Step 6
 						if(Window.OK == dInput.open())
 						{
-							//获取设置的Directive信息
-							//Stirng selEleValue = dInput.getEleValue();
-							String selEleValue = "DefaultValue";
+							Directive dirct = orc.newDirective();
+							dirct.setName(selEleName);
 							
-							RecDirective dirct = new RecDirective();
-							dirct.SetDirectiveText(selEleName+selEleValue);
-							count = directives.size();
-							directives.add(count, dirct);
+							java.util.List<Parameter> listParams = dInput.getParams();
+							if(listParams!=null && !listParams.isEmpty())
+							{
+								Parameter param = null;
+								count = listParams.size();
+								i = 0;
+								while(i < count)
+								{
+									param = listParams.get(i);
+									dirct.addParameter(param);
+									i++;
+								}
+							}
+							else
+							{
+								return;
+							}
+
+							try {
+								block.addDirective(dirct);
+							} catch (RemoteException e1) {
+								e1.printStackTrace();
+							}
+
 							UpdateListCtl();
 							
-							//Just for test!!! begin
-							//ctlList.add(selEleName+"DefaultValue");
-							//Just for test!!! begin
-							
-							//Step 7
 							flagChanged = true;
 						}
 					}//else
-					
-					
 				}
 			}
 		});
@@ -269,66 +256,131 @@ public class BlockInput extends Composite {
 		new Label(this, SWT.NONE);
 		this.btnEdit = new Button(this,SWT.NONE);
 		
-		//Step 3-2
 		btnEdit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 
-				//执行步骤:
-				//1、获取List控件中被选中的项的值,即选择的Directive，Block的directiveString,blockString;
-				//2、以directiveString,blockString为参数，创建ElementSetDialog;
-				//3、若ElementSetDialog::open()返回OK，即点击OK按钮导致ElementSetDialog退出，则根据所设置的Directive参数值更新Block,并更新List.
-				//4、若添加Directive成功，则更新flagChanged为TRUE。
+				java.util.List<DirectiveMeta> directiveMetas = new ArrayList<DirectiveMeta>();
+				java.util.List<BlockMeta> blockMetas = new ArrayList<BlockMeta>();
+				directiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
+				blockMetas = bMeta.getBlockMeta(blockSubGroup);
 				
-				//Step 1
 				if(ctlList.getSelectionCount() == 0)
 				{
 					MessageDialog.openWarning(getShell(),"Question","Please select an option!");
 					return;
 				}
-				String directiveString = ctlList.getItem(ctlList.getSelectionIndex());//.getSelectedElementName();
-				RecDirective dirct = new RecDirective();
-				dirct.SetDirectiveText(directiveString);
-				String directiveName = dirct.getName();
+				String selEle = ctlList.getItem(ctlList.getSelectionIndex());
 				
-				//Step 2
-				java.util.List<DirectiveMeta> directiveMetas = new ArrayList<DirectiveMeta>();
-				directiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
-				
-				DirectiveMeta dMeta = null;
-				int count = directiveMetas.size();
-				int i = 0;
-				while(i < count)
+				int len = selEle.length();
+				if(len > 6 && selEle.substring(selEle.length()-6,selEle.length()).equals(strBlockMark))
 				{
-					dMeta = directiveMetas.get(i);
-					if(directiveName == dMeta.getName())
+					BlockMeta bMeta = null;
+					int count = blockMetas.size();
+					int i = 0;
+					while(i < count)
 					{
-						break;
+						bMeta = blockMetas.get(i);
+						if(selEle == bMeta.getName())
+						{
+							break;
+						}
+						bMeta = null;
+						i++;
 					}
-					i++;
-				}
-				if(dMeta == null)
-				{
-					return;
-				}
-				
-				DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);
-				
-				//Step 3
-				if(Window.OK == dInput.open())
-				{
-					//获取设置的Directive信息
-					//Stirng selEleValue = dInput.getEleValue();
-					String selEleValue = "DefaultValue";
+					if(bMeta == null)
+					{
+						return;
+					}
 					
-					directives.remove(dirct);
-					dirct.SetDirectiveText(directiveName+selEleValue);
-					count = directives.size();
-					directives.add(count, dirct);
-					UpdateListCtl();
+					String blockName = "";// = input.getName();
+					String blockType = "";// = input.getBlocktype();
+					String blockOutNames = "";// = input.getOuterBlockNames();
+					String blockIndex = "";// = input.getBlockIndex();
+					bMeta = bMeta;
+					String subGroupName = "";// = blkSubGroup;
 					
-					//Step 4
-					flagChanged = true;
+					HttpElement newInput = new HttpElement(null);
+					newInput.init(blockName, blockType , "0", blockOutNames, middleware);
+					
+					BlockInputDialog biDlg = new BlockInputDialog(new Shell(), newInput, bMeta, subGroupName);
+				}
+				else
+				{
+					DirectiveMeta dMeta = null;
+					int count = directiveMetas.size();
+					int i = 0;
+					while(i < count)
+					{
+						dMeta = directiveMetas.get(i);
+						if(selEle == dMeta.getName())
+						{
+							break;
+						}
+						dMeta = null;
+						i++;
+					}
+					if(dMeta == null)
+					{
+						return;
+					}
+					
+					Directive oldDirct = null;
+					if(directives!=null && !directives.isEmpty())
+					{
+						count = directives.size();
+						i = 0;
+						while(i < count)
+						{
+							oldDirct = directives.get(i);
+							if(oldDirct.getName() == selEle)
+							{
+								break;
+							}
+							oldDirct = null;
+							i++;
+						}
+						if(oldDirct == null)
+						{
+							return;
+						}
+					}
+					
+					DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);//oldDirct
+					
+					if(Window.OK == dInput.open())
+					{
+						Directive newDirct = orc.newDirective();
+						newDirct.setName(selEle);
+						
+						java.util.List<Parameter> listParams = dInput.getParams();
+						if(listParams!=null && !listParams.isEmpty())
+						{
+							Parameter param = null;
+							count = listParams.size();
+							i = 0;
+							while(i < count)
+							{
+								param = listParams.get(i);
+								newDirct.addParameter(param);
+								i++;
+							}
+						}
+						else
+						{
+							return;
+						}
+						
+						try {
+							block.addDirective(newDirct);//block.replaceDirective(dirct, newDirct);
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+						}
+
+						UpdateListCtl();
+						
+						flagChanged = true;
+					}
 				}
 			}
 		});
@@ -340,18 +392,10 @@ public class BlockInput extends Composite {
 		new Label(this, SWT.NONE);
 		this.btnDelete = new Button(this,SWT.NONE);
 		
-		//Step 3-3
 		btnDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 
-				//执行步骤:
-				//1、获取List控件中被选中的项的值,即选择的Directive的directiveString;
-				//2、以directiveString为参数，创建RecDirective;
-				//3、从本Block中删除RecDirective,并从List控件中删除对应的Directive项以更新List控件;
-				//4、若添加Directive成功，则更新flagChanged为TRUE。
-				
-				//Step 1
 				if(ctlList.getSelectionCount() == 0)
 				{
 					MessageDialog.openWarning(new Shell(),"Warning","Please select an option!");
@@ -361,17 +405,73 @@ public class BlockInput extends Composite {
 				{
 					return;
 				}
-				String directiveString = ctlList.getItem(ctlList.getSelectionIndex());//.getSelectedElementName();
+				String selEle = ctlList.getItem(ctlList.getSelectionIndex());
 				
-				//Step 2
-				RecDirective dirct = new RecDirective();
-				dirct.SetDirectiveText(directiveString);
+				int len = selEle.length();
+				int count = 0;
+				int i = 0;
+				if(len > 6 && selEle.substring(selEle.length()-6,selEle.length()).equals(strBlockMark))
+				{
+					Block oldBlock = null;
+					if(blocks!=null && !blocks.isEmpty())
+					{
+						count = blocks.size();
+						i = 0;
+						while(i < count)
+						{
+							oldBlock = blocks.get(i);
+							if(oldBlock.getName() == selEle)
+							{
+								break;
+							}
+							oldBlock = null;
+							i++;
+						}
+						if(oldBlock == null)
+						{
+							return;
+						}
+					}
+					
+					try {
+						block.addBlock(oldBlock);//block.removeBlock(oldBlock);
+					} catch (RemoteException e1) {
+						e1.printStackTrace();
+					}
+				}
+				else
+				{
+					Directive oldDirct = null;
+					if(directives!=null && !directives.isEmpty())
+					{
+						count = directives.size();
+						i = 0;
+						while(i < count)
+						{
+							oldDirct = directives.get(i);
+							if(selEle == oldDirct.getName())
+							{
+								break;
+							}
+							oldDirct = null;
+							i++;
+						}
+						if(oldDirct == null)
+						{
+							return;
+						}
+						
+						try {
+							block.addDirective(oldDirct);//block.removeDirective(oldDirct);
+							
+						} catch (RemoteException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
 				
-				//Step 3
-				directives.remove(dirct);
 				UpdateListCtl();
 				
-				//Step 4
 				flagChanged = true;
 			}
 		});
@@ -381,40 +481,29 @@ public class BlockInput extends Composite {
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		
-		//Step 4
 		UpdateListCtl();
 		
 	}
 	
 	private void UpdateListCtl()
 	{
-		//执行步骤:
-		//1、更新对应本Block的成员变量Directives，Blocks;
-		//2、清空List数据;
-		//3、将成员变量Directives，Blocks中的数据更新至List中。
-		
-		//Step 1
+		this.directives.clear();
+		this.blocks.clear();
 		try {
 			this.directives = this.block.getDirectives();
 			this.blocks = this.block.getBlocks();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
-		//Just for test!!! begin
-		//this.directives = null;
-		//this.blocks = null;
-		//Just for test!!! end
 		
-		//Step 2
 		ctlList.removeAll();
 		
-		//Step 3
 		int i = 0;
 		if(this.directives != null && !this.directives.isEmpty())
 		{
 			while(i<this.directives.size())
 			{
-				ctlList.add(directives.get(i).toString());
+				ctlList.add(directives.get(i).getName());
 				i++;
 			}
 		}
@@ -423,7 +512,7 @@ public class BlockInput extends Composite {
 			i = 0;
 			while(i<this.blocks.size())
 			{
-				ctlList.add(blocks.get(i).toString());
+				ctlList.add(blocks.get(i).getName()+strBlockMark);
 				i++;
 			}
 		}

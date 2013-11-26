@@ -11,8 +11,6 @@ import org.eclipse.swt.widgets.Text;
 
 public class OptionStringParamInput extends Composite implements ParamInput {
 
-	//以“[name]=[value]”形式的指令参数，其中[value]需提供Text获取普通字符串值。
-	
 	String strParamName = "option";
 	int intParam;
 	String strUnit;

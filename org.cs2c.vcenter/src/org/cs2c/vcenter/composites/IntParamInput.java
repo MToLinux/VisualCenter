@@ -11,8 +11,6 @@ import org.eclipse.swt.widgets.Spinner;
 
 public class IntParamInput extends Composite implements ParamInput {
 
-	//以Spinner获取的整数作为指令参数，可有单位，单位提供Combo进行选择。
-	
 	int intParam;
 	String strUnit;
 	

@@ -22,8 +22,6 @@ import org.eclipse.ui.dialogs.FilteredItemsSelectionDialog;
 
 public class ElementSelector extends FilteredItemsSelectionDialog {
 	
-	//类似于Eclipse中接口和类选择时的选择器，允许搜索。
-	
 	private List<String> directiveNames = new ArrayList<String>();
 	private String strSelectedElement = null;
 	
@@ -35,16 +33,6 @@ public class ElementSelector extends FilteredItemsSelectionDialog {
 		
 		setTitle("Element Selector");
 		setMessage("Select an item to open(? = any character, *=any string), enter '?' to show all options:");
-		//setSelectionHistory(new ResourceSelectionHistory());
-		
-		//Just for test!!! begin
-		directiveNames.add("aaa");
-		directiveNames.add("bbb");
-		directiveNames.add("ccc");
-		directiveNames.add("ddd");
-		directiveNames.add("eee");
-		directiveNames.add("fffd");
-		//Just for test!!! end
 		
 		setInitialPattern("?", FULL_SELECTION);
 	}
@@ -54,7 +42,6 @@ public class ElementSelector extends FilteredItemsSelectionDialog {
 		
 		setTitle("Element Selector");
 		setMessage("Select an item to open (? = any character, *=any string), enter '?' to show all options:");
-		//setSelectionHistory(new ResourceSelectionHistory());
 		
 		List<DirectiveMeta> directives = new ArrayList<DirectiveMeta>();
 		directives = meta.getDirectiveMeta(meta.getGroup());
@@ -65,14 +52,6 @@ public class ElementSelector extends FilteredItemsSelectionDialog {
 		{
 			directiveNames.add(directives.get(i).getName());
 		}
-		//Just for test!!! begin
-		directiveNames.add("aaa");
-		directiveNames.add("bbb");
-		directiveNames.add("ccc");
-		directiveNames.add("ddd");
-		directiveNames.add("eee");
-		directiveNames.add("fffe");
-		//Just for test!!! end
 		
 		setInitialPattern("?", FULL_SELECTION);
 	}
@@ -81,31 +60,9 @@ public class ElementSelector extends FilteredItemsSelectionDialog {
 		
 		setTitle("Element Selector");
 		setMessage("Select an item to open(? = any character, *=any string), enter '?' to show all options:");
-		//setSelectionHistory(new ResourceSelectionHistory());
 		this.directiveNames = directiveNames;
 		
-		//Just for test!!! begin
-		directiveNames.add("aaa");
-		directiveNames.add("bbb");
-		directiveNames.add("ccc");
-		directiveNames.add("ddd");
-		directiveNames.add("eee");
-		directiveNames.add("ffff");
-		//Just for test!!! end
-		
 		setInitialPattern("?", FULL_SELECTION);
-	}
-	
-	private class ResourceSelectionHistory extends SelectionHistory {
-
-		@Override
-		protected Object restoreItemFromMemento(IMemento memento) {
-			return null;
-		}
-		@Override
-		protected void storeItemToMemento(Object item, IMemento memento) {
-			
-		}
 	}
 
 	@Override

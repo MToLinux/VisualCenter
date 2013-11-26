@@ -12,8 +12,6 @@ import org.eclipse.swt.widgets.Spinner;
 
 public class OptionIntParamInput extends Composite implements ParamInput {
 
-	//以“[name]=[value]”形式的指令参数，其中[value]需提供spinner获取整数值，可能有单位，如open_file_cache max=1000 inactive=20s
-	
 	String strParamName = "max";
 	int intValue;
 	String strUnit;
