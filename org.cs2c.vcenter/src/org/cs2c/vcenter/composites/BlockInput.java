@@ -11,7 +11,8 @@ import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.RecStringParameter;
-import org.cs2c.vcenter.dialog.BlockInputDialog;
+import org.cs2c.vcenter.dialog.BlockConfigDialog;
+import org.cs2c.vcenter.dialog.BlockConfigInfo;
 import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.dialog.ElementSelector;
 import org.cs2c.vcenter.metadata.BlockMeta;
@@ -52,6 +53,8 @@ public class BlockInput extends Composite {
 	private String blockIndex = null;
 	private Configurator orc = null;
 	
+	private String blockMetaType = null;
+	
 	final String strBlockMark = " {...}";
 
 	//Metadata
@@ -61,9 +64,8 @@ public class BlockInput extends Composite {
 	private Block block = new RecBlock();
 	private java.util.List<Directive> directives = new ArrayList<Directive>();
 	private java.util.List<Block> blocks = new ArrayList<Block>();
-
 	
-	public BlockInput(Composite parent, int style, TreeElement input, BlockMeta blkMeta, String blkSubGroup) {
+	public BlockInput(Composite parent, int style, TreeElement input, Block blk, BlockMeta blkMeta, String blkSubGroup) {
 		super(parent, style);
 
 		this.input = input;
@@ -76,18 +78,10 @@ public class BlockInput extends Composite {
 		this.bMeta = blkMeta;
 		this.blockSubGroup = blkSubGroup;
 		
-		try {
-			if(this.blockType == "main")
-			{
-				this.block = this.orc.getRootBlock();
-			}
-			else
-			{
-				this.block = this.orc.getBlocks(blockType, blockOutNames).get(Integer.parseInt(blockIndex));
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		String sType[] = blockType.split(" ");
+		this.blockMetaType = sType[0];
+		
+		this.block = blk;
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -187,6 +181,8 @@ public class BlockInput extends Composite {
 							block.addBlock(blk);
 						} catch (RemoteException e1) {
 							e1.printStackTrace();
+							MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+							return;
 						}
 					}
 					else
@@ -238,6 +234,8 @@ public class BlockInput extends Composite {
 								block.addDirective(dirct);
 							} catch (RemoteException e1) {
 								e1.printStackTrace();
+								MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+								return;
 							}
 
 							UpdateListCtl();
@@ -303,7 +301,9 @@ public class BlockInput extends Composite {
 					HttpElement newInput = new HttpElement(null);
 					newInput.init(blockName, blockType , "0", blockOutNames, middleware);
 					
-					BlockInputDialog biDlg = new BlockInputDialog(new Shell(), newInput, bMeta, subGroupName);
+					BlockConfigInfo bcInfo = null;
+					
+					BlockConfigDialog bcDlg = new BlockConfigDialog(new Shell(), bcInfo);
 				}
 				else
 				{
@@ -375,6 +375,8 @@ public class BlockInput extends Composite {
 							block.addDirective(newDirct);//block.replaceDirective(dirct, newDirct);
 						} catch (RemoteException e1) {
 							e1.printStackTrace();
+							MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+							return;
 						}
 
 						UpdateListCtl();
@@ -437,6 +439,8 @@ public class BlockInput extends Composite {
 						block.addBlock(oldBlock);//block.removeBlock(oldBlock);
 					} catch (RemoteException e1) {
 						e1.printStackTrace();
+						MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+						return;
 					}
 				}
 				else
@@ -466,6 +470,8 @@ public class BlockInput extends Composite {
 							
 						} catch (RemoteException e1) {
 							e1.printStackTrace();
+							MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+							return;
 						}
 					}
 				}
@@ -487,32 +493,78 @@ public class BlockInput extends Composite {
 	
 	private void UpdateListCtl()
 	{
-		this.directives.clear();
 		this.blocks.clear();
+		this.directives.clear();
 		try {
-			this.directives = this.block.getDirectives();
 			this.blocks = this.block.getBlocks();
+			this.directives = this.block.getDirectives();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
+			MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+			return;
 		}
 		
 		ctlList.removeAll();
 		
+		java.util.List<BlockMeta> subBlockMetas = bMeta.getBlockMeta(blockSubGroup);
+		java.util.List<DirectiveMeta> subDirectiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
+		
+		java.util.List<String> subBlockTypes = new ArrayList<String>();
+		java.util.List<String> subDirectiveTypes = new ArrayList<String>();
+		
+		subBlockTypes.clear();
+		subDirectiveTypes.clear();
+		int count = 0;
 		int i = 0;
-		if(this.directives != null && !this.directives.isEmpty())
+		if(subBlockMetas != null && !subBlockMetas.isEmpty())
 		{
-			while(i<this.directives.size())
+			count = subBlockMetas.size();
+			while(i<count)
 			{
-				ctlList.add(directives.get(i).getName());
+				String name = subBlockMetas.get(i).getName();
+				int curBCount = subDirectiveTypes.size();
+				subBlockTypes.add(curBCount,name);
 				i++;
 			}
 		}
+		i = 0;
+		if(subDirectiveMetas != null && !subDirectiveMetas.isEmpty())
+		{
+			count = subDirectiveMetas.size();
+			while(i<count)
+			{
+				String name = subDirectiveMetas.get(i).getName();
+				int curDCount = subDirectiveTypes.size();
+				subDirectiveTypes.add(curDCount,name);
+				i++;
+			}
+		}
+		
+		i = 0;
 		if(this.blocks != null && !this.blocks.isEmpty())
 		{
-			i = 0;
-			while(i<this.blocks.size())
+			count = this.blocks.size();
+			while(i<count)
 			{
-				ctlList.add(blocks.get(i).getName()+strBlockMark);
+				String name = blocks.get(i).getName();
+				if(!subBlockTypes.contains(name))
+				{
+					ctlList.add(name+strBlockMark);
+				}
+				i++;
+			}
+		}
+		i = 0;
+		if(this.directives != null && !this.directives.isEmpty())
+		{
+			count = this.directives.size();
+			while(i<count)
+			{
+				String name = directives.get(i).getName();
+				if(!subDirectiveMetas.contains(name))
+				{
+					ctlList.add(directives.get(i).toString());
+				}
 				i++;
 			}
 		}
