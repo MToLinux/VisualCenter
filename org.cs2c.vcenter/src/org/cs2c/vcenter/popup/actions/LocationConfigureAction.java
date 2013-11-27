@@ -3,16 +3,26 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.editors.MonitorFace;
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
  *
  */
 public class LocationConfigureAction implements IObjectActionDelegate {
+	private TreeElement element;
+	private Shell shell;
 
 	/**
 	 * 
@@ -27,7 +37,12 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		// TODO Auto-generated method stub
-
+		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			page.openEditor((IEditorInput)element, MonitorFace.ID);
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -35,8 +50,8 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		IStructuredSelection ss=(IStructuredSelection)selection;
+		this.element=(TreeElement)ss.getFirstElement();
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +59,7 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
+		shell = targetPart.getSite().getShell();
 
 	}
 

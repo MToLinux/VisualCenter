@@ -40,7 +40,6 @@ public class LocationElement extends TreeElement implements ILocation {
 			String allname = entry.getKey().toString();
 			String blIndex = entry.getValue().toString();
 			String subname = allname.substring(9,allname.length());
-			//TODO
 			String outerBlNames = this.getOuterBlockNames()+"|"
 					+this.getBlocktype()+":"+this.getBlockIndex();
 
@@ -54,7 +53,7 @@ public class LocationElement extends TreeElement implements ILocation {
 		while(itIndexIndex.hasNext()){
 			Entry<String, String> entry = (Entry<String, String>)itIndexIndex.next();
 			String nameIndexStr[] = entry.getKey().toString().split("\\|");
-		
+
 			String allname = nameIndexStr[0];
 //			System.out.println("nameIndexStr[0] : "+nameIndexStr[0]);	// TODO
 

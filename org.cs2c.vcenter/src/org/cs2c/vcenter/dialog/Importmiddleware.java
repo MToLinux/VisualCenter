@@ -2,6 +2,7 @@ package org.cs2c.vcenter.dialog;
 
 import java.util.List;
 
+import org.cs2c.vcenter.metadata.DOMParser;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.graphics.Point;
@@ -18,6 +19,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.ui.PlatformUI;
 
 public class Importmiddleware extends Dialog {
 	Combo combo_host = null;
@@ -54,7 +56,6 @@ public class Importmiddleware extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		Composite container = (Composite) super.createDialogArea(parent);
-		container.setEnabled(false);
 		GridLayout gridLayout = (GridLayout) container.getLayout();
 		gridLayout.numColumns = 6;
 		new Label(container, SWT.NONE);
@@ -70,6 +71,7 @@ public class Importmiddleware extends Dialog {
 		lblNewLabel.setText("Host：");
 		
 		combo_host = new Combo(container, SWT.NONE);
+		combo_host.setEnabled(true);
 		combo_host.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				Setmiddlewarename();
@@ -82,18 +84,20 @@ public class Importmiddleware extends Dialog {
 		String Miditems[] = new String[listMiddleware.size()];
 		for(int i=0;i<listMiddleware.size();i++){
 			Miditems[i]=listMiddleware.get(i);
+//			System.out.println(listMiddleware.get(i));
 		}
 		combo_host.setItems(Miditems);
 		combo_host.select(0);
-//		combo_host.i
-		
-		
+
 		Button btn_ViewSelect = new Button(container, SWT.NONE);
 		btn_ViewSelect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				//调出Host Editor查看该Host的详细信息
-//				HostsEditDialog hed = new HostsEditDialog(shell, middlewarename, null);
+				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+				HostsEditDialog addhostDialog = new HostsEditDialog(shell
+						, combo_host.getText(), DOMParser.getInstance());
+				addhostDialog.open();
 			}
 		});
 		btn_ViewSelect.setText("  ...  ");
@@ -129,6 +133,11 @@ public class Importmiddleware extends Dialog {
 				middlewarename=null;
 			}
 		});
+	}
+	
+	@Override
+	protected void setShellStyle(int newShellStyle) {
+	    super.setShellStyle(newShellStyle ^ SWT.CLOSE);
 	}
 
 	/**
