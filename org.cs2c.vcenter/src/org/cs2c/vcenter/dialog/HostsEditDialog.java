@@ -102,7 +102,7 @@ public class HostsEditDialog extends Dialog {
 		text_1 = new Text(grpHostinfo, SWT.BORDER);
 		text_1.setBounds(115, 56, 220, 23);
 
-		text_2 = new Text(grpHostinfo, SWT.BORDER);
+		text_2 = new Text(grpHostinfo, SWT.BORDER | SWT.PASSWORD);
 		text_2.setBounds(115, 88, 220, 23);
 		new Label(container, SWT.NONE);
 
@@ -175,7 +175,7 @@ public class HostsEditDialog extends Dialog {
 		text_7 = new Text(grpMiddlewareManagerInfo, SWT.BORDER);
 		text_7.setBounds(115, 56, 220, 23);
 
-		text_8 = new Text(grpMiddlewareManagerInfo, SWT.BORDER);
+		text_8 = new Text(grpMiddlewareManagerInfo, SWT.BORDER | SWT.PASSWORD);
 		text_8.setBounds(115, 88, 220, 23);
 		new Label(container, SWT.NONE);
 
