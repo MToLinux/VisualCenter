@@ -86,6 +86,18 @@
             id="org.cs2c.vcenter.editors.LogBrowser"
             name="Log Browser">
       </editor>
+      <editor
+            class="org.cs2c.vcenter.editors.BlockConfigFace"
+            default="false"
+            id="org.cs2c.vcenter.editors.BlockConfigFace"
+            name="Block Config Face">
+      </editor>
+      <editor
+            class="org.cs2c.vcenter.editors.BasicConfigFace"
+            default="false"
+            id="org.cs2c.vcenter.editors.BasicConfigFace"
+            name="Basic Config Face">
+      </editor>
    </extension>
    <extension
          point="org.eclipse.ui.popupMenus">
