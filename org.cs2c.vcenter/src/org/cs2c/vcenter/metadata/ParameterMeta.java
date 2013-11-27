@@ -10,7 +10,7 @@ public class ParameterMeta {
 	private String className;
 	private long min;
 	private long max;
-	private List<String> unit;
+	private List<String> units;
 	private String tips;
 	private List<String> items;
 	public ParameterMeta()
@@ -20,7 +20,7 @@ public class ParameterMeta {
 		 className=null;
 		 min=-2;
 		 max=-2;
-		 unit=new ArrayList<String>(0);
+		 units=new ArrayList<String>(0);
 		 tips=null;
 		 items=new ArrayList<String>(0);
 	}
@@ -52,7 +52,7 @@ public class ParameterMeta {
 	
 	public void setUnits(List<String>  strlist)
 	{
-		this.unit=strlist;
+		this.units=strlist;
 		
 	}
 	public void setItems(List <String>  strlist)
@@ -88,7 +88,7 @@ public class ParameterMeta {
 	
 	public List <String> getUnit()
 	{
-		return this.unit;
+		return this.units;
 	}
 	public List <String> getItems()
 	{

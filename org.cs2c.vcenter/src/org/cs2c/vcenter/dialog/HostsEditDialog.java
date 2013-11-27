@@ -26,6 +26,10 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
 
 public class HostsEditDialog extends Dialog {
 	private Text text;
@@ -71,123 +75,110 @@ public class HostsEditDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 
 		Composite container = (Composite) super.createDialogArea(parent);
-		GridLayout gridLayout = (GridLayout) container.getLayout();
-		gridLayout.numColumns = 4;
-		new Label(container, SWT.NONE);
+		container.setLayout(new GridLayout(1, false));
 
 		Group grpHostinfo = new Group(container, SWT.NONE);
-		grpHostinfo.setText("HostInfo");
-		GridData gd_grpHostinfo = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-		gd_grpHostinfo.heightHint = 107;
-		gd_grpHostinfo.widthHint = 339;
+		GridData gd_grpHostinfo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpHostinfo.widthHint = 323;
 		grpHostinfo.setLayoutData(gd_grpHostinfo);
+		grpHostinfo.setText("HostInfo");
+		grpHostinfo.setLayout(new GridLayout(2, false));
 
 		Label lblNewLabel = new Label(grpHostinfo, SWT.NONE);
-		lblNewLabel.setBounds(10, 27, 61, 17);
 		lblNewLabel.setText("*Host:");
 
-		Label lblNewLabel_1 = new Label(grpHostinfo, SWT.NONE);
-		lblNewLabel_1.setBounds(10, 56, 61, 17);
-		lblNewLabel_1.setText("*Username:");
-
-		Label lblNewLabel_2 = new Label(grpHostinfo, SWT.NONE);
-		lblNewLabel_2.setBounds(10, 88, 61, 17);
-		lblNewLabel_2.setText("*Password:");
-
 		text = new Text(grpHostinfo, SWT.BORDER);
-
-		text.setBounds(115, 27, 220, 23);
+		GridData gd_text = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_text.widthHint = 229;
+		text.setLayoutData(gd_text);
+		
+				Label lblNewLabel_1 = new Label(grpHostinfo, SWT.NONE);
+				lblNewLabel_1.setText("*Username:");
 
 		text_1 = new Text(grpHostinfo, SWT.BORDER);
-		text_1.setBounds(115, 56, 220, 23);
+		GridData gd_text_1 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_text_1.widthHint = 229;
+		text_1.setLayoutData(gd_text_1);
+		
+				Label lblNewLabel_2 = new Label(grpHostinfo, SWT.NONE);
+				lblNewLabel_2.setText("*Password:");
 
 		text_2 = new Text(grpHostinfo, SWT.BORDER | SWT.PASSWORD);
-		text_2.setBounds(115, 88, 220, 23);
-		new Label(container, SWT.NONE);
-
-		btnOk = new Button(container, SWT.NONE);
-		btnOk.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				
-				if(contentIsValid())
-				{
-					hostXml.saveHostInfo("conf/host.xml", hostInfo);
-					setReturnCode(OK);
-					close();
-				}
-				
-			}
-		});
-
-		btnOk.setText("   OK   ");
-		//btnOk.setEnabled(false);
-		new Label(container, SWT.NONE);
+		GridData gd_text_2 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_text_2.widthHint = 237;
+		text_2.setLayoutData(gd_text_2);
 
 		Group grpMiddlewareinfo = new Group(container, SWT.NONE);
-		grpMiddlewareinfo.setText("Middleware Info");
-		GridData gd_grpMiddlewareinfo = new GridData(SWT.LEFT, SWT.CENTER,
-				false, false, 1, 1);
-		gd_grpMiddlewareinfo.widthHint = 340;
-		gd_grpMiddlewareinfo.heightHint = 91;
+		GridData gd_grpMiddlewareinfo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpMiddlewareinfo.widthHint = 325;
 		grpMiddlewareinfo.setLayoutData(gd_grpMiddlewareinfo);
+		grpMiddlewareinfo.setText("Middleware Info");
+		grpMiddlewareinfo.setLayout(new GridLayout(2, false));
 
 		Label lblmiddleware = new Label(grpMiddlewareinfo, SWT.NONE);
 		lblmiddleware.setText("*Middleware:");
-		lblmiddleware.setBounds(10, 31, 92, 17);
-
-		Label lblhome = new Label(grpMiddlewareinfo, SWT.NONE);
-		lblhome.setText("*Home:");
-		lblhome.setBounds(10, 70, 92, 17);
 
 		text_4 = new Text(grpMiddlewareinfo, SWT.BORDER);
-		text_4.setBounds(108, 28, 220, 23);
+		GridData gd_text_4 = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_text_4.widthHint = 228;
+		text_4.setLayoutData(gd_text_4);
+		
+				Label lblhome = new Label(grpMiddlewareinfo, SWT.NONE);
+				lblhome.setText("*Home:");
 
 		text_5 = new Text(grpMiddlewareinfo, SWT.BORDER);
-		text_5.setBounds(108, 67, 220, 23);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
-		new Label(container, SWT.NONE);
+		text_5.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 
 		Group grpMiddlewareManagerInfo = new Group(container, SWT.NONE);
-		GridData gd_grpMiddlewareManagerInfo = new GridData(SWT.LEFT,
-				SWT.CENTER, false, false, 1, 1);
-		gd_grpMiddlewareManagerInfo.widthHint = 348;
+		GridData gd_grpMiddlewareManagerInfo = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_grpMiddlewareManagerInfo.widthHint = 325;
 		grpMiddlewareManagerInfo.setLayoutData(gd_grpMiddlewareManagerInfo);
 		grpMiddlewareManagerInfo.setText("Middleware Manager Info");
+		grpMiddlewareManagerInfo.setLayout(new GridLayout(2, false));
 
 		Label lblStatusPath = new Label(grpMiddlewareManagerInfo, SWT.NONE);
 		lblStatusPath.setText("Status Path:");
-		lblStatusPath.setBounds(10, 27, 99, 17);
-
-		Label lblUsername = new Label(grpMiddlewareManagerInfo, SWT.NONE);
-		lblUsername.setText("Username:");
-		lblUsername.setBounds(10, 56, 99, 17);
-
-		Label lblPassword = new Label(grpMiddlewareManagerInfo, SWT.NONE);
-		lblPassword.setText("Password:");
-		lblPassword.setBounds(10, 88, 99, 17);
 
 		text_6 = new Text(grpMiddlewareManagerInfo, SWT.BORDER);
-		text_6.setBounds(115, 27, 220, 23);
+		GridData gd_text_6 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gd_text_6.widthHint = 228;
+		text_6.setLayoutData(gd_text_6);
+		
+				Label lblUsername = new Label(grpMiddlewareManagerInfo, SWT.NONE);
+				lblUsername.setText("Username:");
 
 		text_7 = new Text(grpMiddlewareManagerInfo, SWT.BORDER);
-		text_7.setBounds(115, 56, 220, 23);
+		GridData gd_text_7 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_text_7.widthHint = 241;
+		text_7.setLayoutData(gd_text_7);
+		
+				Label lblPassword = new Label(grpMiddlewareManagerInfo, SWT.NONE);
+				lblPassword.setText("Password:");
 
 		text_8 = new Text(grpMiddlewareManagerInfo, SWT.BORDER | SWT.PASSWORD);
-		text_8.setBounds(115, 88, 220, 23);
-		new Label(container, SWT.NONE);
-
-		btnCancle = new Button(container, SWT.NONE);
-		btnCancle.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				setReturnCode(CANCEL);
-				close();
-			}
-		});
-		btnCancle.setText("CANCLE");
+		GridData gd_text_8 = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_text_8.widthHint = 240;
+		text_8.setLayoutData(gd_text_8);
+								
+								Composite composite = new Composite(container, SWT.NONE);
+								GridData gd_composite = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+								gd_composite.widthHint = 329;
+								composite.setLayoutData(gd_composite);
+								
+								Button button = new Button(composite, SWT.NONE);
+								button.setBounds(61, 10, 54, 27);
+								button.setText("   OK   ");
+								
+										btnCancle = new Button(composite, SWT.NONE);
+										btnCancle.setBounds(214, 10, 59, 27);
+										btnCancle.addMouseListener(new MouseAdapter() {
+											@Override
+											public void mouseDown(MouseEvent e) {
+												setReturnCode(CANCEL);
+												close();
+											}
+										});
+										btnCancle.setText("CANCLE");
 
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
@@ -274,9 +265,15 @@ public class HostsEditDialog extends Dialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(515, 513);
+		return new Point(356, 422);
 	}
 
+	@Override  
+    protected void configureShell(Shell newShell) {  
+        // TODO Auto-generated method stub  
+        super.configureShell(newShell);  
+        newShell.setText("Host Information Edit");  
+    }  
 	
 	private boolean contentIsValid() {
 		
@@ -398,5 +395,4 @@ public class HostsEditDialog extends Dialog {
 		*/
 		return true;
 	}
-	
 }
