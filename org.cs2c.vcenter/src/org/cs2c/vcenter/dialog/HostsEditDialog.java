@@ -45,7 +45,7 @@ public class HostsEditDialog extends Dialog {
 	private DOMParser hostXml = null;
 	// private List<String> hostInfo=null;
 	private HostInfo hostInfo = null;
-	Button btnOk = null;
+	Button btn_Ok =null;
 	Button btnCancle = null;
 
 	/**
@@ -165,9 +165,21 @@ public class HostsEditDialog extends Dialog {
 								gd_composite.widthHint = 329;
 								composite.setLayoutData(gd_composite);
 								
-								Button button = new Button(composite, SWT.NONE);
-								button.setBounds(61, 10, 54, 27);
-								button.setText("   OK   ");
+								btn_Ok = new Button(composite, SWT.NONE);
+								btn_Ok.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseDown(MouseEvent e) {
+										if(contentIsValid())
+										{
+											hostXml.saveHostInfo("conf/host.xml", hostInfo);
+											setReturnCode(OK);
+											close();
+										}
+
+									}
+								});
+								btn_Ok.setBounds(61, 10, 54, 27);
+								btn_Ok.setText("   OK   ");
 								
 										btnCancle = new Button(composite, SWT.NONE);
 										btnCancle.setBounds(214, 10, 59, 27);
@@ -368,21 +380,21 @@ public class HostsEditDialog extends Dialog {
 	
 	private boolean isUserNameValid(String str)
 	{
-		Pattern pattern = Pattern.compile("[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]?");
+		Pattern pattern = Pattern.compile("[A-Za-z0-9_.][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]?");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
 	private boolean isPathValid(String str)
 	{
 		//Pattern pattern = Pattern.compile( "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
-		Pattern pattern = Pattern.compile( "(\\/([0-9a-zA-Z]+))+/");
+		Pattern pattern = Pattern.compile( "(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+/");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
 	
 	private boolean isPassWordValid(String str)
 	{
-		Pattern pattern = Pattern.compile("^[a-zA-Z]\\w*$" );				
+		Pattern pattern = Pattern.compile("^[a-zA-Z]\\w{4,}$" );				
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}

@@ -1,10 +1,13 @@
 package org.cs2c.vcenter.dialog;
 
 import java.util.ArrayList;
+
+import org.cs2c.vcenter.Activator;
 import org.cs2c.vcenter.Application;
 import org.cs2c.vcenter.metadata.DOMParser;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -186,7 +189,9 @@ public class HostsManagerDialog extends Dialog {
     protected void configureShell(Shell newShell) {  
         // TODO Auto-generated method stub  
         super.configureShell(newShell);  
-        newShell.setText("Hosts Information");  
+        newShell.setText("Hosts Information"); 
+        newShell.setImage(new Image(newShell.getDisplay(),"icons/hosts.png"));
+       
     }  
 	public void getHostsInfoFromXml() {
 		list.removeAll();
