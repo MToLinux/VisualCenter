@@ -2,7 +2,7 @@ package org.cs2c.vcenter.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+
 
 public class BlockMeta {
 	private String name;
@@ -12,7 +12,7 @@ public class BlockMeta {
 	private List<BlockMeta> blockMeta=null;
 	private String group=null;
 	
-	public void BlockMeta()
+	public BlockMeta()
 	{
 		name=null;
 		group=null;
