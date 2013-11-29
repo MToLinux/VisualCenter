@@ -68,7 +68,7 @@ public class Importmiddleware extends Dialog {
 		
 		Label lblNewLabel = new Label(container, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("Host：");
+		lblNewLabel.setText("Host: ");
 		
 		combo_host = new Combo(container, SWT.NONE);
 		combo_host.setEnabled(true);

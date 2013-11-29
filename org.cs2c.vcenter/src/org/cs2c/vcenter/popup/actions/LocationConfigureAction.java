@@ -3,6 +3,7 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.editors.BlockConfigFace;
 import org.cs2c.vcenter.editors.MonitorFace;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
@@ -39,7 +40,7 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 		// TODO Auto-generated method stub
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			page.openEditor((IEditorInput)element, MonitorFace.ID);
+			page.openEditor((IEditorInput)element, BlockConfigFace.ID);
 		} catch (PartInitException e) {
 			e.printStackTrace();
 		}
