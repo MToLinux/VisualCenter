@@ -51,24 +51,49 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 	}
 	private void DeleteLocation() throws RemoteException {
 		String outerBlockNames = null;
+		String locationName = null;
 
 		RecConfigurator orc = null;
 		orc = (RecConfigurator) this.element.getMiddlewareFactory().getConfigurator();
-		String viewServer_name = this.element.getParent().getName();
-		int nserverindex = GetServerIndex(orc,viewServer_name);
-		if(nserverindex > -1){
-			outerBlockNames = "http:0|server:"+Integer.toString(nserverindex);
-			String locationName = "location "+this.element.getName();
-//			System.out.println("locationName:"+locationName);
-			List<Block> listlo = orc.getBlocks(locationName , outerBlockNames);
-			if((listlo != null)&&(listlo.size()>0)){
-//				System.out.println("listlo.size():"+listlo.size());
-				Block delBlock = listlo.get(0);
-				orc.delete(delBlock, outerBlockNames);
-				//aoto show in treeview,do refresh
-				this.treeViewer.refresh();
-			}
+		
+		outerBlockNames = this.element.getOuterBlockNames();
+		locationName = this.element.getBlocktype();
+		List<Block> listlo = orc.getBlocks(locationName , outerBlockNames);
+		if((listlo != null)&&(listlo.size()>0)){
+//			System.out.println("listlo.size():"+listlo.size());
+			int index = Integer.parseInt(this.element.getBlockIndex());
+			Block delBlock = listlo.get(index);
+			orc.delete(delBlock, outerBlockNames);
+			//aoto show in treeview,do refresh
+			this.treeViewer.refresh();
 		}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//
+//		String viewServer_name = this.element.getParent().getName();
+//		int nserverindex = GetServerIndex(orc,viewServer_name);
+//		if(nserverindex > -1){
+//			outerBlockNames = "http:0|server:"+Integer.toString(nserverindex);
+//			String locationName = "location "+this.element.getName();
+////			System.out.println("locationName:"+locationName);
+//			List<Block> listlo = orc.getBlocks(locationName , outerBlockNames);
+//			if((listlo != null)&&(listlo.size()>0)){
+////				System.out.println("listlo.size():"+listlo.size());
+//				Block delBlock = listlo.get(0);
+//				orc.delete(delBlock, outerBlockNames);
+//				//aoto show in treeview,do refresh
+//				this.treeViewer.refresh();
+//			}
+//		}
 	}
 
 	private int GetServerIndex(RecConfigurator orc,String viewServer_name) throws RemoteException {

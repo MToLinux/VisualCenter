@@ -33,10 +33,9 @@ public class HttpElement extends TreeElement implements IHttp {
 		String blIndex = null;
 		
 		Map<String, String> SerMap =  getServerName();
-//		Set set = SerMap.entrySet();
 		Iterator<Entry<String, String>> it = SerMap.entrySet().iterator();
 		while(it.hasNext()){
-			Entry entry = (Entry)it.next();
+			Entry<String, String> entry = (Entry<String, String>)it.next();
 			blIndex = entry.getKey().toString();
 			String sername = entry.getValue().toString();
 			ServerElement server=new ServerElement(this);
