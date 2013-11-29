@@ -33,6 +33,15 @@ public abstract class TreeElement {
 	public String getName(){
 		return this.name;
 	}
+	public String getBlocktype(){
+		return this.blocktype;
+	}
+	public String getBlockIndex(){
+		return this.blockIndex;
+	}
+	public String getOuterBlockNames(){
+		return this.outerBlockNames;
+	}
 	
 	public MiddlewareFactory getMiddlewareFactory(){
 		return this.middleware;
