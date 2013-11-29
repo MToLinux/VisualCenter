@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,40 +15,39 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class DOMParser {
+/**
+ * @author liuqin
+ *
+ */
+public class HostManager {
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory
 			.newInstance();
 	Document document = null;
-	String hostName = null;
-	String userName = null;
-	String passWord = null;
-	private static class DOMParserHoder{
-		
-		private static DOMParser instance=new DOMParser("conf/host.xml");
-		
-	}
-	
-	
 
-	public static  DOMParser getInstance(){
-		return DOMParserHoder.instance; 
 
-			 
+	private static class HostManagerHoder {
+
+		private static HostManager instance = new HostManager("conf/host.xml");
+
 	}
-	private DOMParser(String filePath) {
-		//System.out.println("create domparser");
+
+	public static HostManager getInstance() {
+		return HostManagerHoder.instance;
+
+	}
+
+	private HostManager(String filePath) {
 		document = parseXml(filePath);
 	}
 
-	public  Document getDocument()
-	{
-		
+	public Document getDocument() {
+
 		return document;
 	}
+
 	// Load and parse XML file into DOM
 	public Document parseXml(String filePath) {
 		Document document = null;
@@ -89,8 +87,8 @@ public class DOMParser {
 		HostInfo hostInfo = new HostInfo();
 
 		String host[] = mainHostInfo.split("-", 2);
-		//System.out.println(host[0]);
-		//System.out.println(host[1]);
+		// System.out.println(host[0]);
+		// System.out.println(host[1]);
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
@@ -119,8 +117,8 @@ public class DOMParser {
 
 	public boolean deleteHostInfo(String mainHostInfo) {
 		String host[] = mainHostInfo.split("-", 2);
-		//System.out.println(host[0]);
-		//System.out.println(host[1]);
+		// System.out.println(host[0]);
+		// System.out.println(host[1]);
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
@@ -134,14 +132,14 @@ public class DOMParser {
 				if (nodeList.item(i).getParentNode()
 						.removeChild(nodeList.item(i)) != null) {
 					// delete the blank line
-					//System.out.println(rootElement.getElementsByTagName("host")
-					//		.getLength());
-					
+					// System.out.println(rootElement.getElementsByTagName("host")
+					// .getLength());
+
 					return true;
 				}
 			}
 		}
-		//System.out.println("112");
+		// System.out.println("112");
 		return false;
 	}
 
@@ -192,27 +190,25 @@ public class DOMParser {
 	}
 
 	public boolean saveXml(Document document, String filename) {
-		
-		
+
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
 		System.out
 				.println(rootElement.getElementsByTagName("host").getLength());
 		for (int i = 0; i < nodeList.getLength(); i++) {
-			Element element = (Element) nodeList.item(i);
-			//System.out.println(element.getAttribute(i+"name"));
+			// Element element = (Element) nodeList.item(i);
+			// System.out.println(element.getAttribute(i+"name"));
 		}
-		
-		
+
 		// TODO Auto-generated method stub
 		boolean flag = true;
 		try {
-			
-			/** 将document中的内容写入文件中 */
+
+			/**  the content of document are written to file */
 			TransformerFactory tFactory = TransformerFactory.newInstance();
 			Transformer transformer = tFactory.newTransformer();
-			//transformer.setoutpu
-			/** 编码 */
+			
+			
 			// transformer.setOutputProperty(OutputKeys.ENCODING, "GB2312");
 			DOMSource source = new DOMSource(document);
 			StreamResult result = new StreamResult(new File(filename));
@@ -225,5 +221,4 @@ public class DOMParser {
 		return flag;
 	}
 
-	
 }

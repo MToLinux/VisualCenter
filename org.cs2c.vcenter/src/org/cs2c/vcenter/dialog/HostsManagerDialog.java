@@ -1,14 +1,14 @@
 package org.cs2c.vcenter.dialog;
 
-import java.util.ArrayList;
-import org.cs2c.vcenter.Application;
-import org.cs2c.vcenter.metadata.DOMParser;
+
+import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
+
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.MessageBox;
+
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.SWT;
@@ -24,7 +24,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.PaintEvent;
 
 public class HostsManagerDialog extends Dialog {
-	DOMParser hostXml = null;
+	HostManager hostXml = null;
 	List list = null;
 	GridData gd_list;
 	Button btnNewButton = null;
@@ -38,7 +38,7 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = DOMParser.getInstance();
+		hostXml = HostManager.getInstance();
 		
 		//hostXml=org.cs2c.vcenter.Application.domparser;
 
@@ -186,7 +186,9 @@ public class HostsManagerDialog extends Dialog {
     protected void configureShell(Shell newShell) {  
         // TODO Auto-generated method stub  
         super.configureShell(newShell);  
-        newShell.setText("Hosts Information");  
+        newShell.setText("Hosts Information"); 
+        newShell.setImage(new Image(newShell.getDisplay(),"icons/hosts.png"));
+       
     }  
 	public void getHostsInfoFromXml() {
 		list.removeAll();

@@ -1,13 +1,13 @@
 package org.cs2c.vcenter.dialog;
 
-import java.util.List;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.cs2c.vcenter.metadata.DOMParser;
+
 import org.cs2c.vcenter.metadata.HostInfo;
+import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -20,16 +20,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
+
 
 public class HostsEditDialog extends Dialog {
 	private Text text;
@@ -42,10 +38,10 @@ public class HostsEditDialog extends Dialog {
 	private Text text_8;
 	// private int flag=0;
 	private String selectItem = null;
-	private DOMParser hostXml = null;
+	private HostManager hostXml = null;
 	// private List<String> hostInfo=null;
 	private HostInfo hostInfo = null;
-	Button btnOk = null;
+	Button btn_Ok =null;
 	Button btnCancle = null;
 
 	/**
@@ -58,7 +54,7 @@ public class HostsEditDialog extends Dialog {
 		super(parentShell);
 	}
 
-	public HostsEditDialog(Shell parentShell, String para, DOMParser domPara) {
+	public HostsEditDialog(Shell parentShell, String para, HostManager domPara) {
 		super(parentShell);
 		selectItem = para;
 		hostXml = domPara;
@@ -165,9 +161,21 @@ public class HostsEditDialog extends Dialog {
 								gd_composite.widthHint = 329;
 								composite.setLayoutData(gd_composite);
 								
-								Button button = new Button(composite, SWT.NONE);
-								button.setBounds(61, 10, 54, 27);
-								button.setText("   OK   ");
+								btn_Ok = new Button(composite, SWT.NONE);
+								btn_Ok.addMouseListener(new MouseAdapter() {
+									@Override
+									public void mouseDown(MouseEvent e) {
+										if(contentIsValid())
+										{
+											hostXml.saveHostInfo("conf/host.xml", hostInfo);
+											setReturnCode(OK);
+											close();
+										}
+
+									}
+								});
+								btn_Ok.setBounds(61, 10, 54, 27);
+								btn_Ok.setText("   OK   ");
 								
 										btnCancle = new Button(composite, SWT.NONE);
 										btnCancle.setBounds(214, 10, 59, 27);
@@ -368,21 +376,21 @@ public class HostsEditDialog extends Dialog {
 	
 	private boolean isUserNameValid(String str)
 	{
-		Pattern pattern = Pattern.compile("[A-Za-z_][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]?");
+		Pattern pattern = Pattern.compile("[A-Za-z0-9_.][A-Za-z0-9_.-]*[A-Za-z0-9_.$-]?");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
 	private boolean isPathValid(String str)
 	{
 		//Pattern pattern = Pattern.compile( "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
-		Pattern pattern = Pattern.compile( "(\\/([0-9a-zA-Z]+))+/");
+		Pattern pattern = Pattern.compile( "(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+/");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
 	
 	private boolean isPassWordValid(String str)
 	{
-		Pattern pattern = Pattern.compile("^[a-zA-Z]\\w*$" );				
+		Pattern pattern = Pattern.compile("^[a-zA-Z]\\w{4,}$" );				
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
