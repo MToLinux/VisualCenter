@@ -22,9 +22,7 @@ public class HostManager {
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory
 			.newInstance();
 	Document document = null;
-	String hostName = null;
-	String userName = null;
-	String passWord = null;
+
 
 	private static class HostManagerHoder {
 

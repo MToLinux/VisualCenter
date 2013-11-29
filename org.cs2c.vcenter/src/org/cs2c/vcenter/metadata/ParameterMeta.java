@@ -8,8 +8,8 @@ public class ParameterMeta {
 	private String name;
 	private String value;
 	private String className;
-	private long min;
-	private long max;
+	private int min;
+	private int max;
 	private List<String> units;
 	private String tips;
 	private List<String> items;
@@ -36,11 +36,11 @@ public class ParameterMeta {
 	{
 		this.className=para;
 	}
-	public void setMin(long para)
+	public void setMin(int para)
 	{
 		this.min=para;
 	}
-	public void setMax(long para)
+	public void setMax(int para)
 	{
 		this.max=para;
 	}
