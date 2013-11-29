@@ -9,8 +9,8 @@ import java.util.List;
 import org.cs2c.vcenter.Activator;
 import org.cs2c.vcenter.dialog.Importmiddleware;
 import org.cs2c.vcenter.dialog.deploydialog;
-import org.cs2c.vcenter.metadata.DOMParser;
 import org.cs2c.vcenter.metadata.HostInfo;
+import org.cs2c.vcenter.metadata.HostManager;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -66,7 +66,7 @@ public class ImportProjectAction extends Action {
 	@Override
 	public void run(){
 		//  get liu qin return list
-		DOMParser objDOMParser = DOMParser.getInstance();
+		HostManager objDOMParser = HostManager.getInstance();
 	    List<String> list = objDOMParser.getMainHostInfo();
 		// call Import Project Dialog
 		// open dialog

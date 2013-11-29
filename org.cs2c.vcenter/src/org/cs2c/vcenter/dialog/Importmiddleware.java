@@ -2,7 +2,7 @@ package org.cs2c.vcenter.dialog;
 
 import java.util.List;
 
-import org.cs2c.vcenter.metadata.DOMParser;
+import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.graphics.Point;
@@ -96,7 +96,7 @@ public class Importmiddleware extends Dialog {
 				//调出Host Editor查看该Host的详细信息
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 				HostsEditDialog addhostDialog = new HostsEditDialog(shell
-						, combo_host.getText(), DOMParser.getInstance());
+						, combo_host.getText(), HostManager.getInstance());
 				addhostDialog.open();
 			}
 		});
