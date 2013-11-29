@@ -1,6 +1,6 @@
 package org.cs2c.vcenter;
 
-import org.cs2c.vcenter.metadata.DOMParser;
+
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.swt.widgets.Display;
