@@ -18,6 +18,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * @author liuqin
+ *
+ */
 public class HostManager {
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory
 			.newInstance();
