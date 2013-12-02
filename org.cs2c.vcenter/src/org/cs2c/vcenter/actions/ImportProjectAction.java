@@ -3,12 +3,11 @@
  */
 package org.cs2c.vcenter.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cs2c.vcenter.Activator;
 import org.cs2c.vcenter.dialog.Importmiddleware;
-import org.cs2c.vcenter.dialog.deploydialog;
+//import org.cs2c.vcenter.dialog.deploydialog;
 import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
 import org.cs2c.vcenter.views.MiddlewareView;

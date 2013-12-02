@@ -93,7 +93,7 @@ public class Importmiddleware extends Dialog {
 		btn_ViewSelect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				//调出Host Editor查看该Host的详细信息
+				//call Host Editor view Host info
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 				HostsEditDialog addhostDialog = new HostsEditDialog(shell
 						, combo_host.getText(), HostManager.getInstance());
