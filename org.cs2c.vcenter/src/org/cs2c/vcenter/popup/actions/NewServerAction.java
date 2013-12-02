@@ -3,15 +3,16 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
+import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.RecStringParameter;
-import org.cs2c.nginlib.ctl.Controller;
+import org.cs2c.nginlib.config.StringParameter;
+//import org.cs2c.nginlib.ctl.Controller;
 import org.cs2c.vcenter.dialog.serverdialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
@@ -73,16 +74,16 @@ public class NewServerAction implements IObjectActionDelegate {
 		Block newBlock = orc.newBlock();
 		newBlock.setName("server");
 		//make Directive : server_name
-			RecDirective rdserver_name = new RecDirective();
+			Directive rdserver_name = orc.newDirective();
 			rdserver_name.setName("server_name");
-				RecStringParameter param1 = new RecStringParameter();
+				StringParameter param1 = orc.newStringParameter();
 				param1.setValue(sernameval);
 			rdserver_name.addParameter(param1);
 		newBlock.addDirective(rdserver_name);
 		//make Directive : listen
-			RecDirective rd = new RecDirective();
+			Directive rd = orc.newDirective();
 			rd.setName("listen");
-				RecStringParameter param = new RecStringParameter();
+				StringParameter param = orc.newStringParameter();
 				param.setValue(listenval);
 			rd.addParameter(param);
 		newBlock.addDirective(rd);

@@ -181,12 +181,15 @@ public class BlockInput extends Composite {
 					int len = selEleName.length();
 					if(len > 6 && selEleName.substring(selEleName.length()-6,selEleName.length()).equals(strBlockMark))
 					{
-						Block blk = orc.newBlock();
-						blk.setName(selEleName.substring(0, selEleName.length()-6));
+						Block blk;
 						try {
+							blk = orc.newBlock();
+							blk.setName(selEleName.substring(0, selEleName.length()-6));
 							block.addBlock(blk);
 						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
 							e1.printStackTrace();
+
 						}
 					}
 					else
@@ -234,11 +237,7 @@ public class BlockInput extends Composite {
 								return;
 							}
 
-							try {
-								block.addDirective(dirct);
-							} catch (RemoteException e1) {
-								e1.printStackTrace();
-							}
+							block.addDirective(dirct);
 
 							UpdateListCtl();
 							
@@ -371,11 +370,7 @@ public class BlockInput extends Composite {
 							return;
 						}
 						
-						try {
-							block.addDirective(newDirct);//block.replaceDirective(dirct, newDirct);
-						} catch (RemoteException e1) {
-							e1.printStackTrace();
-						}
+						block.addDirective(newDirct);//block.replaceDirective(dirct, newDirct);
 
 						UpdateListCtl();
 						
@@ -433,11 +428,7 @@ public class BlockInput extends Composite {
 						}
 					}
 					
-					try {
-						block.addBlock(oldBlock);//block.removeBlock(oldBlock);
-					} catch (RemoteException e1) {
-						e1.printStackTrace();
-					}
+					block.addBlock(oldBlock);//block.removeBlock(oldBlock);
 				}
 				else
 				{
@@ -461,12 +452,7 @@ public class BlockInput extends Composite {
 							return;
 						}
 						
-						try {
-							block.addDirective(oldDirct);//block.removeDirective(oldDirct);
-							
-						} catch (RemoteException e1) {
-							e1.printStackTrace();
-						}
+						block.addDirective(oldDirct);//block.removeDirective(oldDirct);
 					}
 				}
 				
