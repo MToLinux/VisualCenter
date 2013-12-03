@@ -1,14 +1,15 @@
 package org.cs2c.vcenter.dialog;
 
 
+import javax.swing.JOptionPane;
+
 import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
-
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.SWT;
@@ -77,7 +78,7 @@ public class HostsManagerDialog extends Dialog {
 	
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				// list.getItems()
 				HostsEditDialog addhostDialog = new HostsEditDialog(this
 						.getShell(), "", hostXml);
@@ -113,7 +114,7 @@ public class HostsManagerDialog extends Dialog {
 		
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				HostsEditDialog edithostDialog = new HostsEditDialog(this
 						.getShell(), list.getSelection()[0], hostXml);
 
@@ -139,11 +140,15 @@ public class HostsManagerDialog extends Dialog {
 				false, 2, 1));
 		btnNewButton_2.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
-				hostXml.deleteHostInfo(list.getSelection()[0]);		
-				hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
+			public void mouseUp(MouseEvent e) {
 				
-				getHostsInfoFromXml();
+				if(JOptionPane.showConfirmDialog(null, "Are you sure to delete this host information?",
+						"Delete host information", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION)
+				{
+					hostXml.deleteHostInfo(list.getSelection()[0]);		
+					hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
+					getHostsInfoFromXml();
+				}
 
 			}
 		});

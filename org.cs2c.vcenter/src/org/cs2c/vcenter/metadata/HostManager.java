@@ -13,6 +13,9 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -92,12 +95,12 @@ public class HostManager {
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
-		System.out
-				.println(rootElement.getElementsByTagName("host").getLength());
+		//System.out
+		//		.println(rootElement.getElementsByTagName("host").getLength());
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Element element = (Element) nodeList.item(i);
 			// System.out.println(element.toString());
-			System.out.println(element.getAttribute("middleware"));
+			//System.out.println(element.getAttribute("middleware"));
 			if ((element.getAttribute("middleware").compareTo(host[0]) == 0)
 					&& (element.getAttribute("name").compareTo(host[1]) == 0)) {
 				hostInfo.setHostName(element.getAttribute("name"));
@@ -122,8 +125,8 @@ public class HostManager {
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
-		System.out
-				.println(rootElement.getElementsByTagName("host").getLength());
+		//System.out
+		//		.println(rootElement.getElementsByTagName("host").getLength());
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			Element element = (Element) nodeList.item(i);
 			if ((element.getAttribute("middleware").compareTo(host[0]) == 0)
@@ -143,32 +146,42 @@ public class HostManager {
 		return false;
 	}
 
-	public boolean saveHostInfo(String xmlFile, HostInfo hostInfo) {
-
+	public boolean hasHostInfo(HostInfo hostInfo)
+	{
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
 
-		for (int i = 0; i < nodeList.getLength(); i++) {
+		for (int i = 0; i < nodeList.getLength(); i++) 
+		{
 
 			Element element = (Element) nodeList.item(i);
-			if ((element.getAttribute("middleware").compareTo(
-					hostInfo.getMiddleware()) == 0)
-					&& (element.getAttribute("name").compareTo(
-							hostInfo.getHostName()) == 0)) {
-				element.setAttribute("name", hostInfo.getHostName());
-				element.setAttribute("username", hostInfo.getUserName());
-				element.setAttribute("password", hostInfo.getPassWord());
-				element.setAttribute("middleware", hostInfo.getMiddleware());
-				element.setAttribute("home", hostInfo.getHome());
-				element.setAttribute("stapath", hostInfo.getStatusPath());
-				element.setAttribute("musername", hostInfo.getManagerUserName());
-				element.setAttribute("mpassword", hostInfo.getManagerPassWord());
-				saveXml(document, xmlFile);
+			if ((element.getAttribute("middleware").toLowerCase().compareTo(
+					hostInfo.getMiddleware().toLowerCase()) == 0)
+					&& (element.getAttribute("name").toLowerCase().compareTo(
+							hostInfo.getHostName().toLowerCase()) == 0)) {
+
+System.out.println("have no the same service");
+				
 				return true;
 			}
-
 		}
+		return false;
+	}
+	
+	private Shell getShell() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	public boolean insertHostInfo(String xmlFile, HostInfo hostInfo) {
+
+		Element rootElement = document.getDocumentElement();
+		
+		/*if(hasHostInfo(hostInfo)==true)
+		{
+			return false;
+		}
+*/
 		Element theHost = null;
 		theHost = document.createElement("host");
 		theHost.setAttribute("name", hostInfo.getHostName());
@@ -188,13 +201,79 @@ public class HostManager {
 			return false;
 
 	}
+	public int modifyHostInfo(String xmlFile, HostInfo oldHostInfo,HostInfo newHostInfo)
+	{
+		if((oldHostInfo.getHostName().equals(newHostInfo.getHostName()))&&(oldHostInfo.getMiddleware().equals(newHostInfo.getMiddleware())))
+		{
+			Element rootElement = document.getDocumentElement();
+			NodeList nodeList = rootElement.getElementsByTagName("host");
+			for (int i = 0; i < nodeList.getLength(); i++) {
 
+				Element element = (Element) nodeList.item(i);
+				if ((element.getAttribute("middleware").compareTo(
+						oldHostInfo.getMiddleware()) == 0)
+						&& (element.getAttribute("name").compareTo(
+								oldHostInfo.getHostName()) == 0)) {
+					element.setAttribute("name", newHostInfo.getHostName());
+					element.setAttribute("username", newHostInfo.getUserName());
+					element.setAttribute("password", newHostInfo.getPassWord());
+					element.setAttribute("middleware", newHostInfo.getMiddleware());
+					element.setAttribute("home", newHostInfo.getHome());
+					element.setAttribute("stapath", newHostInfo.getStatusPath());
+					element.setAttribute("musername", newHostInfo.getManagerUserName());
+					element.setAttribute("mpassword", newHostInfo.getManagerPassWord());
+					if(saveXml(document, xmlFile))
+						return 1;//save successfully
+					else
+						return 2;//save failed
+					
+				}
+			}
+		}
+		else 
+		{
+			if(hasHostInfo(newHostInfo)==true)
+			{
+				return 3;//already have the host information
+			}
+			else
+			{
+				Element rootElement = document.getDocumentElement();
+				NodeList nodeList = rootElement.getElementsByTagName("host");
+				for (int i = 0; i < nodeList.getLength(); i++) {
+
+					Element element = (Element) nodeList.item(i);
+					if ((element.getAttribute("middleware").compareTo(
+					oldHostInfo.getMiddleware()) == 0)
+					&& (element.getAttribute("name").compareTo(
+							oldHostInfo.getHostName()) == 0)) {
+						element.setAttribute("name", newHostInfo.getHostName());
+						element.setAttribute("username", newHostInfo.getUserName());
+						element.setAttribute("password", newHostInfo.getPassWord());
+						element.setAttribute("middleware", newHostInfo.getMiddleware());
+						element.setAttribute("home", newHostInfo.getHome());
+						element.setAttribute("stapath", newHostInfo.getStatusPath());
+						element.setAttribute("musername", newHostInfo.getManagerUserName());
+						element.setAttribute("mpassword", newHostInfo.getManagerPassWord());
+						
+						if(saveXml(document, xmlFile))
+							return 1;//save successfully
+						else
+							return 2;//save failed
+				
+					}
+				}
+			}
+		}
+		return 0;//find host element failed
+	}
+	
 	public boolean saveXml(Document document, String filename) {
 
 		Element rootElement = document.getDocumentElement();
 		NodeList nodeList = rootElement.getElementsByTagName("host");
-		System.out
-				.println(rootElement.getElementsByTagName("host").getLength());
+		//System.out
+		//		.println(rootElement.getElementsByTagName("host").getLength());
 		for (int i = 0; i < nodeList.getLength(); i++) {
 			// Element element = (Element) nodeList.item(i);
 			// System.out.println(element.getAttribute(i+"name"));

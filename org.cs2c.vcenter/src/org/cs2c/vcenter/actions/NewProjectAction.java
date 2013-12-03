@@ -4,6 +4,7 @@
 package org.cs2c.vcenter.actions;
 
 import org.cs2c.vcenter.Activator;
+import org.cs2c.vcenter.dialog.MiddlewareInstallerDialog;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -17,6 +18,7 @@ public class NewProjectAction extends Action {
 	/**
 	 * 
 	 */
+	private IWorkbenchWindow window;//abliuqin
 	public NewProjectAction() {
 		// TODO Auto-generated constructor stub
 	}
@@ -48,11 +50,13 @@ public class NewProjectAction extends Action {
 	}
 	public NewProjectAction(IWorkbenchWindow window){
 		super("New Mid-ware...");
+		this.window=window;
 		this.setId(NewProjectAction.ID);
 		this.setImageDescriptor(Activator.getImageDescriptor("icons/project_add.png"));
 	}
 	@Override
 	public void run(){
-		
+		MiddlewareInstallerDialog md=new MiddlewareInstallerDialog(window.getShell());
+		md.open();
 	}
 }
