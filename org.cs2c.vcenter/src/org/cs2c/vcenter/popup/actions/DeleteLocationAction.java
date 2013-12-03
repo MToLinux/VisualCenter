@@ -11,12 +11,14 @@ import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Shell;
 
 /**
  * @author Administrator
@@ -24,7 +26,7 @@ import org.eclipse.ui.PlatformUI;
  */
 public class DeleteLocationAction implements IObjectActionDelegate {
 	private TreeElement element;
-//	private Shell shell;
+	private Shell shell;
 	private TreeViewer treeViewer=null;
 	/**
 	 * 
@@ -38,6 +40,13 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		try {
+			// make sure
+			boolean retValue = MessageDialog.openQuestion(
+					this.shell, "Warn", "do you really want to delete?");
+			if(!retValue){
+				return;
+			}
+			
 			DeleteLocation();
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -79,7 +88,7 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-//		shell = targetPart.getSite().getShell();
+		shell = targetPart.getSite().getShell();
 		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 		this.treeViewer = meviewer.getTreeViewer();
 	}

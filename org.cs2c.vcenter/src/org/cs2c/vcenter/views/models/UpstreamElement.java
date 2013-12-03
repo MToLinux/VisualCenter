@@ -19,7 +19,8 @@ import org.cs2c.nginlib.config.RecStringParameter;
  */
 public class UpstreamElement extends TreeElement implements IUpstream {
 	private Map<String, String> lisloName = null;
-	
+	private Map<String,String> maploNameIndexIndex = new HashMap<String,String>();
+
 	/**
 	 * @param parent
 	 */
@@ -30,46 +31,89 @@ public class UpstreamElement extends TreeElement implements IUpstream {
 	@Override
 	public List<TreeElement> getChildren() {
 		List<TreeElement> children=new LinkedList<TreeElement>();
-
 		Iterator<Entry<String, String>> it = lisloName.entrySet().iterator();
 		while(it.hasNext()){
 			Entry<String, String> entry = (Entry<String, String>)it.next();
-			String blIndex = entry.getKey().toString();
-			String allname = entry.getValue().toString();
+			String allname = entry.getKey().toString();
+			String blIndex = entry.getValue().toString();
 			String subname = allname.substring(9,allname.length());
-				
+//			String outerBlNames = this.getOuterBlockNames()+"http:0";
 			String outerBlNames = "http:0";
+
 			UpstreamInstanceElement upstreamInstance=new UpstreamInstanceElement(this);
-			upstreamInstance.init(subname, allname, blIndex, outerBlNames, this.middleware);
-//			System.out.println(sername);
+//			System.out.println(" allname: "+allname);	//
+			System.out.println(" UPouterBlNames: "+outerBlNames);	//TODO
+			upstreamInstance.init(subname, allname, blIndex,outerBlNames, this.middleware);
 			children.add(upstreamInstance);
 		}
+		//lop maploNameIndexIndex
+		Iterator<Entry<String, String>> itIndexIndex = maploNameIndexIndex.entrySet().iterator();
+		while(itIndexIndex.hasNext()){
+			Entry<String, String> entry = (Entry<String, String>)itIndexIndex.next();
+			String nameIndexStr[] = entry.getKey().toString().split("\\|");
+
+			String allname = nameIndexStr[0];
+//			System.out.println("nameIndexStr[0] : "+nameIndexStr[0]);
+
+			String blIndex = entry.getValue().toString();
+			String subname = allname.substring(9,allname.length());
+			String outerBlNames = "http:0";
+
+			UpstreamInstanceElement upstreamInstance=new UpstreamInstanceElement(this);
+//			System.out.println(outerBlNames+" : "+outerBlNames);
+			upstreamInstance.init(subname, allname, blIndex,outerBlNames, this.middleware);
+			children.add(upstreamInstance);
+		}
+
+
 
 		return children;
 	}
 
 	private Map<String, String> getUpstreamName() throws RemoteException {
 		List<Block> list= null;
-		Map<String,String> lstloName = new HashMap<String,String>();
+		Map<String,String> maploNameIndex = new HashMap<String,String>();
+		String loIndex = "0";
 
-		Block blServer = getUpstreamBlock();
+		Block blhttp = gethttpBlock();
+		if(null == blhttp){
+			return null;
+		}
+		
 //		System.out.println(blServer.toString());
-		list= blServer.getBlocks();
+		list= blhttp.getBlocks();
+		if(list.isEmpty()){
+			return null;
+		}
+		
 //		System.out.println("list size"+list.size());
 		for(int i = 0;i<list.size();i++){
 			if(list.get(i).getName().length() < 8){
 				continue;
 			}
-			if ("upstream".equals(list.get(i).getName().substring(0, 8))){
+			if("upstream".equals(list.get(i).getName().substring(0, 8))){
 				String loname = list.get(i).getName();
-				lstloName.put(Integer.toString(i), loname);
+				
+				if(!maploNameIndex.containsKey(loname)){
+					maploNameIndex.put(loname,loIndex);
+				}else{
+					//1000 : support repeat block name 1000 times
+					for(int j = 1;j<1000;j++){
+						loname = loname+"|"+Integer.toString(j);
+						System.out.println("loname| : "+loname);	// TODO
+						if(!maploNameIndexIndex.containsKey(loname)){
+							maploNameIndexIndex.put(loname,Integer.toString(j));
+							break;
+						}
+					}
+				}
 			}
 		}
 		
-		return lstloName;
+		return maploNameIndex;
 	}
 	
-	private Block getUpstreamBlock() throws RemoteException{
+	private Block gethttpBlock() throws RemoteException{
 		String blockName = null;
 		String outerBlockNames = "";
 		List<Block> list= null;
@@ -92,6 +136,10 @@ public class UpstreamElement extends TreeElement implements IUpstream {
 		boolean bHasChildren = false;
 		
 		lisloName =  getUpstreamName();
+		if(null == lisloName){
+			return false;
+		}
+		
 		if(lisloName.size()>0){
 			bHasChildren = true;
 		}else{

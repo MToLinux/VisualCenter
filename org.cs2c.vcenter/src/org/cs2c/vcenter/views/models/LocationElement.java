@@ -88,7 +88,6 @@ public class LocationElement extends TreeElement implements ILocation {
 		}
 		
 		for(int i = 0;i<list.size();i++){
-
 			if(list.get(i).getName().length() < 8){
 				continue;
 			}

@@ -41,7 +41,7 @@ public class ShutdownAction implements IObjectActionDelegate {
 		} catch (RemoteException e) {
 			try{
 				//The nginx is running already.
-				if(e.getMessage().equals("The nginx is not running. ")){
+				if(null != e.getMessage()){
 					openMessageDialog(e.getMessage());
 				}else{
 					MessageDialog.openInformation(shell, "Exception", e.getMessage());
