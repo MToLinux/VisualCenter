@@ -32,27 +32,26 @@ public class HttpElement extends TreeElement implements IHttp {
 		List<TreeElement> children=new LinkedList<TreeElement>();
 		String blIndex = null;
 		
-		Map<String, String> SerMap =  getServerName();
-		Iterator<Entry<String, String>> it = SerMap.entrySet().iterator();
-		while(it.hasNext()){
-			Entry<String, String> entry = (Entry<String, String>)it.next();
-			blIndex = entry.getKey().toString();
-			String sername = entry.getValue().toString();
+		List<String> Serlist =  getServerName();
+		for(int i = 0;i<Serlist.size();i++){
+			blIndex = Integer.toString(i);
+			String sername = Serlist.get(i);
 			ServerElement server=new ServerElement(this);
 //			String sername = lisSerName.get(i).;	//TODO
 			String outerBlNames = "http:0";
 			server.init(sername,"server",blIndex,outerBlNames, this.middleware);
 			children.add(server);
 		}
+
 		return children;
 	}
 	
-	private Map<String, String> getServerName() throws RemoteException{
+	private List<String> getServerName() throws RemoteException{
 		String blockName = null;
 		String outerBlockNames = "http:0";
 		List<Block> list= null;
 		RecConfigurator orc = null;
-		Map<String,String> lstserverName = new HashMap<String,String>();
+		List<String> lstserverName = new ArrayList<String>();
 
 		orc = (RecConfigurator) this.middleware.getConfigurator();
 //			String PathWithName = SetConfpath(); TODO dialog
@@ -66,8 +65,8 @@ public class HttpElement extends TreeElement implements IHttp {
 			for(int j = 0;j<listdire.size(); j++){
 				if(listdire.get(j).getName().equals("server_name")){
 					RecStringParameter rsp = (RecStringParameter)listdire.get(j).getParameters().get(0);
-					lstserverName.put(Integer.toString(i), rsp.getValue());
-//					System.out.println(rsp.getValue());
+					lstserverName.add(rsp.getValue());
+//					System.out.println(Integer.toString(i)+"rsp:"+rsp.getValue());
 				}
 			}
 		}

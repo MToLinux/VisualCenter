@@ -48,7 +48,6 @@ public class DeployAction implements IObjectActionDelegate {
 	public void run(IAction action) {
 		try {
 			DeployToServer();
-			MessageDialog.openInformation(shell, "Information", "Deploy OK");
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}catch (Exception ex) {
@@ -81,7 +80,7 @@ public class DeployAction implements IObjectActionDelegate {
 	 * @throws IOException 
 	 * */
 	private void WritetoRemote(String LocalFilename,String RemotePath) throws IOException, RemoteException{        
-		System.out.println("LocalFilename:"+LocalFilename);
+//		System.out.println("LocalFilename:"+LocalFilename);
 
 		Controller orc = null;
 		orc = this.element.getMiddlewareFactory().getController();
@@ -89,6 +88,8 @@ public class DeployAction implements IObjectActionDelegate {
 		if (null != zipfile){
 //			System.out.println("RemotePath:"+RemotePath);
 			orc.deploy(zipfile, RemotePath);
+			// show Information
+			MessageDialog.openInformation(shell, "Information", "Deploy OK");
 		}
 	}
 	
