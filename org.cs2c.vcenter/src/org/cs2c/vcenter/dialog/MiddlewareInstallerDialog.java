@@ -28,15 +28,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.swt.widgets.Group;
+
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormAttachment;
 
-import swing2swt.layout.BoxLayout;
 
 public class MiddlewareInstallerDialog extends Dialog {
 	private Text text;
@@ -192,9 +187,17 @@ public class MiddlewareInstallerDialog extends Dialog {
 						String targetPath=text_4.getText();
 						try {
 							MiddlewareFactory.install(authInfo, gzFile, targetPath, null);
-						} catch (IOException | RemoteException e1) {
+						}catch (RemoteException e1) {
 							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							MessageBox mb=new MessageBox(getShell(),SWT.OK);
+							mb.setMessage(e1.getMessage());
+							mb.open();
+						} 
+						catch (IOException e1) {
+							// TODO Auto-generated catch block
+							MessageBox mb=new MessageBox(getShell(),SWT.OK);
+							mb.setMessage(e1.getMessage());
+							mb.open();
 						}
 						
 						if(hostXml.insertHostInfo("conf/host.xml", hostInfo))
