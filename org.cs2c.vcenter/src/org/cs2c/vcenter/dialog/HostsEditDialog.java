@@ -5,6 +5,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
+
 import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -12,6 +14,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
@@ -20,7 +23,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Button;
-
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
@@ -40,9 +42,11 @@ public class HostsEditDialog extends Dialog {
 	private String selectItem = null;
 	private HostManager hostXml = null;
 	// private List<String> hostInfo=null;
-	private HostInfo hostInfo = null;
+	private HostInfo newHostInfo = null;
+	private HostInfo oldHostInfo = null;
 	Button btn_Ok =null;
 	Button btnCancle = null;
+	private int flag=0;//add:1;edit:2;
 
 	/**
 	 * Create the dialog.
@@ -58,7 +62,8 @@ public class HostsEditDialog extends Dialog {
 		super(parentShell);
 		selectItem = para;
 		hostXml = domPara;
-		hostInfo = new HostInfo();
+		oldHostInfo = new HostInfo();
+		newHostInfo = new HostInfo();
 
 	}
 
@@ -164,14 +169,75 @@ public class HostsEditDialog extends Dialog {
 								btn_Ok = new Button(composite, SWT.NONE);
 								btn_Ok.addMouseListener(new MouseAdapter() {
 									@Override
-									public void mouseDown(MouseEvent e) {
-										if(contentIsValid())
+									public void mouseUp(MouseEvent e) {
+										if(flag==1)
 										{
-											hostXml.saveHostInfo("conf/host.xml", hostInfo);
-											setReturnCode(OK);
-											close();
+											if(contentIsValid())
+											{
+												if(hostXml.hasHostInfo(newHostInfo)==false)
+												{
+												
+													hostXml.insertHostInfo("conf/host.xml", newHostInfo);											
+													setReturnCode(OK);
+													close();
+												}
+												else
+												{
+													MessageBox mb=new MessageBox(getShell(), SWT.OK);
+													mb.setMessage("There exists the host information!");
+													mb.setText("Warning");
+													mb.open();
+													//setReturnCode(CANCEL);
+												}
+											
+											}
+											
 										}
+										else if(flag==2)
+										{
+											if(contentIsValid())
+											{
+												int result=hostXml.modifyHostInfo("conf/host.xml", oldHostInfo, newHostInfo);
+												if(result==3)
+												{
+													MessageBox mb=new MessageBox(getShell(), SWT.OK);
+													mb.setMessage("There exists the host information!");
+													mb.setText("Warning");
+													mb.open();
 
+												}
+												else if(result==1)
+												{
+													MessageBox mb=new MessageBox(getShell(), SWT.OK);
+													mb.setMessage("Modify successfully!");
+													mb.setText("");
+													mb.open();										
+													setReturnCode(OK);
+													close();
+												}
+												else if(result==2)
+												{
+													MessageBox mb=new MessageBox(getShell(), SWT.OK);
+													mb.setMessage("Modify failed!");
+													mb.setText("");
+													mb.open();										
+													setReturnCode(CANCEL);
+													close();
+												}
+												else if(result==0)
+												{
+													MessageBox mb=new MessageBox(getShell(), SWT.OK);
+													mb.setMessage("Find host element failed!");
+													mb.setText("");
+													mb.open();										
+													setReturnCode(CANCEL);
+													close();
+													
+												}
+											
+											}
+										}
+										
 									}
 								});
 								btn_Ok.setBounds(61, 10, 54, 27);
@@ -181,7 +247,7 @@ public class HostsEditDialog extends Dialog {
 										btnCancle.setBounds(214, 10, 59, 27);
 										btnCancle.addMouseListener(new MouseAdapter() {
 											@Override
-											public void mouseDown(MouseEvent e) {
+											public void mouseUp(MouseEvent e) {
 												setReturnCode(CANCEL);
 												close();
 											}
@@ -190,62 +256,72 @@ public class HostsEditDialog extends Dialog {
 
 		text.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setHostName(text.getText());
+				newHostInfo.setHostName(text.getText());
 				//contentIsValid();
 			}
 		});
 		text_1.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setUserName(text_1.getText());
+				newHostInfo.setUserName(text_1.getText());
 			}
 		});
 
 		text_2.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setPassWord(text_2.getText());
+				newHostInfo.setPassWord(text_2.getText());
 			}
 		});
 
 		text_4.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setMiddleware(text_4.getText());
+				newHostInfo.setMiddleware(text_4.getText());
 			}
 		});
 
 		text_5.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setHome(text_5.getText());
+				newHostInfo.setHome(text_5.getText());
 			}
 		});
 
 		text_6.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setStatusPath(text_6.getText());
+				newHostInfo.setStatusPath(text_6.getText());
 			}
 		});
 
 		text_7.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setManagerUserName(text_7.getText());
+				newHostInfo.setManagerUserName(text_7.getText());
 			}
 		});
 		text_8.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
-				hostInfo.setManagerPassWord(text_8.getText());
+				newHostInfo.setManagerPassWord(text_8.getText());
 			}
 		});
 
 		if (!selectItem.equals("")) {
-			hostInfo = hostXml.getHostInfo(selectItem);
+			oldHostInfo = hostXml.getHostInfo(selectItem);
+			newHostInfo.setHostName(oldHostInfo.getHostName());
+			newHostInfo.setUserName(oldHostInfo.getUserName());
+			newHostInfo.setPassWord(oldHostInfo.getPassWord());
+			newHostInfo.setMiddleware(oldHostInfo.getMiddleware());
+			newHostInfo.setHome(oldHostInfo.getHome());
+			newHostInfo.setStatusPath(oldHostInfo.getStatusPath());
+			newHostInfo.setManagerUserName(oldHostInfo.getManagerUserName());
+			newHostInfo.setManagerPassWord(oldHostInfo.getManagerPassWord());
 			// System.out.println(hostInfo.get(0));
-			text.setText(hostInfo.getHostName());
-			text_1.setText(hostInfo.getUserName());
-			text_2.setText(hostInfo.getPassWord());
-			text_4.setText(hostInfo.getMiddleware());
-			text_5.setText(hostInfo.getHome());
-			text_6.setText(hostInfo.getStatusPath());
-			text_7.setText(hostInfo.getManagerUserName());
-			text_8.setText(hostInfo.getManagerPassWord());
+			text.setText(oldHostInfo.getHostName());
+			text_1.setText(oldHostInfo.getUserName());
+			text_2.setText(oldHostInfo.getPassWord());
+			text_4.setText(oldHostInfo.getMiddleware());
+			text_5.setText(oldHostInfo.getHome());
+			text_6.setText(oldHostInfo.getStatusPath());
+			text_7.setText(oldHostInfo.getManagerUserName());
+			text_8.setText(oldHostInfo.getManagerPassWord());
+			flag=2;
+			
 		} else {
 			text.setText("");
 			text_1.setText("");
@@ -255,6 +331,7 @@ public class HostsEditDialog extends Dialog {
 			text_6.setText("");
 			text_7.setText("");
 			text_8.setText("");
+			flag=1;
 		}
 		return container;
 	}
