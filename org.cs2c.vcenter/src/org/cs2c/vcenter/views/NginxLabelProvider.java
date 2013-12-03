@@ -80,8 +80,9 @@ public class NginxLabelProvider implements ILabelProvider {
 			return new Image(null, "icons/logs.png");
 		else if(element instanceof UpstreamElement)
 			return new Image(null, "icons/upstream.png");
-		else if(element instanceof ModuleElement)
-			return new Image(null, "icons/upstream.png");
+		/*else if(element instanceof ModuleElement)
+			return new Image(null, "icons/module.png");
+			*/
 		else if(element instanceof ProjectElement)
 				return new Image(null, "icons/project.png");
 		else if(element instanceof LogInstanceElement)
