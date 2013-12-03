@@ -86,7 +86,7 @@ public class LogBrowser extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
-		this.text = new Text(parent, SWT.BORDER);
+		this.text = new Text(parent, SWT.BORDER|SWT.MULTI);
 		this.text.setEditable(false);
 		Logger logger=this.input.getMiddlewareFactory().getLogger();
 		try {
