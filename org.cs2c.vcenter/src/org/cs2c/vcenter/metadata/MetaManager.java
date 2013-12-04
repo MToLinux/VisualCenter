@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPath;
@@ -191,13 +190,13 @@ public class MetaManager {
 					|| (decreaseBlank(recuroneelement.getAttribute("min")) == null))
 				tmpParaMeta.setMin(-2);
 			else
-				tmpParaMeta.setMin(Long.parseLong(decreaseBlank(recuroneelement
+				tmpParaMeta.setMin(Integer.parseInt(decreaseBlank(recuroneelement
 						.getAttribute("min"))));
 			if ((decreaseBlank(recuroneelement.getAttribute("max")) == "")
 					|| (decreaseBlank(recuroneelement.getAttribute("max")) == null))
 				tmpParaMeta.setMax(-2);
 			else
-				tmpParaMeta.setMax(Long.parseLong(decreaseBlank(recuroneelement
+				tmpParaMeta.setMax(Integer.parseInt(decreaseBlank(recuroneelement
 						.getAttribute("max"))));
 
 			tmpParaMeta.setTips(recuroneelement.getAttribute("tips"));

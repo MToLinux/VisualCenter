@@ -14,9 +14,11 @@ import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
@@ -28,6 +30,8 @@ import org.eclipse.ui.PlatformUI;
 public class DeleteUpstreamAction implements IObjectActionDelegate {
 	private TreeElement element;
 	private TreeViewer treeViewer=null;
+	private Shell shell;
+
 	/**
 	 * 
 	 */
@@ -40,9 +44,21 @@ public class DeleteUpstreamAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		try {
+			// make sure
+			boolean retValue = MessageDialog.openQuestion(
+					this.shell, "Warn", "do you really want to delete?");
+			if(!retValue){
+				return;
+			}
 			DeleteUpstream();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			}else{
+				e.printStackTrace();
+			}
+
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -50,33 +66,25 @@ public class DeleteUpstreamAction implements IObjectActionDelegate {
 
 	private void DeleteUpstream() throws RemoteException {
 		//delete a Upstream block
-		String outerBlockNames = "http:0";
+		String outerBlockNames = null;
+		String locationName = null;
+
 		RecConfigurator orc = null;
 		orc = (RecConfigurator) this.element.getMiddlewareFactory().getConfigurator();
 		
-		Block blServer = getUpstreamBlock(orc);
+		outerBlockNames = this.element.getOuterBlockNames();
+		locationName = this.element.getBlocktype();
+		List<Block> listlo = orc.getBlocks(locationName , outerBlockNames);
 		
-		if(blServer!=null){
-			orc.delete(blServer, outerBlockNames);
+		if((listlo != null)&&(listlo.size()>0)){
+//			System.out.println("outerBlockNames:"+outerBlockNames);	//TODO
+			int index = Integer.parseInt(this.element.getBlockIndex());
+			Block delBlock = listlo.get(index);
+			orc.delete(delBlock, outerBlockNames);
+			//aoto show in treeview,do refresh
 			this.treeViewer.refresh();
 		}
-	}
-	
-	private Block getUpstreamBlock(RecConfigurator orc) throws RemoteException{
-		String blockName = null;
-		String outerBlockNames = "http:0";
-		List<Block> list= null;
-		
-		blockName = "upstream "+this.element.getName();
-		list= orc.getBlocks(blockName, outerBlockNames);
-		if((list != null)&&(list.size()>0)){
-			Block tembl = list.get(0);
-			return tembl;
-		}
-		
-		return null;
-	}
-	
+	}	
 
 	/* (non-Javadoc)
 	 * @see org.eclipse.ui.IActionDelegate#selectionChanged(org.eclipse.jface.action.IAction, org.eclipse.jface.viewers.ISelection)
@@ -94,6 +102,8 @@ public class DeleteUpstreamAction implements IObjectActionDelegate {
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 		this.treeViewer = meviewer.getTreeViewer();
+		shell = targetPart.getSite().getShell();
+
 	}
 
 }

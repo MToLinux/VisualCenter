@@ -3,7 +3,16 @@
  */
 package org.cs2c.vcenter.views;
 
+import org.cs2c.vcenter.views.models.HttpElement;
+import org.cs2c.vcenter.views.models.LocationElement;
+import org.cs2c.vcenter.views.models.LogElement;
+import org.cs2c.vcenter.views.models.LogInstanceElement;
+import org.cs2c.vcenter.views.models.ModuleElement;
+import org.cs2c.vcenter.views.models.ProjectElement;
+import org.cs2c.vcenter.views.models.ServerElement;
 import org.cs2c.vcenter.views.models.TreeElement;
+import org.cs2c.vcenter.views.models.UpstreamElement;
+import org.cs2c.vcenter.views.models.UpstreamInstanceElement;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IViewerLabelProvider;
@@ -64,8 +73,32 @@ public class NginxLabelProvider implements ILabelProvider {
 	 */
 	@Override
 	public Image getImage(Object element) {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO Auto-generated method stub  new Image(null, "icons/http.png");
+		//TreeElement node=(TreeElement)element;
+		if(element instanceof HttpElement)
+			return new Image(null, "icons/http.png");
+		else if(element instanceof LogElement)
+			return new Image(null, "icons/logs.png");
+		else if(element instanceof UpstreamElement)
+			return new Image(null, "icons/upstreams.png");
+		else if(element instanceof UpstreamInstanceElement)
+			return new Image(null, "icons/upstream.png");
+		/*else if(element instanceof ModuleElement)
+			return new Image(null, "icons/module.png");
+			*/
+		else if(element instanceof ProjectElement)
+				return new Image(null, "icons/project.png");
+		else if(element instanceof LogInstanceElement)
+			return new Image(null, "icons/log.png");
+		else if(element instanceof LocationElement)
+			return new Image(null, "icons/location.png");
+		else if(element instanceof ServerElement)
+			return new Image(null, "icons/server.png");
+		
+		else 
+			return null;
+		
+		
 	}
 
 	/* (non-Javadoc)

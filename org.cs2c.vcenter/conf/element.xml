@@ -15,18 +15,18 @@
 <directive name="debug_points" tips="is used for debugging." scope="main" group="core">
 <param class="SelectParamInput" items="abort:stop"/>
 </directive>
-<directive name="error_log" tips="Configures logging" scope="http:server:location" group="basic" reused="false">
+<directive name="error_log" tips="Configures logging" scope="http:server:location" group="basic" reused="true">
 <param class="StringParamInput" tips="This parameter defines a file that will store the log. The special value stderr selects the standard error file. Logging to syslog can be configured by specifying the ��syslog:�� prefix. "/>
 <param class="SelectParamInput" items="debug:info:notice:warn:error:crit:alert:emerg" tips="This parameter determines the level of logging, optional."/>
 </directive>
-<directive name="error_log" tips="Configures logging" scope="main" group="core">
+<directive name="error_log" tips="Configures logging" scope="main" group="core" reused="false">
 <param class="StringParamInput" tips="This parameter defines a file that will store the log. The special value stderr selects the standard error file. Logging to syslog can be configured by specifying the ��syslog:�� prefix."/>
 <param class="SelectParamInput" items="debug:info:notice:warn:error:crit:alert:emerg"  tips="This parameter determines the level of logging, optional." />
 </directive>
 <directive name="env" tips="This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables." scope="main " group="core" reused="true">
 <param class="StringParamInput" tips="Like 'MALLOC_OPTIONS' or 'PERL5LIB=/data/modules' "/>
 </directive>
-<block name="events" tips="Provides the configuration file context in which the directives that affect connection processing are specified" scope="main" group="core">
+<block name="events" tips="Provides the configuration file context in which the directives that affect connection processing are specified" scope="main" group="core" reused="true">
 </block>
 <directive name="include" tips="Includes another file, or files matching the specified mask, into configuration" scope="main" group="core" reused="true">
 <param class="StringParamInput" tips="Like 'vhosts/*.conf' or 'mime.types' "/>
@@ -46,7 +46,7 @@
 <directive name="pcre_jit" tips="Enables or disables the use of 'just-in-time compilation' for the regular expressions known by the time of configuration parsing-----appeared in v1.1.12" scope="main " group="core">
 <param class="SelectParamInput" items="on:off"/>
 </directive>
-<directive name="pid" tips="Defines a file that will store the process ID of the main process" scope="main" group="core">
+<directive name="pid" tips="Defines a file that will store the process ID of the main process" scope="main" group="core" reused="false">
 <param class="StringParamInput" tips="Like 'nginx.pid' "/>
 </directive>
 <directive name="ssl_engine" tips="Defines the name of the hardware SSL accelerator" scope="main" group="core">
@@ -58,14 +58,14 @@
 <directive name="use" tips="Specifies the connection processing method to use." scope="events" group="core">
 <param class="SelectParamInput" items="select:poll:kqueue:epoll:rtsig:/dev/poll:eventport"/>
 </directive>
-<directive name="user" tips="Defines user and group credentials used by worker processes." scope="main" group="core">
+<directive name="user" tips="Defines user and group credentials used by worker processes." scope="main" group="core" reused="false">
 <param class="StringParamInput" tips="user"/>
 <param class="StringParamInput" tips="group, optional"/>
 </directive>
 <directive name="worker_aio_requests" tips="When using aio with the epoll connection processing method, sets the maximum number of outstanding asynchronous I/O operations for a single worker process-----v1.1.4 and v1.0.7" scope="events" group="core">
 <param class="IntParamInput" min="1" max="9999999" units="" />
 </directive>
-<directive name="worker_connections" tips="Sets the maximum number of simultaneous connections that can be opened by a worker process. " scope="events" group="core">
+<directive name="worker_connections" tips="Sets the maximum number of simultaneous connections that can be opened by a worker process. " scope="events" group="core" reused="false">
 <param class="IntParamInput" min="1" max="9999999" units=""/>
 </directive>
 <directive name="work_cpu_affinity" tips="Binds worker processes to the sets of CPUs.The directive is only available on FreeBSD and Linux." scope="main" group="core">
@@ -74,7 +74,7 @@
 <directive name="worker_priority" tips="Defines the scheduling priority for worker processes like it is done by the nice command: a negative number means higher priority" scope="main" group="core">
 <param class="IntParamInput" min="-20" max="20" units="" default="0"/>
 </directive>
-<directive name="worker_processes" tips="Defines the number of worker processes. " scope="main" group="core">
+<directive name="worker_processes" tips="Defines the number of worker processes. " scope="main" group="core" reused="false">
 <param class="IntParamInput" min="0" max="9999999" units="" default="1" tips=" '0' indecates auto-------The auto parameter is supported starting from versions 1.3.8 and 1.2.5. " />
 </directive>
 <directive name="worker_rlimit_core" tips="Changes the limit on the largest size of a core file (RLIMIT_CORE) for worker processes." scope="main" group="core">
@@ -89,10 +89,10 @@
 <directive name="working_directory" tips="Defines the current working directory for a worker process. " scope="main" group="core">
 <param class="StringParamInput" />
 </directive> 
-<directive name="access_log" tips="Sets the path, format, and configuration for a buffered log write " scope="http:server:location:finlocatio:limit_except" group="basic">
+<directive name="access_log" tips="Sets the path, format, and configuration for a buffered log write " scope="http:server:location:finlocatio:limit_except" group="basic" reused="true">
 <param class="StringParamInput" tips="An empty string means the value is 'off' " />
 </directive> 
-<directive name="log_format" tips="Specifies log format." scope="http" group="basic">
+<directive name="log_format" tips="Specifies log format." scope="http" group="basic" reused="true">
 <param class="StringParamInput" tips="Like 'combined'" />
 <param class="StringParamInput" tips="Like '$remote_addr - $remote_user' "/>
 </directive> 
@@ -157,7 +157,7 @@
 <directive name="connection_pool_size" tips="Allows accurate tuning of per-connection memory allocations. " scope="http:server" group="others">
 <param class="OptionIntParamInput " name="max" min="1" max="9999999" units="" />
 </directive> 
-<directive name="default_type" tips="Defines the default MIME type of a response. Mapping of file name extensions to MIME types can be set with the types directive. " scope=" http:server:location" group="basic">
+<directive name="default_type" tips="Defines the default MIME type of a response. Mapping of file name extensions to MIME types can be set with the types directive. " scope=" http:server:location" group="basic" reused="false">
 <param class="StringParamInput" tips="" />
 </directive> 
 <directive name="directio" tips="Enables the use of the O_DIRECT flag (FreeBSD, Linux), the F_NOCACHE flag (Mac OS X), or the directio() function (Solaris), when reading files that are larger than or equal to the specified size-------appeared in version 0.7.7" scope="http:server :location" group="gzip">
@@ -193,7 +193,7 @@
 <directive name="keepalive_requests" tips="Sets the maximum number of requests that can be served through one keep-alive connection-----appeared in version 0.8.0" scope=" http:server:location " group="client">
 <param class="IntParamInput" min="1" max="9999999" units=""/>
 </directive> 
-<directive name="keepalive_timeout" tips="The first parameter sets a timeout during which a keep-alive client connection will stay open on the server side. The zero value disables keep-alive client connections. The optional second parameter sets a value in the 'Keep-Alive: timeout=time' response header field. Two parameters may differ. " scope="http:server:location" group="client">
+<directive name="keepalive_timeout" tips="The first parameter sets a timeout during which a keep-alive client connection will stay open on the server side. The zero value disables keep-alive client connections. The optional second parameter sets a value in the 'Keep-Alive: timeout=time' response header field. Two parameters may differ. " scope="http:server:location" group="client" reused="false">
 <param class="IntParamInput" min="0" max="9999999" units="s" />
 <param class="IntParamInput" min="0" max="9999999" units="s" tips="optional"/>
 </directive> 
@@ -274,7 +274,7 @@
 <directive name="resolver_timeout" tips="Sets a timeout for name resolution" scope=" http:server:location" group="others">
 <param class="IntParamInput" min="1" max="99999" units="s"/>
 </directive> 
-<directive name="root" tips="Sets the root directory for requests" scope="http:server:location:finlocatio" group="basic">
+<directive name="root" tips="Sets the root directory for requests" scope="http:server:location:finlocatio" group="basic" reused="false">
 <param class="StringParamInput" tips="as '/data/w3'"/>
 </directive> 
 <directive name="satisfy" tips="Allows access if all (all) or at least one (any) of the ngx_http_access_module, ngx_http_auth_basic_module or ngx_http_auth_request_module modules allow access" scope="http:server:location" group="basic">
@@ -289,13 +289,13 @@
 <directive name="send_timeout" tips="Sets a timeout for transmitting a response to the client" scope=" http:server:location " group="client">
 <param class="IntParamInput" min="0" max="99999" units="s"/>
 </directive>  
-<directive name="sendfile" tips="Enables or disables the use of sendfile()" scope="http:server:location:finlocatio" group="basic">
+<directive name="sendfile" tips="Enables or disables the use of sendfile()" scope="http:server:location:finlocatio" group="basic" reused="false">
 <param class="SelectParamInput" items="on:off " />
 </directive> 
 <directive name="sendfile_max_chunk" tips="When set to a non-zero value, limits the amount of data that can be transferred in a single sendfile() call" scope="http:server:location " group="basic">
 <param class="IntParamInput" min="0" max="99999" units=""/>
 </directive>  
-<directive name="server_name" tips="Sets names of a virtual server" scope="server" group="basic">
+<directive name="server_name" tips="Sets names of a virtual server" scope="server" group="basic" reused="true">
 <param class="StringParamInput" />
 </directive>
 <directive name="server_name_in_redirect" tips="Enables or disables the use of the primary server name, specified by the server_name directive, in redirects issued by nginx" scope="http:server:location" group="basic">
@@ -750,7 +750,7 @@
 <directive name="imap_client_buffer" scope="server:mail" tips="Sets the IMAP commands read buffer size. "  group="others">
 <param class="StringParamInput" default="4k|8k"/>
 </directive> 
-<directive name="index" scope="http:server:location" tips="Defines files that will be used as an index. "  group="basic">
+<directive name="index" scope="http:server:location" tips="Defines files that will be used as an index. "  group="basic" reused="true">
 <param class="StringParamInput" tips=""/>
 </directive> 
 <directive name="limit_conn" scope="http:server:location" tips="Sets the shared memory zone and the maximum allowed number of connections for a given key value. "  group="basic" reused="true">
@@ -789,7 +789,7 @@
 <param class="OptionStringParamInput" name="zone" />
 <param class="OptionStringParamInput" name="rate" />
 </directive> 
-<directive name="listen" tips="Sets the address and port for the socket on which the server will accept requests. " scope="server " group="basic">
+<directive name="listen" tips="Sets the address and port for the socket on which the server will accept requests. " scope="server " group="basic" reused="true">
 <param class="StringParamInput" />
 </directive>
 <directive name="protocol" tips="Sets the protocol for a proxied server. " scope="server "  group="proxy">

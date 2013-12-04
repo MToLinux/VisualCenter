@@ -24,7 +24,6 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 	 */
 	public ProjectElement(TreeElement parent) {
 		super(null);
-		// TODO Auto-generated constructor stub
 	}
 	public String getStatusPath() {
 		return statusPath;
@@ -55,11 +54,11 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 		HttpElement http=new HttpElement(this);
 		http.init("Http","http","0","", this.middleware);
 		UpstreamElement upstream=new UpstreamElement(this);
-		upstream.init("Upstream","upstream","0","", this.middleware);
+		upstream.init("Upstream","allupstream","0","", this.middleware);
 		ModuleElement module=new ModuleElement(this);
-		module.init("Module","","","", this.middleware);
+		module.init("Module","module","","", this.middleware);
 		LogElement log=new LogElement(this);
-		log.init("Log","","","", this.middleware);
+		log.init("Log","log","","", this.middleware);
 		elements.add(http);
 		elements.add(upstream);
 		elements.add(module);

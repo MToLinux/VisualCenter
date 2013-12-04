@@ -3,9 +3,11 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.editors.BlockConfigFace;
 import org.cs2c.vcenter.editors.MonitorFace;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
@@ -28,7 +30,7 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 	 * 
 	 */
 	public LocationConfigureAction() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	/* (non-Javadoc)
@@ -39,8 +41,12 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 		// TODO Auto-generated method stub
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			page.openEditor((IEditorInput)element, MonitorFace.ID);
+			page.openEditor((IEditorInput)element, BlockConfigFace.ID);
 		} catch (PartInitException e) {
+			MessageDialog.openInformation(shell, "PartInitException", e.getMessage());
+			e.printStackTrace();
+		}catch (Exception e) {
+			MessageDialog.openInformation(shell, "Exception", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -60,7 +66,6 @@ public class LocationConfigureAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		shell = targetPart.getSite().getShell();
-
 	}
 
 }

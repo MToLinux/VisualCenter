@@ -43,7 +43,7 @@ public class StartAction implements IObjectActionDelegate {
 		} catch (RemoteException e) {
 			try{
 				//The nginx is running already.
-				if(e.getMessage().equals("The nginx is running already. ")){
+				if(null != e.getMessage()){
 					openMessageDialog(e.getMessage());
 				}else{
 					e.printStackTrace();
@@ -54,12 +54,6 @@ public class StartAction implements IObjectActionDelegate {
 			}
 		}
 	}
-	
-//	private void openDirectoryDialog(){
-//		DirectoryDialog dirDialog = new DirectoryDialog(shell);
-//		dirDialog.setText("Select your home directory");
-//		String selectedDir = dirDialog.open();
-//	}
 	
 	private void openMessageDialog(String mess){
 		MessageDialog.openInformation(shell, "Information", mess);

@@ -57,6 +57,6 @@ public class HostManagerAction extends Action {
 	@Override
 	public void run(){
 		HostsManagerDialog dg  =   new  HostsManagerDialog(window.getShell());
-        dg.open();
+		dg.open();
 	}
 }

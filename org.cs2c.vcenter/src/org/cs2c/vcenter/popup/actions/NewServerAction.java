@@ -3,19 +3,21 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
+import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.RecStringParameter;
-import org.cs2c.nginlib.ctl.Controller;
+import org.cs2c.nginlib.config.StringParameter;
+//import org.cs2c.nginlib.ctl.Controller;
 import org.cs2c.vcenter.dialog.serverdialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -46,7 +48,13 @@ public class NewServerAction implements IObjectActionDelegate {
 		try {
 			NewServer();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			}else{
+				e.printStackTrace();
+			}
+
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -73,16 +81,16 @@ public class NewServerAction implements IObjectActionDelegate {
 		Block newBlock = orc.newBlock();
 		newBlock.setName("server");
 		//make Directive : server_name
-			RecDirective rdserver_name = new RecDirective();
+			Directive rdserver_name = orc.newDirective();
 			rdserver_name.setName("server_name");
-				RecStringParameter param1 = new RecStringParameter();
+				StringParameter param1 = orc.newStringParameter();
 				param1.setValue(sernameval);
 			rdserver_name.addParameter(param1);
 		newBlock.addDirective(rdserver_name);
 		//make Directive : listen
-			RecDirective rd = new RecDirective();
+			Directive rd = orc.newDirective();
 			rd.setName("listen");
-				RecStringParameter param = new RecStringParameter();
+				StringParameter param = orc.newStringParameter();
 				param.setValue(listenval);
 			rd.addParameter(param);
 		newBlock.addDirective(rd);

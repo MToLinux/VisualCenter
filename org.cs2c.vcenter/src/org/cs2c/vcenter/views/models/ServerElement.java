@@ -13,12 +13,15 @@ import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.nginlib.config.RecStringParameter;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
 
 /**
  * @author Administrator
  *
  */
-public class ServerElement extends TreeElement implements IServer {
+public class ServerElement extends TreeElement implements IServer, IEditorInput  {
 
 	private Map<String, String> lisloName = null;
 	private Map<String,String> maploNameIndexIndex = new HashMap<String,String>();//repeat block name use
@@ -43,7 +46,7 @@ public class ServerElement extends TreeElement implements IServer {
 			String subname = allname.substring(9,allname.length());
 			String outerBlNames = this.getOuterBlockNames()+"|"
 					+this.getBlocktype()+":"+this.getBlockIndex();
-//			System.out.println(outerBlNames+" : "+outerBlNames);	// TODO
+//			System.out.println(outerBlNames+" : "+outerBlNames);
 
 			LocationElement location=new LocationElement(this);
 //			System.out.println(allname+" : "+blIndex);
@@ -58,7 +61,7 @@ public class ServerElement extends TreeElement implements IServer {
 			String nameIndexStr[] = entry.getKey().toString().split("\\|");
 		
 			String allname = nameIndexStr[0];
-//			System.out.println("nameIndexStr[0] : "+nameIndexStr[0]);	// TODO
+//			System.out.println("nameIndexStr[0] : "+nameIndexStr[0]);	// 
 
 			String blIndex = entry.getValue().toString();
 			String subname = allname.substring(9,allname.length());
@@ -66,7 +69,7 @@ public class ServerElement extends TreeElement implements IServer {
 					+this.getBlocktype()+":"+this.getBlockIndex();
 
 			LocationElement location=new LocationElement(this);
-//			System.out.println(allname+" : "+blIndex);	// TODO
+//			System.out.println(allname+" : "+blIndex);	// 
 			location.init(subname, allname, blIndex,outerBlNames, this.middleware);
 			children.add(location);
 		}
@@ -142,5 +145,38 @@ public class ServerElement extends TreeElement implements IServer {
 			bHasChildren = false;
 		}
 		return bHasChildren ;
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		if(this.middleware==null){
+			return false;
+		}
+		return true;
+
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -1,14 +1,13 @@
 package org.cs2c.vcenter.dialog;
 
-import java.util.ArrayList;
-import org.cs2c.vcenter.Application;
-import org.cs2c.vcenter.metadata.DOMParser;
+import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.MessageBox;
+
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.SWT;
@@ -24,7 +23,7 @@ import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.events.PaintEvent;
 
 public class HostsManagerDialog extends Dialog {
-	DOMParser hostXml = null;
+	HostManager hostXml = null;
 	List list = null;
 	GridData gd_list;
 	Button btnNewButton = null;
@@ -38,9 +37,9 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = DOMParser.getInstance();
-		
-		//hostXml=org.cs2c.vcenter.Application.domparser;
+		hostXml = HostManager.getInstance();
+
+		// hostXml=org.cs2c.vcenter.Application.domparser;
 
 	}
 
@@ -64,7 +63,7 @@ public class HostsManagerDialog extends Dialog {
 		btnNewButton = new Button(container, SWT.NONE);
 		btnNewButton_1 = new Button(container, SWT.NONE);
 		btnNewButton_2 = new Button(container, SWT.NONE);
-			
+
 		getHostsInfoFromXml();
 
 		gd_list = new GridData(SWT.LEFT, SWT.CENTER, false, false, 5, 5);
@@ -74,16 +73,14 @@ public class HostsManagerDialog extends Dialog {
 
 		new Label(container, SWT.NONE);
 
-	
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				// list.getItems()
 				HostsEditDialog addhostDialog = new HostsEditDialog(this
 						.getShell(), "", hostXml);
 
-				if (addhostDialog.open() == OK)	
-				{
+				if (addhostDialog.open() == OK) {
 					getHostsInfoFromXml();
 				}
 
@@ -110,15 +107,13 @@ public class HostsManagerDialog extends Dialog {
 		new Label(container, SWT.NONE);
 		new Label(container, SWT.NONE);
 
-		
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseUp(MouseEvent e) {
 				HostsEditDialog edithostDialog = new HostsEditDialog(this
 						.getShell(), list.getSelection()[0], hostXml);
 
-				if (edithostDialog.open() == OK)
-				{
+				if (edithostDialog.open() == OK) {
 					getHostsInfoFromXml();
 				}
 
@@ -134,16 +129,22 @@ public class HostsManagerDialog extends Dialog {
 		btnNewButton_1.setText("Edit");
 		new Label(container, SWT.NONE);
 
-		
 		btnNewButton_2.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 2, 1));
 		btnNewButton_2.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseDown(MouseEvent e) {
-				hostXml.deleteHostInfo(list.getSelection()[0]);		
-				hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
-				
-				getHostsInfoFromXml();
+			public void mouseUp(MouseEvent e) {
+				if (MessageDialog.openConfirm(getShell(), "Confirm Dialog",
+						"Are you sure to delete this host information?"))
+				// if(JOptionPane.showConfirmDialog(null,
+				// "Are you sure to delete this host information?",
+				// "Delete host information", JOptionPane.OK_CANCEL_OPTION,
+				// JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION)
+				{
+					hostXml.deleteHostInfo(list.getSelection()[0]);
+					hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
+					getHostsInfoFromXml();
+				}
 
 			}
 		});
@@ -155,7 +156,7 @@ public class HostsManagerDialog extends Dialog {
 				btnNewButton_1.setEnabled(true);
 				btnNewButton_2.setEnabled(true);
 			}
-			
+
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
 				btnNewButton_1.setEnabled(true);
@@ -182,29 +183,29 @@ public class HostsManagerDialog extends Dialog {
 		return new Point(450, 300);
 	}
 
-    @Override  
-    protected void configureShell(Shell newShell) {  
-        // TODO Auto-generated method stub  
-        super.configureShell(newShell);  
-        newShell.setText("Hosts Information");  
-    }  
+	@Override
+	protected void configureShell(Shell newShell) {
+		// TODO Auto-generated method stub
+		super.configureShell(newShell);
+		newShell.setText("Hosts Information");
+		newShell.setImage(new Image(newShell.getDisplay(), "icons/hosts.png"));
+
+	}
+
 	public void getHostsInfoFromXml() {
 		list.removeAll();
 		for (int i = 0; i < hostXml.getMainHostInfo().size(); i++) {
 			list.add(hostXml.getMainHostInfo().get(i));
 		}
 		list.setFocus();
-		if(list.getItemCount()!=0) 
-		{
+		if (list.getItemCount() != 0) {
 			list.setSelection(0);
 			btnNewButton_1.setEnabled(true);
 			btnNewButton_2.setEnabled(true);
-		}
-		else
-		{
+		} else {
 			btnNewButton_1.setEnabled(false);
 			btnNewButton_2.setEnabled(false);
 		}
-		
+
 	}
 }

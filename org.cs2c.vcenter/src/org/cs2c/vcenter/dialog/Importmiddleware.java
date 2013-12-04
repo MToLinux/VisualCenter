@@ -2,7 +2,7 @@ package org.cs2c.vcenter.dialog;
 
 import java.util.List;
 
-import org.cs2c.vcenter.metadata.DOMParser;
+import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.graphics.Point;
@@ -68,7 +68,7 @@ public class Importmiddleware extends Dialog {
 		
 		Label lblNewLabel = new Label(container, SWT.NONE);
 		lblNewLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		lblNewLabel.setText("Host...");
+		lblNewLabel.setText("Host: ");
 		
 		combo_host = new Combo(container, SWT.NONE);
 		combo_host.setEnabled(true);
@@ -93,10 +93,10 @@ public class Importmiddleware extends Dialog {
 		btn_ViewSelect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				//璋冨嚭Host Editor鏌ョ湅璇ost鐨勮缁嗕俊鎭�
+				//call Host Editor view Host info
 				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
 				HostsEditDialog addhostDialog = new HostsEditDialog(shell
-						, combo_host.getText(), DOMParser.getInstance());
+						, combo_host.getText(), HostManager.getInstance());
 				addhostDialog.open();
 			}
 		});

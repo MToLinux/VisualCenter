@@ -1,7 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><root>
-
-<<<<<<< HEAD
 <host home="/usr/local/nginx/" middleware="NginxA" mpassword="qwer1234" musername="git" name="10.1.50.4" password="cs2csolutions" stapath="/usr/local/nginx/log/" username="root"/><host home="/usr/local/nginx/" middleware="nginxW" mpassword="" musername="" name="10.1.50.3" password="qwe123" stapath="" username="liuqin"/></root>
-=======
-<host home="111" middleware="Nginx" musername="111" name="10.1.50.4" password="111" stapath="111" upassword="111" username="112"/><host home="/usr/local/nginx/" middleware="NginxA" mpassword="qwer1234" musername="git" name="10.1.50.4" password="cs2csolutions" stapath="/usr/local/nginx/log/" username="root"/><host home="/usr/local/nginx/" middleware="nginxW" mpassword="" musername="" name="10.1.50.6" password="qwer1234" stapath="" username="root"/></root>
->>>>>>> refs/remotes/VisualCenter/master

@@ -3,22 +3,32 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
+import org.cs2c.vcenter.editors.BlockConfigFace;
+import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IObjectActionDelegate;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
  *
  */
 public class ServerConfigureAction implements IObjectActionDelegate {
-
+	private TreeElement element;
+	private Shell shell;
 	/**
 	 * 
 	 */
 	public ServerConfigureAction() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	/* (non-Javadoc)
@@ -27,6 +37,16 @@ public class ServerConfigureAction implements IObjectActionDelegate {
 	@Override
 	public void run(IAction action) {
 		// TODO Auto-generated method stub
+		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		try {
+			page.openEditor((IEditorInput)element, BlockConfigFace.ID);
+		} catch (PartInitException e) {
+			MessageDialog.openInformation(shell, "PartInitException", e.getMessage());
+			e.printStackTrace();
+		}catch (Exception e) {
+			MessageDialog.openInformation(shell, "Exception", e.getMessage());
+			e.printStackTrace();
+		}
 
 	}
 
@@ -35,8 +55,8 @@ public class ServerConfigureAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		// TODO Auto-generated method stub
-
+		IStructuredSelection ss=(IStructuredSelection)selection;
+		this.element=(TreeElement)ss.getFirstElement();
 	}
 
 	/* (non-Javadoc)
@@ -44,8 +64,7 @@ public class ServerConfigureAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
-		// TODO Auto-generated method stub
-
+		shell = targetPart.getSite().getShell();
 	}
 
 }

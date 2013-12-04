@@ -14,12 +14,15 @@ import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.RecConfigurator;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
 
 /**
  * @author Administrator
  *
  */
-public class LocationElement extends TreeElement implements ILocation {
+public class LocationElement extends TreeElement implements ILocation, IEditorInput {
 	private Map<String, String> lisloName = null;
 	private Map<String,String> maploNameIndexIndex = new HashMap<String,String>();
 
@@ -88,7 +91,6 @@ public class LocationElement extends TreeElement implements ILocation {
 		}
 		
 		for(int i = 0;i<list.size();i++){
-
 			if(list.get(i).getName().length() < 8){
 				continue;
 			}
@@ -151,6 +153,38 @@ public class LocationElement extends TreeElement implements ILocation {
 			bHasChildren = false;
 		}
 		return bHasChildren ;
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		if(this.middleware==null){
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
