@@ -12,6 +12,7 @@ import org.cs2c.vcenter.views.models.ProjectElement;
 import org.cs2c.vcenter.views.models.ServerElement;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.cs2c.vcenter.views.models.UpstreamElement;
+import org.cs2c.vcenter.views.models.UpstreamInstanceElement;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IViewerLabelProvider;
@@ -79,6 +80,8 @@ public class NginxLabelProvider implements ILabelProvider {
 		else if(element instanceof LogElement)
 			return new Image(null, "icons/logs.png");
 		else if(element instanceof UpstreamElement)
+			return new Image(null, "icons/upstreams.png");
+		else if(element instanceof UpstreamInstanceElement)
 			return new Image(null, "icons/upstream.png");
 		/*else if(element instanceof ModuleElement)
 			return new Image(null, "icons/module.png");
