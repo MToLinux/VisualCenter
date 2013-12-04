@@ -1,5 +1,6 @@
 package org.cs2c.vcenter;
 
+import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
 import org.eclipse.ui.PlatformUI;
@@ -31,5 +32,10 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void postWindowCreate(){
     	super.postWindowCreate();
     	this.getWindowConfigurer().getWindow().getShell().setMaximized(true);
+    }
+    
+    public void postWindowOpen() {
+    	IStatusLineManager statusline = getWindowConfigurer().getActionBarConfigurer().getStatusLineManager();
+    	statusline.setMessage(null, "Status line is ready");
     }
 }
