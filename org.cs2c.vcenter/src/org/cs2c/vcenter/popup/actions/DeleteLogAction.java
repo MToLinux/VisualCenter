@@ -44,12 +44,12 @@ public class DeleteLogAction implements IObjectActionDelegate {
 			Logger logger=this.element.getMiddlewareFactory().getLogger();
 			try {
 				logger.delete(((LogInstanceElement)this.element).getLog().getName());
+				//aoto show in treeview,do refresh
+				this.treeViewer.refresh(this.element.getParent(),false);
 			} catch (RemoteException e) {
 				MessageDialog.openError(shell, "Delete Error", e.getMessage());
 			}
 		}
-		//aoto show in treeview,do refresh
-		this.treeViewer.refresh();
 	}
 
 	/* (non-Javadoc)
