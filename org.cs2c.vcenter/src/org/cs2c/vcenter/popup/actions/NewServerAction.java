@@ -17,6 +17,7 @@ import org.cs2c.vcenter.dialog.serverdialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -47,7 +48,13 @@ public class NewServerAction implements IObjectActionDelegate {
 		try {
 			NewServer();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			}else{
+				e.printStackTrace();
+			}
+
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		}

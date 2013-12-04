@@ -12,6 +12,7 @@ import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -91,6 +92,7 @@ public class ImportProjectAction extends Action {
 			middle = MiddlewareFactory.getInstance(authInfo, objHostInfo.getHome());
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			MessageDialog.openInformation(window.getShell(), "RemoteException", e.getMessage());
 			return;
 		}
 		

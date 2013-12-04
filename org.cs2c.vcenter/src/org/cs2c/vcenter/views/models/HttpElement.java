@@ -12,19 +12,21 @@ import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
 import org.cs2c.nginlib.config.RecStringParameter;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
 
 /**
  * @author Administrator
  *
  */
-public class HttpElement extends TreeElement implements IHttp {
+public class HttpElement extends TreeElement implements IHttp, IEditorInput {
 
 	/**
 	 * @param parent
 	 */
 	public HttpElement(TreeElement parent) {
 		super(parent);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class HttpElement extends TreeElement implements IHttp {
 			blIndex = Integer.toString(i);
 			String sername = Serlist.get(i);
 			ServerElement server=new ServerElement(this);
-//			String sername = lisSerName.get(i).;	//TODO
+//			String sername = lisSerName.get(i).;
 			String outerBlNames = "http:0";
 			server.init(sername,"server",blIndex,outerBlNames, this.middleware);
 			children.add(server);
@@ -54,7 +56,7 @@ public class HttpElement extends TreeElement implements IHttp {
 		List<String> lstserverName = new ArrayList<String>();
 
 		orc = (RecConfigurator) this.middleware.getConfigurator();
-//			String PathWithName = SetConfpath(); TODO dialog
+//			String PathWithName = SetConfpath();
 		blockName = "server";
 		list= orc.getBlocks(blockName, outerBlockNames);
 		
@@ -77,6 +79,37 @@ public class HttpElement extends TreeElement implements IHttp {
 	@Override
 	public boolean hasChildren() {
 		return true;
+	}
+
+	@Override
+	public Object getAdapter(Class adapter) {
+		return null;
+	}
+
+	@Override
+	public boolean exists() {
+		if(this.middleware==null){
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public ImageDescriptor getImageDescriptor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public IPersistableElement getPersistable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getToolTipText() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

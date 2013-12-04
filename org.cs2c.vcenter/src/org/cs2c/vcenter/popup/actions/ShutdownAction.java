@@ -44,7 +44,7 @@ public class ShutdownAction implements IObjectActionDelegate {
 				if(null != e.getMessage()){
 					openMessageDialog(e.getMessage());
 				}else{
-					MessageDialog.openInformation(shell, "Exception", e.getMessage());
+					MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
 					e.printStackTrace();
 				}
 			}catch (Exception ex){

@@ -2,24 +2,30 @@ package org.cs2c.vcenter.views;
 
 import java.io.File;
 import java.util.*;
+
 import org.cs2c.vcenter.actions.HostManagerAction;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 import org.w3c.dom.Document;
 import org.cs2c.vcenter.views.models.*;
+
 import javax.xml.parsers.*;
+
 import org.cs2c.nginlib.*;
 
 public class MiddlewareView extends ViewPart {
@@ -27,6 +33,8 @@ public class MiddlewareView extends ViewPart {
 	public static final String ID = "org.cs2c.vcenter.views.MiddlewareView"; //$NON-NLS-1$
 	private TreeViewer treeViewer=null;
 	private List<TreeElement> projectList=new LinkedList<TreeElement>();
+	private List<String> projectnameList=new ArrayList<String>();
+
 	public MiddlewareView() {
 	}
 
@@ -58,6 +66,12 @@ public class MiddlewareView extends ViewPart {
 	public void addProject(String name, MiddlewareFactory middleware){
 		ProjectElement project=new ProjectElement(null);
 		project.init(name, "main","0","", middleware);
+		if(this.projectnameList.contains(name)){
+			Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell, "Information", "the middleware is already exist!");
+			return;
+		}
+		this.projectnameList.add(name);
 		this.projectList.add(project);
 		this.treeViewer.setInput(projectList);
 	}

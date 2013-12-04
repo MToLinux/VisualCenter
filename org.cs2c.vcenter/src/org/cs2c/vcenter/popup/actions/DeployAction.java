@@ -49,8 +49,16 @@ public class DeployAction implements IObjectActionDelegate {
 		try {
 			DeployToServer();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+				e.printStackTrace();
+
+			}else{
+				e.printStackTrace();
+			}
 		}catch (Exception ex) {
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 			ex.printStackTrace();
 		}
 	}

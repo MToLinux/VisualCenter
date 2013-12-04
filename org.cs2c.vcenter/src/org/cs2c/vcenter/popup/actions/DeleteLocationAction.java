@@ -49,7 +49,13 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 			
 			DeleteLocation();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			}else{
+				e.printStackTrace();
+			}
+
 		}catch (Exception ex) {
 			ex.printStackTrace();
 		}

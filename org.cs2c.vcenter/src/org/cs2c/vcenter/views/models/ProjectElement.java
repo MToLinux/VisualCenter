@@ -24,7 +24,6 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 	 */
 	public ProjectElement(TreeElement parent) {
 		super(null);
-		// TODO Auto-generated constructor stub
 	}
 	public String getStatusPath() {
 		return statusPath;

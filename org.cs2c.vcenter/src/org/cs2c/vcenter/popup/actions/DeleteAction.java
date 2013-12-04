@@ -49,8 +49,14 @@ public class DeleteAction implements IObjectActionDelegate {
 			}
 			DeleteServer();
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			//RemoteException message
+			if(null != e.getMessage()){
+				MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			}else{
+				e.printStackTrace();
+			}
 		}catch (Exception ex) {
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 			ex.printStackTrace();
 		}
 	}
@@ -65,8 +71,8 @@ public class DeleteAction implements IObjectActionDelegate {
 		
 		if(blServer!=null){
 			//TODO
-			System.out.println("blServer:"+blServer.getName()+"："+blServer.toString());	//TODO
-			System.out.println("outerBlockNames:"+outerBlockNames);	//TODO
+//			System.out.println("blServer:"+blServer.getName()+"："+blServer.toString());	//TODO
+//			System.out.println("outerBlockNames:"+outerBlockNames);	//TODO
 
 			orc.delete(blServer, outerBlockNames);
 			//server_name aoto show in treeview,do refresh
