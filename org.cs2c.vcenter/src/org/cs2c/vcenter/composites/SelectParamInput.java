@@ -1,6 +1,5 @@
 package org.cs2c.vcenter.composites;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cs2c.nginlib.config.Parameter;
@@ -18,9 +17,7 @@ import org.eclipse.swt.events.ModifyEvent;
 
 public class SelectParamInput extends Composite implements ParamInput {
 
-	//<param class="SelectParamInput" items="on:off"/>
-	
-	List<String> strOptions = null;//new ArrayList<String>();
+	List<String> strOptions = null;
 	String tips = "";
 	
 	String selValue = "";

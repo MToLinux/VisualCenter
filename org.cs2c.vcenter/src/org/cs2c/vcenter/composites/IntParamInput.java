@@ -18,7 +18,6 @@ import org.eclipse.swt.events.ModifyEvent;
 
 public class IntParamInput extends Composite implements ParamInput {
 
-	//<param class="IntParamInput" min="1" max="9999" units="k:m"/>
 	String strParamName = "";
 	List<String> strUnit = new ArrayList<String>();
 	int max = 999999999;
@@ -61,7 +60,6 @@ public class IntParamInput extends Composite implements ParamInput {
 		
 		this.pMeta = meta;
 		
-		//strParamName = this.pMeta.getName();
 		selValue = 0;
 		max = (int) this.pMeta.getMax();
 		min = (int) this.pMeta.getMin();
@@ -72,12 +70,14 @@ public class IntParamInput extends Composite implements ParamInput {
 		ctlSpinner.setMinimum(min);
 		ctlSpinner.setSelection(0);
 		
-		if(!strUnit.isEmpty())
+		if(strUnit!=null && !strUnit.isEmpty())
 		{
-			int i = strUnit.size();
-			while(i>0)
+			int count = strUnit.size();
+			int i = 0;
+			while(i<count)
 			{
-				ctlCombo.add(ctlCombo.getItem(i-1));
+				ctlCombo.add(strUnit.get(i));
+				i++;
 			}
 		}
 		else
@@ -114,7 +114,6 @@ public class IntParamInput extends Composite implements ParamInput {
 	public void setMeta(ParameterMeta meta) {
 		this.pMeta = meta;
 		
-		//strParamName = this.pMeta.getName();
 		selValue = 0;
 		max = (int) this.pMeta.getMax();
 		min = (int) this.pMeta.getMin();
@@ -127,10 +126,12 @@ public class IntParamInput extends Composite implements ParamInput {
 		
 		if(!strUnit.isEmpty())
 		{
-			int i = strUnit.size();
-			while(i>0)
+			int count = strUnit.size();
+			int i = 0;
+			while(i<count)
 			{
-				ctlCombo.add(ctlCombo.getItem(i-1));
+				ctlCombo.add(strUnit.get(i));
+				i++;
 			}
 		}
 		else

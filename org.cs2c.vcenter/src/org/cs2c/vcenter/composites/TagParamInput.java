@@ -14,7 +14,6 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class TagParamInput extends Composite implements ParamInput {
 
-	//<param class="TagParamInput" name="off" tips="if check 'off' others can't be checked"/>
 	String strParamName = "";
 	
 	String strValue = "";

@@ -19,7 +19,6 @@ import org.eclipse.swt.events.ModifyEvent;
 
 public class OptionIntParamInput extends Composite implements ParamInput {
 
-	//<param name="inactive" min="1" max="9999999" units="s" tips="optional"/>
 	String strParamName = "";
 	List<String> strUnit = new ArrayList<String>();
 	int max = 999999999;

@@ -79,9 +79,7 @@ public class DirectiveInput extends Dialog {
 				String strClassName = pMeta.getClassName();
 				if(strClassName.equals("OptionIntParamInput"))
 				{
-					//OptionIntParamInput
 					OptionIntParamInput oppInput = new OptionIntParamInput(composite, SWT.NONE, pMeta);
-					//oppInput.setMeta(pMeta);
 					oppInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
 					gridDataList_opp.verticalSpan=1;
@@ -96,9 +94,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("OptionStringParamInput"))
 				{
-					//OptionStringParamInput
 					OptionStringParamInput ospInput = new OptionStringParamInput(composite, SWT.NONE, pMeta);
-					//ospInput.setMeta(pMeta);
 				    ospInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_osp=new GridData(GridData.FILL_BOTH);
 					gridDataList_osp.verticalSpan=1;
@@ -112,9 +108,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("IntParamInput"))
 				{
-					//IntParamInput
 					IntParamInput ipInput = new IntParamInput(composite, SWT.NONE, pMeta);
-					//ipInput.setMeta(pMeta);
 				    ipInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_ip=new GridData(GridData.FILL_BOTH);
 					gridDataList_ip.verticalSpan=1;
@@ -128,9 +122,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("StringParamInput"))
 				{
-					//StringParamInput
 					StringParamInput strpInput = new StringParamInput(composite, SWT.NONE, pMeta);
-					//strpInput.setMeta(pMeta);
 					strpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_strp=new GridData(GridData.FILL_BOTH);
 					gridDataList_strp.verticalSpan=1;
@@ -144,9 +136,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("SelectParamInput"))
 				{
-					//SelectParamInput
 					SelectParamInput slctpInput = new SelectParamInput(composite, SWT.NONE, pMeta);
-					//slctpInput.setMeta(pMeta);
 					slctpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_slctp=new GridData(GridData.FILL_BOTH);
 					gridDataList_slctp.verticalSpan=1;
@@ -160,9 +150,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("TagParamInput"))
 				{
-					//TagParamInput
 					TagParamInput tagpInput = new TagParamInput(composite, SWT.NONE, pMeta);
-					//tagpInput.setMeta(pMeta);
 					tagpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_tagp=new GridData(GridData.FILL_BOTH);
 					gridDataList_tagp.verticalSpan=1;

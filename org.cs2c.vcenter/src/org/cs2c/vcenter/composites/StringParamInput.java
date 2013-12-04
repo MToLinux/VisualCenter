@@ -8,15 +8,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 
 public class StringParamInput extends Composite implements ParamInput {
 	
-	//<param class="StringParamInput" tips="Can be off\test\size\rotate 90|180|270\resize width height\crop width height " />
 	String strValue = "";
 	String tips = "";
 	

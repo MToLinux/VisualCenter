@@ -15,7 +15,6 @@ import org.eclipse.swt.events.ModifyEvent;
 
 public class OptionStringParamInput extends Composite implements ParamInput {
 
-	//<param name="uri" class="OptionStringParamInput" tips="optional" />
 	String strParamName = "";
 	String strValue = "";
 	String tips = "";
