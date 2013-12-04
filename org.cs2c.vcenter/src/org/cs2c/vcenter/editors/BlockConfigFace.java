@@ -11,6 +11,7 @@ import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Configurator;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.vcenter.composites.BlockInput;
+import org.cs2c.vcenter.dialog.BlockElementInfo;
 import org.cs2c.vcenter.metadata.BlockMeta;
 import org.cs2c.vcenter.metadata.MetaManager;
 import org.cs2c.vcenter.views.models.HttpElement;
@@ -133,7 +134,7 @@ public class BlockConfigFace extends EditorPart {
 			return;
 		}
 		this.input = new HttpElement(null);
-		this.input.init("","main","0","", middleware);
+		this.input.init("","main","0","", middleware);//this.input.init("","server","0","http", middleware);
 		//Just for test!!! end by yanbin.jia
 
 		this.middleware = this.input.getMiddlewareFactory();
@@ -161,7 +162,9 @@ public class BlockConfigFace extends EditorPart {
 			return;
 		}
 		
-		System.out.println(this.oldBlock.toString());
+		//Just for test!!! begin by yanbin.jia
+		//System.out.println(this.oldBlock.toString());
+		//Just for test!!! end by yanbin.jia
 	}
 
 	@Override
@@ -194,7 +197,18 @@ public class BlockConfigFace extends EditorPart {
 		if(countGroups == 1)
 		{
 			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(parent, SWT.NONE, input, this.oldBlock, bMeta, subGroupName);
+			//bInput = new BlockInput(parent, SWT.NONE, input, this.oldBlock, bMeta, subGroupName);
+			
+			BlockElementInfo bcInfo = new BlockElementInfo();
+			bcInfo.setBlock(this.oldBlock);
+			bcInfo.setBlockName(this.oldBlock.getName());
+			bcInfo.setBlockType(this.blockType);
+			bcInfo.setBlockIndex(this.blockIndex);
+			bcInfo.setBlockMeta(this.bMeta);
+			bcInfo.setBlockOutNames(this.blockOutNames);
+			bcInfo.setMiddleware(middleware);
+			
+			bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName);
 		}
 		else
 		{
@@ -209,8 +223,18 @@ public class BlockConfigFace extends EditorPart {
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
 				
-				bInputs[i] = new BlockInput(
-						this.tabFolder, SWT.NONE, input, this.oldBlock, bMeta, subGroupName);
+				//bInputs[i] = new BlockInput(
+				//		this.tabFolder, SWT.NONE, input, this.oldBlock, bMeta, subGroupName);
+				BlockElementInfo bcInfo = new BlockElementInfo();
+				bcInfo.setBlock(this.oldBlock);
+				bcInfo.setBlockName(this.oldBlock.getName());
+				bcInfo.setBlockType(this.blockType);
+				bcInfo.setBlockIndex(this.blockIndex);
+				bcInfo.setBlockMeta(this.bMeta);
+				bcInfo.setBlockOutNames(this.blockOutNames);
+				bcInfo.setMiddleware(middleware);
+				bInputs[i] = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName);
+				
 				tbi.setControl(bInputs[i]);
 				
 				htGroupTItems.put(subGroupName, tbi);

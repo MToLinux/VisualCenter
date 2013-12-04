@@ -4,6 +4,7 @@
 package org.cs2c.vcenter.views.models;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
@@ -19,38 +20,66 @@ import org.cs2c.nginlib.config.RecStringParameter;
  */
 public class ServerElement extends TreeElement implements IServer {
 
-	private List<String> lisloName = null;
-	
+	private Map<String, String> lisloName = null;
+	private Map<String,String> maploNameIndexIndex = new HashMap<String,String>();//repeat block name use
+//	private List<HashMap<String,String>> listReIndexName = new ArrayList<HashMap<String,String>>();
+
 	/**
 	 * @param parent
 	 */
 	public ServerElement(TreeElement parent) {
 		super(parent);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public List<TreeElement> getChildren(){
 		List<TreeElement> children=new LinkedList<TreeElement>();
 
-		for(int i = 0;i<lisloName.size();i++){
+		Iterator<Entry<String, String>> it = lisloName.entrySet().iterator();
+		while(it.hasNext()){
+			Entry<String, String> entry = (Entry<String, String>)it.next();
+			String allname = entry.getKey().toString();
+			String blIndex = entry.getValue().toString();
+			String subname = allname.substring(9,allname.length());
+			String outerBlNames = this.getOuterBlockNames()+"|"
+					+this.getBlocktype()+":"+this.getBlockIndex();
+//			System.out.println(outerBlNames+" : "+outerBlNames);	// TODO
+
 			LocationElement location=new LocationElement(this);
-			String sername = new String(lisloName.get(i));
-			//TODO
-			String blIndex = null;
-			String outerBlNames = null;
-			location.init(sername, "server",blIndex,outerBlNames, this.middleware);
-//			System.out.println(sername);
+//			System.out.println(allname+" : "+blIndex);
+			location.init(subname, allname, blIndex,outerBlNames, this.middleware);
+			children.add(location);
+		}
+		
+		//lop maploNameIndexIndex
+		Iterator<Entry<String, String>> itIndexIndex = maploNameIndexIndex.entrySet().iterator();
+		while(itIndexIndex.hasNext()){
+			Entry<String, String> entry = (Entry<String, String>)itIndexIndex.next();
+			String nameIndexStr[] = entry.getKey().toString().split("\\|");
+		
+			String allname = nameIndexStr[0];
+//			System.out.println("nameIndexStr[0] : "+nameIndexStr[0]);	// TODO
+
+			String blIndex = entry.getValue().toString();
+			String subname = allname.substring(9,allname.length());
+			String outerBlNames = this.getOuterBlockNames()+"|"
+					+this.getBlocktype()+":"+this.getBlockIndex();
+
+			LocationElement location=new LocationElement(this);
+//			System.out.println(allname+" : "+blIndex);	// TODO
+			location.init(subname, allname, blIndex,outerBlNames, this.middleware);
 			children.add(location);
 		}
 		return children;
 	}
 
-	private List<String> getLocationName() throws RemoteException {
+	private Map<String, String> getLocationName() throws RemoteException {
 		List<Block> list= null;
-		List<String> lstloName = new ArrayList<String>();
-		String serverBlockName = this.getName();
-		Block blServer = getServerBlock(serverBlockName);
+		String loIndex = "0";
+		
+		Map<String,String> maploNameIndex = new HashMap<String,String>();
+//		List<String> reblList = new ArrayList<String>();
+		Block blServer = getServerBlock();
 		
 		list= blServer.getBlocks();
 		
@@ -61,40 +90,44 @@ public class ServerElement extends TreeElement implements IServer {
 			}
 
 			if ("location".equals(list.get(i).getName().substring(0, 8))){
-				String loname = list.get(i).getName().substring(9,list.get(i).getName().length());
-				lstloName.add(loname);
-//				System.out.println("lstloName: "+loname);
-			}
-		}
-		
-		return lstloName;
-	}
-	
-	private Block getServerBlock(String serverBlockName) throws RemoteException{
+				String loname = list.get(i).getName();
 
-		String blockName = null;
-		String outerBlockNames = "http:0";
-		List<Block> list= null;
-		RecConfigurator orc = null;
-
-		orc = (RecConfigurator) this.middleware.getConfigurator();
-		blockName = "server";
-		list= orc.getBlocks(blockName, outerBlockNames);
-		
-		for(int i = 0;i<list.size();i++){
-			List<Directive> listdire = new ArrayList<Directive>();
-			Block tembl = list.get(i);
-			listdire = tembl.getDirectives();
-			for(int j = 0;j<listdire.size(); j++){
-				if(listdire.get(j).getName().equals("server_name")){
-					RecStringParameter rsp = (RecStringParameter)listdire.get(j).getParameters().get(0);
-					if(serverBlockName.equals(rsp.getValue())){
-						return tembl;
+				if(!maploNameIndex.containsKey(loname)){
+					maploNameIndex.put(loname,loIndex);
+				}else{
+					//1000 : support repeat block name 1000 times
+					for(int j = 1;j<1000;j++){
+						loname = loname+"|"+Integer.toString(j);
+//						System.out.println("loname| : "+loname);	// TODO
+						if(!maploNameIndexIndex.containsKey(loname)){
+							maploNameIndexIndex.put(loname,Integer.toString(j));
+							break;
+						}
 					}
 				}
 			}
 		}
 		
+		return maploNameIndex;
+	}
+	
+	private Block getServerBlock() throws RemoteException{
+
+		String blockName = null;
+		List<Block> list= null;
+		RecConfigurator orc = null;
+
+		orc = (RecConfigurator) this.middleware.getConfigurator();
+		String outerBlockNames = this.getOuterBlockNames();
+		blockName = "server";
+		list= orc.getBlocks(blockName, outerBlockNames);
+
+		for(int i = 0;i<list.size();i++){
+			if(i == Integer.parseInt(this.getBlockIndex())){
+				return list.get(i);
+			}
+		}
+
 		return null;
 	}
 

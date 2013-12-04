@@ -3,7 +3,14 @@
  */
 package org.cs2c.vcenter.actions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.cs2c.vcenter.Activator;
+import org.cs2c.vcenter.dialog.Importmiddleware;
+import org.cs2c.vcenter.dialog.deploydialog;
+import org.cs2c.vcenter.metadata.DOMParser;
+import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -17,6 +24,7 @@ import org.cs2c.nginlib.*;
  */
 public class ImportProjectAction extends Action {
 	static public final String ID="org.cs2c.vcenter.actions.ImportProjectAction";
+	private IWorkbenchWindow window; 
 	/**
 	 * 
 	 */
@@ -53,28 +61,43 @@ public class ImportProjectAction extends Action {
 		super("Import...");
 		this.setId(ImportProjectAction.ID);
 		this.setImageDescriptor(Activator.getImageDescriptor("icons/project_import.png"));
+		this.window = window;
 	}
 	@Override
 	public void run(){
-		// call ImportProject Dialog
-		//  get liu qin return list 1.2.3
+		//  get liu qin return list
+		DOMParser objDOMParser = DOMParser.getInstance();
+	    List<String> list = objDOMParser.getMainHostInfo();
+		// call Import Project Dialog
+		// open dialog
+		Importmiddleware dialog = new Importmiddleware(window.getShell());
+		dialog.init(list);
+	    dialog.open();
+	    String selectitem = dialog.getServername();
+	    if((null == selectitem)||("" == selectitem.trim())){
+	    	return;
+	    }
+
 		// gethostinfo
-		
+	    HostInfo objHostInfo = objDOMParser.getHostInfo(selectitem);
+	    
 		// get middleware instance based on user input
 		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
-		authInfo.setHost("10.1.50.4");
-		authInfo.setUsername("root");
-		authInfo.setPassword("cs2csolutions");
+		authInfo.setHost(objHostInfo.getHostName());
+		authInfo.setUsername(objHostInfo.getUserName());
+		authInfo.setPassword(objHostInfo.getPassWord());
+
 		MiddlewareFactory middle;
 		try {
-			middle = MiddlewareFactory.getInstance(authInfo, "/usr/local/nginx/");
+			middle = MiddlewareFactory.getInstance(authInfo, objHostInfo.getHome());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			return;
 		}
+		
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
-		view.addProject("Nginx 10.1.50.4", middle);
-		view.addProject("Nginx C", middle);
+		view.addProject(selectitem, middle);
+//		view.addProject("Nginx C", middle);
 	}
 }

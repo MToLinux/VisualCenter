@@ -1,7 +1,11 @@
 package org.cs2c.vcenter;
 
+import org.cs2c.vcenter.editors.BlockConfigFace;
+import org.cs2c.vcenter.views.models.ProjectElement;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPreferenceConstants;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -31,5 +35,17 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
     public void postWindowCreate(){
     	super.postWindowCreate();
     	this.getWindowConfigurer().getWindow().getShell().setMaximized(true);
+    	
+    	//For develop test!!! begin. By yanbin.jia
+    	IWorkbenchPage page = null;
+    	page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+    	ProjectElement projElement = new ProjectElement(null);
+		try {
+			page.openEditor(projElement, BlockConfigFace.ID);//HttpEditor,MonitorFace,BasicConfigFace,BlockConfigFace
+		} catch (PartInitException e) {
+			e.printStackTrace();
+		}
+		//For develop test!!! end. By yanbin.jia
+		
     }
 }

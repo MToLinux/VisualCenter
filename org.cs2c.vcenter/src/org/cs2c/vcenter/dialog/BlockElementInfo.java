@@ -9,7 +9,7 @@ import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.vcenter.metadata.BlockMeta;
 
-public class BlockConfigInfo {
+public class BlockElementInfo {
 	
 	private MiddlewareFactory middleware = null;
 	private String blockName = null;
@@ -27,9 +27,18 @@ public class BlockConfigInfo {
 	private Block block = new RecBlock();
 	private java.util.List<Directive> directives = new ArrayList<Directive>();
 	private java.util.List<Block> blocks = new ArrayList<Block>();
-
-	public BlockConfigInfo() {
+	
+	public BlockElementInfo() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public void setBlock(Block blk)
+	{
+		this.block = blk;
+	}
+	public Block getBlock()
+	{
+		return this.block;
 	}
 	
 	public void setMiddleware(MiddlewareFactory middleware)
@@ -86,7 +95,7 @@ public class BlockConfigInfo {
 		return this.blockOutNames;
 	}
 	
-	public void setblockIndex(String blockIndex)
+	public void setBlockIndex(String blockIndex)
 	{
 		this.blockIndex = blockIndex;
 	}

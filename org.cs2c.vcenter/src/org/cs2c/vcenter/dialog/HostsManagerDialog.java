@@ -182,6 +182,12 @@ public class HostsManagerDialog extends Dialog {
 		return new Point(450, 300);
 	}
 
+    @Override  
+    protected void configureShell(Shell newShell) {  
+        // TODO Auto-generated method stub  
+        super.configureShell(newShell);  
+        newShell.setText("Hosts Information");  
+    }  
 	public void getHostsInfoFromXml() {
 		list.removeAll();
 		for (int i = 0; i < hostXml.getMainHostInfo().size(); i++) {

@@ -86,7 +86,7 @@ public class MetaManager {
 			blockMetaResult
 					.setName(decreaseBlank(element.getAttribute("name")));
 			blockMetaResult
-					.setTips(decreaseBlank(element.getAttribute("tips")));
+					.setTips(element.getAttribute("tips"));
 			blockMetaResult.setGroup(decreaseBlank(element
 					.getAttribute("group")));
 			if (decreaseBlank(element.getAttribute("reused")) == "true")
@@ -107,9 +107,11 @@ public class MetaManager {
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 		String comstr = null;
-
-		comstr = "//directive[contains(@scope,\"" + blockName + "\")]";
-
+		
+		if(blockName.equalsIgnoreCase("main"))
+			comstr = "//directive[contains(@scope,\"" + blockName + "\")]";
+		else
+			comstr = "//directive[contains(@scope,\"" + blockName + "\")]|//directive[contains(@scope,\"exmai\")]";
 		XPathExpression expr = xpath.compile(comstr);
 
 		List<DirectiveMeta> directiveMetaList = new ArrayList<DirectiveMeta>(0);
@@ -121,8 +123,7 @@ public class MetaManager {
 			Element element = (Element) nodes.item(i);
 			directiveMetaResult.setName(decreaseBlank(element
 					.getAttribute("name")));
-			directiveMetaResult.setTips(decreaseBlank(element
-					.getAttribute("tips")));
+			directiveMetaResult.setTips(element.getAttribute("tips"));
 			directiveMetaResult.setGroup(decreaseBlank(element
 					.getAttribute("group")));
 			Set<String> tmpscope = new HashSet<String>();
@@ -220,14 +221,14 @@ public class MetaManager {
 				}
 			} else
 				tmpParaMeta.setItems(null);
-			if (decreaseBlank(recuroneelement.getAttribute("unit")) != "") {
-				if (recuroneelement.getAttribute("unit").indexOf(":") == -1) {
+			if (decreaseBlank(recuroneelement.getAttribute("units")) != "") {
+				if (recuroneelement.getAttribute("units").indexOf(":") == -1) {
 					List<String> tmpunits = new ArrayList<String>();
 					tmpunits.add(decreaseBlank(recuroneelement
-							.getAttribute("unit")));
+							.getAttribute("units")));
 					tmpParaMeta.setUnits(tmpunits);
 				} else {
-					String unitsvalue[] = recuroneelement.getAttribute("unit")
+					String unitsvalue[] = recuroneelement.getAttribute("units")
 							.split(":");
 					List<String> tmpunits = new ArrayList<String>();
 					for (int n = 0; n < unitsvalue.length; n++) {
@@ -252,7 +253,62 @@ public class MetaManager {
 		} else
 			return "";
 	}
+/*
+	private static void printblock(List<BlockMeta> blocklist)
+	{
+		System.out.println("blocknum="+blocklist.size());
+	}
+	private static void printblock1(List<BlockMeta> blocklist)
+	{
+		for(int i=0;i<blocklist.size();i++)
+		{
+			System.out.println("name="+blocklist.get(i).getName());
+			System.out.println("tips="+blocklist.get(i).getTips());
+			System.out.println("reused="+blocklist.get(i).getReused());
+		}
+		
+	}
+	private static void printdirective(List<DirectiveMeta> directivelist)
+	{
 
+		System.out.println("directivenum="+directivelist.size());
+	}
+	private static void printdirective1(List<DirectiveMeta> directivelist)
+	{
+		for(int i=0;i<directivelist.size();i++)
+		{
+			System.out.println("name="+directivelist.get(i).getName());
+			System.out.println("tips="+directivelist.get(i).getTips());
+			System.out.println("scope="+directivelist.get(i).getScope());
+			System.out.println("resued="+directivelist.get(i).getReused());
+			//for(int j=0;j<directivelist.get(i).getOptions().size();j++)
+			//{
+				//System.out.println("class="+directivelist.get(i).getOptions().get(j).getClassName());
+				//System.out.println("name="+directivelist.get(i).getOptions().get(j).getName());
+				//System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin());
+				//System.out.println("max="+directivelist.get(i).getOptions().get(j).getMax());
+				//System.out.println("units="+directivelist.get(i).getOptions().get(j).getUnits());
+				//System.out.println("items="+directivelist.get(i).getOptions().get(j).getItems());
+				
+			//}
+		}
+		
+		
+	}
+	public static void main(String[] args) {
+		MetaManager manager = MetaManager.getInstance();
+		BlockMeta blockMetaResult = new BlockMeta();
+		blockMetaResult = manager.getBlockMeta("limit_except");
+		System.out.println(blockMetaResult.getGroups());
+		printblock1(blockMetaResult.getBlockMeta(blockMetaResult.getGroups().get(0)));
+		for(int i=0;i<blockMetaResult.getGroups().size();i++)
+		{
+			printdirective1(blockMetaResult.getDirectiveMeta(blockMetaResult.getGroups().get(i)));
+		}
+	}
+	
+
+*/
 
 
 }
