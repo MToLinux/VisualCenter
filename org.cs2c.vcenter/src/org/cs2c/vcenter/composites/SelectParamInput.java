@@ -51,7 +51,7 @@ public class SelectParamInput extends Composite implements ParamInput {
 		strOptions = this.pMeta.getItems();
 		tips = this.pMeta.getTips();
 		
-		if(!strOptions.isEmpty())
+		if(strOptions!=null && !strOptions.isEmpty())
 		{
 			for(String option : strOptions)
 			{
@@ -75,7 +75,7 @@ public class SelectParamInput extends Composite implements ParamInput {
 		strOptions = this.pMeta.getItems();
 		tips = this.pMeta.getTips();
 		
-		if(!strOptions.isEmpty())
+		if(strOptions!=null && !strOptions.isEmpty())
 		{
 			for(String option : strOptions)
 			{
