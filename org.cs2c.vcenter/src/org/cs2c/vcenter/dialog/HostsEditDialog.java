@@ -357,7 +357,7 @@ public class HostsEditDialog extends Dialog {
 		if (text.getText().isEmpty()) {
 
 			MessageDialog.openError(getParentShell(), "Error",
-					"HostName is empty");
+					"Host name is empty");
 			return false;
 		}
 		if (text_1.getText().isEmpty()) {
@@ -372,16 +372,16 @@ public class HostsEditDialog extends Dialog {
 		}
 		if (text_4.getText().isEmpty()) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"Middleware is empty");
+					"Middleware name is empty");
 			return false;
 		}
 		if (text_5.getText().isEmpty()) {
-			MessageDialog.openError(getParentShell(), "Error", "Home is empty");
+			MessageDialog.openError(getParentShell(), "Error", "Home path is empty");
 			return false;
 		}
 		if (!(isIPValid(text.getText()) || isHostNameValid(text.getText()))) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"HostName is invalid");
+					"Host name is invalid");
 			return false;
 		}
 		if (!isUserNameValid(text_1.getText())) {
@@ -396,29 +396,29 @@ public class HostsEditDialog extends Dialog {
 		}
 		if (!isMiddlewareNameValid(text_4.getText())) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"MiddlewareName is invalid");
+					"Middleware name is invalid");
 			return false;
 		}
 		if (!isPathValid(text_5.getText())) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"Path is invalid");
+					"Home path is invalid");
 			return false;
 		}
 		if ((!text_6.getText().isEmpty()) && (!isPathValid(text_6.getText()))) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"Path for manager is invalid");
+					"Status path for middleware manager is invalid");
 			return false;
 		}
 		if ((!text_7.getText().isEmpty())
 				&& (!isUserNameValid(text_7.getText()))) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"UserName for manager is invalid");
+					"UserName for middleware manager is invalid");
 			return false;
 		}
 		if ((!text_8.getText().isEmpty())
 				&& (!isPassWordValid(text_8.getText()))) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"PassWord for manager is invalid");
+					"PassWord for middleware manager is invalid");
 			return false;
 		}
 		return true;
@@ -454,7 +454,7 @@ public class HostsEditDialog extends Dialog {
 		// Pattern pattern = Pattern.compile(
 		// "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
 		Pattern pattern = Pattern
-				.compile("(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+/");
+				.compile("(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+[/]?");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}

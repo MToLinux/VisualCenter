@@ -267,7 +267,7 @@ public class MiddlewareInstallerDialog extends Dialog {
 
 		if (text.getText().isEmpty()) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"HostName is empty");
+					"Host name is empty");
 			return false;
 		}
 		if (text_1.getText().isEmpty()) {
@@ -282,11 +282,11 @@ public class MiddlewareInstallerDialog extends Dialog {
 		}
 		if (text_3.getText().isEmpty()) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"Middleware is empty");
+					"Middleware name is empty");
 			return false;
 		}
 		if (text_4.getText().isEmpty()) {
-			MessageDialog.openError(getParentShell(), "Error", "Home is empty");
+			MessageDialog.openError(getParentShell(), "Error", "Home path is empty");
 			return false;
 		}
 		if (text_5.getText().isEmpty()) {
@@ -296,7 +296,7 @@ public class MiddlewareInstallerDialog extends Dialog {
 		}
 		if (!(isIPValid(text.getText()) || isHostNameValid(text.getText()))) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"HostName is invalid");
+					"Host name is invalid");
 			return false;
 		}
 		if (!isUserNameValid(text_1.getText())) {
@@ -311,12 +311,12 @@ public class MiddlewareInstallerDialog extends Dialog {
 		}
 		if (!isMiddlewareNameValid(text_3.getText())) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"MiddlewareName is invalid");
+					"Middleware name is invalid");
 			return false;
 		}
 		if (!isPathValid(text_4.getText())) {
 			MessageDialog.openError(getParentShell(), "Error",
-					"Path is invalid");
+					"Home path is invalid");
 			return false;
 		}
 		if (!isFileValid(text_4.getText())) {
@@ -358,7 +358,7 @@ public class MiddlewareInstallerDialog extends Dialog {
 		// Pattern pattern = Pattern.compile(
 		// "^/([0-9a-zA-Z_-]+/$)+");//(\/([0-9a-zA-Z]+))+
 		Pattern pattern = Pattern
-				.compile("(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+/");
+				.compile("(\\/([\\x21-\\x2e\\x30-\\x7e]{1,255}))+[/]?");
 		Matcher matcher = pattern.matcher(str);
 		return matcher.matches();
 	}
