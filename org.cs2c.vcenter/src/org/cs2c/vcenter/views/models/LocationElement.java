@@ -186,5 +186,8 @@ public class LocationElement extends TreeElement implements ILocation, IEditorIn
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	public int hashCode(){
+		return this.name.hashCode();
+	}
 }

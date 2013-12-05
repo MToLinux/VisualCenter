@@ -186,4 +186,8 @@ public class ServerElement extends TreeElement implements IServer, IEditorInput 
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int hashCode(){
+		return this.name.hashCode();
+	}
 }
