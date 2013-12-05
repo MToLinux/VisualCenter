@@ -3,10 +3,9 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
-import org.cs2c.nginlib.AuthInfo;
-import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.ctl.Controller;
+import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -15,6 +14,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
@@ -23,11 +23,12 @@ import org.eclipse.ui.IWorkbenchPart;
 public class RestartAction implements IObjectActionDelegate {
 	private Shell shell;
 	private TreeElement element;
+	private MiddlewareView meview = null;
+
 	/**
 	 * 
 	 */
 	public RestartAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -35,9 +36,9 @@ public class RestartAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
 		try {
 			RestartNginx();
+			showMessage("The server nginx is already restart.");
 		} catch (RemoteException e) {
 			openMessageDialog(e.getMessage());
 			e.printStackTrace();
@@ -79,6 +80,12 @@ public class RestartAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		shell = targetPart.getSite().getShell();
+		this.meview = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
+
+	}
+	
+	private void showMessage(String message) {
+		this.meview.showMessage(message);
 	}
 
 }

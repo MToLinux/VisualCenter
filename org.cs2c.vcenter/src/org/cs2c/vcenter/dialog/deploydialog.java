@@ -24,7 +24,7 @@ import org.eclipse.ui.PlatformUI;
 
 public class deploydialog extends Dialog {
 	private Text text_file;
-	private Text text_root;
+	private Text txtRemotepath;
 	private Button button_ok;
 	private Button button_cancel;
 	
@@ -41,6 +41,10 @@ public class deploydialog extends Dialog {
 		super(parentShell);
 	}
 	
+	public void init(String rootvalue) {
+		RemotePath = rootvalue;
+	}
+
 	public String getLocalFilename() {
 		return LocalFilename;
 	}
@@ -54,7 +58,13 @@ public class deploydialog extends Dialog {
 	}
 	
 	private void setControlEnable() {
-		text_root.setEnabled(true);
+		txtRemotepath.setEnabled(true);
+	}
+	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Deploy Dialog");
 	}
 
 	/**
@@ -110,15 +120,22 @@ public class deploydialog extends Dialog {
 		lblNewLabel_1.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblNewLabel_1.setText("root:");
 		
-		text_root = new Text(container, SWT.BORDER);
-		text_root.addModifyListener(new ModifyListener() {
+		txtRemotepath = new Text(container, SWT.BORDER);
+		if(null!=RemotePath){
+			txtRemotepath.setText(this.RemotePath);
+			txtRemotepath.setEnabled(false);
+		}else{
+			txtRemotepath.setEnabled(true);
+		}
+
+		txtRemotepath.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				SetOkEnable();
 			}
 		});
-		GridData gd_text_root = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
-		gd_text_root.widthHint = 200;
-		text_root.setLayoutData(gd_text_root);
+		GridData gd_txtRemotepath = new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1);
+		gd_txtRemotepath.widthHint = 200;
+		txtRemotepath.setLayoutData(gd_txtRemotepath);
 		new Label(container, SWT.NONE);
 
 		return container;
@@ -126,7 +143,7 @@ public class deploydialog extends Dialog {
 	
 	private void SetOkEnable() {
 		LocalFilename = text_file.getText().trim();
-		RemotePath = text_root.getText().trim();
+		RemotePath = txtRemotepath.getText().trim();
 		
 		if((null != LocalFilename)&&(null != RemotePath)&&
 			("" != LocalFilename)&&("" != RemotePath)){
@@ -149,7 +166,7 @@ public class deploydialog extends Dialog {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				LocalFilename = text_file.getText();
-				RemotePath = text_root.getText();
+				RemotePath = txtRemotepath.getText();
 			}
 		});
 

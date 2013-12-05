@@ -73,7 +73,7 @@ public class NewUpstreamAction implements IObjectActionDelegate {
 		};
 		//show dialog
 		InputDialog inputDialog = new InputDialog( this.shell,
-				"Please input a String", //dialog title
+				"New Upstream Dialog", //dialog title
 				"Enter a String:", //dialog prompt
 				"", //default text
 				validator ); //validator to use
@@ -93,7 +93,7 @@ public class NewUpstreamAction implements IObjectActionDelegate {
 		if(list.size()>0){
 			orc.append(newBlock, blockName);
 			//aoto show in treeview,do refresh
-			this.treeViewer.refresh();
+			this.treeViewer.refresh(this.element);
 		}
 	}
 
