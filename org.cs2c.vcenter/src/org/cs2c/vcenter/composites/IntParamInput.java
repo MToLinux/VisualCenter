@@ -124,7 +124,7 @@ public class IntParamInput extends Composite implements ParamInput {
 		ctlSpinner.setMinimum(min);
 		ctlSpinner.setSelection(0);
 		
-		if(!strUnit.isEmpty())
+		if(strUnit!=null && !strUnit.isEmpty())
 		{
 			int count = strUnit.size();
 			int i = 0;

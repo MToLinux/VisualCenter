@@ -76,7 +76,7 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		ctlSpinner.setMinimum(min);
 		ctlSpinner.setSelection(0);
 		
-		if(!strUnit.isEmpty())
+		if(strUnit!=null && !strUnit.isEmpty())
 		{
 			int i = strUnit.size();
 			while(i>0)
@@ -109,7 +109,7 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		ctlSpinner.setMinimum(min);
 		ctlSpinner.setSelection(0);
 		
-		if(!strUnit.isEmpty())
+		if(strUnit!=null && !strUnit.isEmpty())
 		{
 			int i = strUnit.size();
 			while(i>0)

@@ -1,5 +1,6 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.Hashtable;
 import java.util.ArrayList;
 
 import org.cs2c.nginlib.MiddlewareFactory;
@@ -85,9 +86,50 @@ public class BlockInput extends Composite {
 				blockMetas = bMeta.getBlockMeta(blockSubGroup);
 				
 				java.util.List<String> elementNames = new ArrayList<String>();
+				Hashtable<String, String> htDMNames = new Hashtable<String, String>();
+				Hashtable<String, String> htBMNames = new Hashtable<String, String>();
 				
 				int count = 0;
 				int i = 0;
+				
+				if(directiveMetas != null && !directiveMetas.isEmpty())
+				{
+					count = directiveMetas.size();
+					i = 0;
+					while(i<count)
+					{
+						String dirctvname = directiveMetas.get(i).getName();
+						elementNames.add(elementNames.size(), dirctvname);
+						if(directiveMetas.get(i).getReused())
+						{
+							htDMNames.put(dirctvname, "true");
+						}
+						else
+						{
+							htDMNames.put(dirctvname, "false");
+						}
+						i++;
+					}
+				}
+				if(blockMetas != null && !blockMetas.isEmpty())
+				{
+					count = blockMetas.size();
+					i = 0;
+					while(i<count)
+					{
+						String blkname = blockMetas.get(i).getName();
+						elementNames.add(elementNames.size(), blkname+strBlockMark);
+						if(blockMetas.get(i).getReused())
+						{
+							htBMNames.put(blkname, "true");
+						}
+						else
+						{
+							htBMNames.put(blkname, "false");
+						}
+						i++;
+					}
+				}
 				
 				if(directives != null && !directives.isEmpty())
 				{
@@ -98,7 +140,16 @@ public class BlockInput extends Composite {
 						String name = directives.get(i).getName();
 						String nameslice[] = name.split(" ");
 						String typeInName = nameslice[0];
-						elementNames.add(elementNames.size(), typeInName);
+						if(htDMNames.containsKey(typeInName))
+						{
+							if((htDMNames.get(typeInName)).equals("true"))
+							{
+							}
+							else
+							{
+								elementNames.remove(typeInName);
+							}
+						}
 						i++;
 					}
 				}
@@ -111,47 +162,20 @@ public class BlockInput extends Composite {
 						String name = blocks.get(i).getName();
 						String nameslice[] = name.split(" ");
 						String typeInName = nameslice[0];
-						elementNames.add(elementNames.size(), typeInName+strBlockMark);
+						if(htBMNames.containsKey(typeInName))
+						{
+							if((htBMNames.get(typeInName)).equals("true"))
+							{
+							}
+							else
+							{
+								elementNames.remove(typeInName);
+							}
+						}
 						i++;
 					}
 				}
 				
-				if(directiveMetas != null && !directiveMetas.isEmpty())
-				{
-					count = directiveMetas.size();
-					i = 0;
-					while(i<count)
-					{
-						String dirctvname = directiveMetas.get(i).getName();
-						if(!elementNames.contains(dirctvname))
-						{
-							elementNames.add(elementNames.size(), dirctvname);
-						}
-						else if(!directiveMetas.get(i).getReused())
-						{
-							elementNames.remove(dirctvname);
-						}
-						i++;
-					}
-				}
-				if(blockMetas != null && !blockMetas.isEmpty())
-				{
-					count = blockMetas.size();
-					i = 0;
-					while(i<count)
-					{
-						String blkname = blockMetas.get(i).getName();
-						if(!elementNames.contains(blkname+strBlockMark))
-						{
-							elementNames.add(elementNames.size(), blkname+strBlockMark);
-						}
-						else if(!blockMetas.get(i).getReused())
-						{
-							elementNames.remove(blkname+strBlockMark);
-						}
-						i++;
-					}
-				}
 				
 				ElementSelector eleSelector = new ElementSelector(new Shell(), elementNames);
 				
@@ -190,7 +214,8 @@ public class BlockInput extends Composite {
 						while(i < count)
 						{
 							dMeta = directiveMetas.get(i);
-							if(selEleName.equals(dMeta.getName()))
+							String metaName = dMeta.getName();
+							if(selEleName.equals(metaName))
 							{
 								break;
 							}
