@@ -49,6 +49,12 @@ public class Importmiddleware extends Dialog {
 		listMiddleware = list;
 	}
 	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Middleware Dialog");
+	}
+
 	/**
 	 * Create contents of the dialog.
 	 * @param parent

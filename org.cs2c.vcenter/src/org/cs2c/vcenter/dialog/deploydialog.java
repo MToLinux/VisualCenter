@@ -60,6 +60,12 @@ public class deploydialog extends Dialog {
 	private void setControlEnable() {
 		txtRemotepath.setEnabled(true);
 	}
+	
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Deploy Dialog");
+	}
 
 	/**
 	 * Create contents of the dialog.

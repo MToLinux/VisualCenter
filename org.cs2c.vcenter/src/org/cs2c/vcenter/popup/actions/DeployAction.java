@@ -12,24 +12,24 @@ import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.nginlib.config.RecConfigurator;
-import org.cs2c.nginlib.config.RecDirective;
+//import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.StringParameter;
 import org.cs2c.nginlib.ctl.Controller;
 import org.cs2c.vcenter.dialog.deploydialog;
-import org.cs2c.vcenter.dialog.serverdialog;
+//import org.cs2c.vcenter.dialog.serverdialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
+//import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import com.trilead.ssh2.SCPClient;
+//import com.trilead.ssh2.SCPClient;
 
 /**
  * @author Administrator
@@ -38,7 +38,7 @@ import com.trilead.ssh2.SCPClient;
 public class DeployAction implements IObjectActionDelegate {
 	private TreeElement element;
 	private Shell shell;
-	private TreeViewer treeViewer=null;
+//	private TreeViewer treeViewer=null;
 //	private MiddlewareView meview = null;
 
 	
@@ -46,7 +46,6 @@ public class DeployAction implements IObjectActionDelegate {
 	 * 
 	 */
 	public DeployAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -56,8 +55,6 @@ public class DeployAction implements IObjectActionDelegate {
 	public void run(IAction action) {
 		try {
 			DeployToServer();
-			//do refresh
-//			this.treeViewer.refresh();
 		} catch (RemoteException e) {
 			//RemoteException message
 			if(null != e.getMessage()){
@@ -76,7 +73,6 @@ public class DeployAction implements IObjectActionDelegate {
 //	}
 
 	private void DeployToServer() throws RemoteException, IOException{
-		// TODO Auto-generated method stub
 		String rootvalue = null;
 //		Directive oldDirective = null;
 		//check server block weather has the root directive
@@ -175,7 +171,7 @@ public class DeployAction implements IObjectActionDelegate {
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		shell = targetPart.getSite().getShell();
 		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
-		this.treeViewer = meviewer.getTreeViewer();
+//		this.treeViewer = meviewer.getTreeViewer();
 //		this.meview = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 	}
 
