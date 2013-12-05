@@ -1,10 +1,9 @@
 package org.cs2c.vcenter.views;
 
-import java.io.File;
 import java.util.*;
 
-import org.cs2c.vcenter.actions.HostManagerAction;
-import org.eclipse.jface.action.Action;
+//import org.cs2c.vcenter.actions.HostManagerAction;
+//import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
@@ -13,18 +12,16 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchActionConstants;
-import org.eclipse.ui.PartInitException;
+//import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Menu;
+//import org.eclipse.swt.widgets.Button;
+//import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
-import org.w3c.dom.Document;
 import org.cs2c.vcenter.views.models.*;
-
-import javax.xml.parsers.*;
 
 import org.cs2c.nginlib.*;
 
@@ -74,6 +71,7 @@ public class MiddlewareView extends ViewPart {
 		this.projectnameList.add(name);
 		this.projectList.add(project);
 		this.treeViewer.setInput(projectList);
+//		showMessage("load already.");
 	}
 	/**
 	 * Create the actions.
@@ -101,5 +99,10 @@ public class MiddlewareView extends ViewPart {
 	@Override
 	public void setFocus() {
 		// Set the focus
+	}
+	
+	public void showMessage(String message) {
+		IActionBars bars = getViewSite().getActionBars();
+		bars.getStatusLineManager().setMessage(message);
 	}
 }
