@@ -83,6 +83,9 @@ public class ServerElement extends TreeElement implements IServer, IEditorInput 
 		Map<String,String> maploNameIndex = new HashMap<String,String>();
 //		List<String> reblList = new ArrayList<String>();
 		Block blServer = getServerBlock();
+		if(null == blServer){
+			return null;
+		}
 		
 		list= blServer.getBlocks();
 		
@@ -139,6 +142,10 @@ public class ServerElement extends TreeElement implements IServer, IEditorInput 
 		boolean bHasChildren = false;
 		
 		lisloName =  getLocationName();
+		if(null == lisloName){
+			return false;
+		}
+		
 		if(lisloName.size()>0){
 			bHasChildren = true;
 		}else{
