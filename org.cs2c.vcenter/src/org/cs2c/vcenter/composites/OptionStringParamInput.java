@@ -35,7 +35,6 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		
 		ctlLabel = new Label(this,SWT.NONE);
 		ctlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		ctlLabel.setText(strParamName+" = ");
 
 		ctlText = new Text(this,SWT.NONE);
 		ctlText.addModifyListener(new ModifyListener() {
@@ -49,6 +48,8 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		this.pMeta = meta;
 		
 		strParamName = this.pMeta.getName();
+		ctlLabel.setText(strParamName+" = ");
+
 		tips = this.pMeta.getTips();
 	}
 
@@ -57,6 +58,8 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		this.pMeta = meta;
 		
 		strParamName = this.pMeta.getName();
+		ctlLabel.setText(strParamName+" = ");
+
 		tips = this.pMeta.getTips();
 
 	}

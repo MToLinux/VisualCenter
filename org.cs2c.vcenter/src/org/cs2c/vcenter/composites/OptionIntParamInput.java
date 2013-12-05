@@ -44,7 +44,6 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		
 		ctlLabel = new Label(this,SWT.NONE);
 		ctlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		ctlLabel.setText(strParamName+" = ");
 		
 		ctlSpinner = new Spinner(this,SWT.NONE);
 		ctlSpinner.addModifyListener(new ModifyListener() {
@@ -81,17 +80,22 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 			int i = strUnit.size();
 			while(i>0)
 			{
-				ctlCombo.add(ctlCombo.getItem(i-1));
+				ctlCombo.add(strUnit.get(i-1));
+				i--;
 			}
 		}
 		else
 		{
-			ctlCombo.add("");
+			//ctlCombo.add("");
+			ctlCombo.setEnabled(false);
 		}
 		if(ctlCombo.getItemCount() > 0)
 		{
 			ctlCombo.select(0);
 		}
+		
+		ctlLabel.setText(strParamName+" = ");
+
 	}
 	
 	@Override
@@ -114,17 +118,22 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 			int i = strUnit.size();
 			while(i>0)
 			{
-				ctlCombo.add(ctlCombo.getItem(i-1));
+				ctlCombo.add(strUnit.get(i-1));
+				i--;
 			}
 		}
 		else
 		{
-			ctlCombo.add("");
+			//ctlCombo.add("");
+			ctlCombo.setEnabled(false);
 		}
 		if(ctlCombo.getItemCount() > 0)
 		{
 			ctlCombo.select(0);
 		}
+		
+		ctlLabel.setText(strParamName+" = ");
+
 	}
 	
 	public void UpdateParam()
