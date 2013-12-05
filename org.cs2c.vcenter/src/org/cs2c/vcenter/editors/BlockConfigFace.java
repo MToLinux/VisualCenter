@@ -1,20 +1,22 @@
 package org.cs2c.vcenter.editors;
 
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cs2c.nginlib.AuthInfo;
 import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
+import org.cs2c.nginlib.config.Block;
+import org.cs2c.nginlib.config.Configurator;
+import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.vcenter.composites.BlockInput;
+import org.cs2c.vcenter.dialog.BlockElementInfo;
 import org.cs2c.vcenter.metadata.BlockMeta;
 import org.cs2c.vcenter.metadata.MetaManager;
-import org.cs2c.vcenter.views.models.HttpElement;
-import org.cs2c.vcenter.views.models.LocationElement;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IEditorInput;
@@ -25,8 +27,11 @@ import org.eclipse.swt.SWT;
 
 public class BlockConfigFace extends EditorPart {
 	
-	
 	public static final String ID="org.cs2c.vcenter.editors.BlockConfigFace";
+	
+	private Block oldBlock = null;
+	private Block newBlock = null;
+	private String blockName = null;
 	
 	private TabFolder tabFolder = null;
 
@@ -34,42 +39,52 @@ public class BlockConfigFace extends EditorPart {
 	private Hashtable<String, BlockInput> htGroupBInputs = new Hashtable<String, BlockInput>();
 	private BlockInput bInput = null;
 	
-	private TreeElement input;
+	private TreeElement input = null;
 	private String blockType = null;
 	
-	private BlockMeta bMeta = new BlockMeta();
-	List<String> blockGroups = new ArrayList<String>();
+	private BlockMeta bMeta = null;
+	List<String> blockGroups = null;
+	
+	
+	private MiddlewareFactory middleware = null;
+	private String blockOutNames = null;
+	private String blockIndex = null;
+	private Configurator orc = null;
+	
+	private String blockMetaType = null;
+	
 	
 	public BlockConfigFace() {
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		
+		try {
+			orc.replace(this.oldBlock, this.newBlock, this.blockOutNames);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			MessageDialog.openError(new Shell(), "Error", e.getMessage());
+			return;
+		}
+		
 		if(bInput != null && bInput.isChanged())
 		{
-			//Save
-			
-			bInput.setChangedFlag(false);
+			bInput.benchmark();
 		}
 		else
 		{
-			//Save
-			
 			if(blockGroups!=null && !blockGroups.isEmpty())
 			{
 				int count = 0;
 				int i = 0;
 				while(i < count)
 				{
-					//get BlockInput
 					BlockInput blkinput = htGroupBInputs.get(blockGroups.get(i));
-					//Save
-					
-					//modify bInput falg to FALSE
-					blkinput.setChangedFlag(false);
+					blkinput.benchmark();
+					i++;
 				}
 			}
-
 		}
 		
 	}
@@ -88,26 +103,67 @@ public class BlockConfigFace extends EditorPart {
 		this.setPartName(input.getName());
 		this.input=(TreeElement)input;
 		
-		//Just for test!!! begin by yanbin.jia
-		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
-		authInfo.setHost("10.1.50.4");
-		authInfo.setUsername("root");
-		authInfo.setPassword("cs2csolutions");
-		MiddlewareFactory middleware;
+		this.middleware = this.input.getMiddlewareFactory();
+		this.blockType = this.input.getBlocktype();
+		this.blockOutNames = this.input.getOuterBlockNames();
+		this.blockIndex = this.input.getBlockIndex();
+		
+		this.orc = this.middleware.getConfigurator();
+		
+		String sType[] = this.blockType.split(" ");
+		this.blockMetaType = sType[0];
+		
 		try {
-			middleware = MiddlewareFactory.getInstance(authInfo, "/usr/local/nginx/");
+			if(this.blockType == "main")
+			{
+				this.oldBlock = this.orc.getRootBlock();
+			}
+			else
+			{
+				List<Block> tmBlocks = this.orc.getBlocks(this.blockType, this.blockOutNames);
+				this.oldBlock = tmBlocks.get(Integer.parseInt(this.blockIndex));
+			}
+			this.blockName = this.oldBlock.getName();
+			
+			this.newBlock = this.orc.newBlock();
+			this.newBlock.setName(this.blockName);
+			((RecBlock)(this.newBlock)).SetBlockText(this.oldBlock.toString());
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			MessageDialog.openError(new Shell(), "Error", e.getMessage());
 			return;
 		}
-		this.input = new HttpElement(null);
-		this.input.init("","main","0","", middleware);
-		//Just for test!!! end by yanbin.jia
-
+		
 	}
 
 	@Override
 	public boolean isDirty() {
+		
+		if(bInput != null && bInput.isChanged())
+		{
+			if(bInput.isChanged())
+			{
+				return true;
+			}
+		}
+		else
+		{
+			if(blockGroups!=null && !blockGroups.isEmpty())
+			{
+				int count = 0;
+				int i = 0;
+				while(i < count)
+				{
+					BlockInput blkinput = htGroupBInputs.get(blockGroups.get(i));
+					if(blkinput.isChanged())
+					{
+						return true;
+					}
+					i++;
+				}
+			}
+		}
+		
 		return false;
 	}
 
@@ -119,10 +175,8 @@ public class BlockConfigFace extends EditorPart {
 	@Override
 	public void createPartControl(Composite parent) {
 
-		this.blockType = input.getBlocktype();
-		
 		MetaManager mmanager = MetaManager.getInstance();
-		bMeta = mmanager.getBlockMeta(this.blockType);
+		bMeta = mmanager.getBlockMeta(this.blockMetaType);
 		blockGroups = bMeta.getGroups();
 		
 		int countGroups = 0;
@@ -135,16 +189,23 @@ public class BlockConfigFace extends EditorPart {
 			countGroups = blockGroups.size();
 		}
 		
+		BlockElementInfo bcInfo = new BlockElementInfo();
+		bcInfo.setBlock(this.newBlock);
+		bcInfo.setBlockType(this.blockType);
+		bcInfo.setBlockMeta(this.bMeta);
+		bcInfo.setMiddleware(middleware);
+		
 		if(countGroups == 1)
 		{
 			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(parent, SWT.NONE, input, bMeta, subGroupName);//this.name, subGroupName, this.middleware);
+			bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName);
 		}
 		else
 		{
 			this.tabFolder = new TabFolder(parent, SWT.NONE);
 			
 			int i = 0;
+			BlockInput[] bInputs = new BlockInput[countGroups];
 			while(i < countGroups)
 			{
 				String subGroupName = blockGroups.get(i);
@@ -152,12 +213,12 @@ public class BlockConfigFace extends EditorPart {
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
 				
-				BlockInput cpstBlockInput = new BlockInput(
-						this.tabFolder, SWT.NONE, input, bMeta, subGroupName);//this.name, subGroupName, this.middleware);
-				tbi.setControl(cpstBlockInput);
+				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName);
+				
+				tbi.setControl(bInputs[i]);
 				
 				htGroupTItems.put(subGroupName, tbi);
-				htGroupBInputs.put(subGroupName, cpstBlockInput);
+				htGroupBInputs.put(subGroupName, bInputs[i]);
 				
 				i++;
 			}

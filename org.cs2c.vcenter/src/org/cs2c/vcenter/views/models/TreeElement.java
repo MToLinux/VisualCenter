@@ -42,7 +42,7 @@ public abstract class TreeElement {
 	public String getOuterBlockNames(){
 		return this.outerBlockNames;
 	}
-
+	
 	public MiddlewareFactory getMiddlewareFactory(){
 		return this.middleware;
 	}

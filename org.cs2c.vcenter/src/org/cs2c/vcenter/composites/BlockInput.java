@@ -1,5 +1,6 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.Hashtable;
 import java.util.ArrayList;
 
 import org.cs2c.nginlib.MiddlewareFactory;
@@ -8,23 +9,19 @@ import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Configurator;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.Parameter;
-import org.cs2c.nginlib.config.RecBlock;
-import org.cs2c.nginlib.config.RecDirective;
-import org.cs2c.nginlib.config.RecStringParameter;
-import org.cs2c.vcenter.dialog.BlockInputDialog;
+import org.cs2c.vcenter.dialog.BlockConfigDialog;
+import org.cs2c.vcenter.dialog.BlockElementInfo;
+import org.cs2c.vcenter.dialog.BlockNameSetDialog;
 import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.dialog.ElementSelector;
 import org.cs2c.vcenter.metadata.BlockMeta;
 import org.cs2c.vcenter.metadata.DirectiveMeta;
 import org.cs2c.vcenter.metadata.MetaManager;
-import org.cs2c.vcenter.views.models.HttpElement;
-import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
@@ -41,53 +38,30 @@ public class BlockInput extends Composite {
 	private Button btnDelete;
 	boolean flagChanged;
 	
-	private TreeElement input;
-	
 	private MiddlewareFactory middleware = null;
-	private String blockName = null;
-	private String blockType = null;
-	private String blockGroup = null;
 	private String blockSubGroup = null;
-	private String blockOutNames = null;
-	private String blockIndex = null;
 	private Configurator orc = null;
 	
 	final String strBlockMark = " {...}";
-
-	//Metadata
-	private BlockMeta bMeta = new BlockMeta();
 	
-	//Server Configuration Information
-	private Block block = new RecBlock();
-	private java.util.List<Directive> directives = new ArrayList<Directive>();
-	private java.util.List<Block> blocks = new ArrayList<Block>();
-
+	private BlockMeta bMeta = null;
 	
-	public BlockInput(Composite parent, int style, TreeElement input, BlockMeta blkMeta, String blkSubGroup) {
+	private Block block = null; 
+	
+	private java.util.List<Directive> directives = null;
+	private java.util.List<Block> blocks = null;
+	
+	
+	public BlockInput(Composite parent, int style, BlockElementInfo bcInfo, String blkSubGroup) {
 		super(parent, style);
-
-		this.input = input;
-		this.middleware = input.getMiddlewareFactory();
-		this.blockName = input.getName();
-		this.blockType = input.getBlocktype();
-		this.blockOutNames = input.getOuterBlockNames();
-		this.blockIndex = input.getBlockIndex();
-		this.orc = this.middleware.getConfigurator();
-		this.bMeta = blkMeta;
+		
+		this.middleware = bcInfo.getMiddleware();
+		this.bMeta = bcInfo.getBlockMeta();
 		this.blockSubGroup = blkSubGroup;
 		
-		try {
-			if(this.blockType == "main")
-			{
-				this.block = this.orc.getRootBlock();
-			}
-			else
-			{
-				this.block = this.orc.getBlocks(blockType, blockOutNames).get(Integer.parseInt(blockIndex));
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		this.orc = this.middleware.getConfigurator();
+		
+		this.block = bcInfo.getBlock();
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -112,30 +86,11 @@ public class BlockInput extends Composite {
 				blockMetas = bMeta.getBlockMeta(blockSubGroup);
 				
 				java.util.List<String> elementNames = new ArrayList<String>();
+				Hashtable<String, String> htDMNames = new Hashtable<String, String>();
+				Hashtable<String, String> htBMNames = new Hashtable<String, String>();
 				
 				int count = 0;
 				int i = 0;
-				
-				if(directives != null && !directives.isEmpty())
-				{
-					count = directives.size();
-					i = 0;
-					while(i < count)
-					{
-						elementNames.add(directives.get(i).getName());
-						i++;
-					}
-				}
-				if(blocks != null && !blocks.isEmpty())
-				{
-					count = blocks.size();
-					i = 0;
-					while(i < count)
-					{
-						elementNames.add(blocks.get(i).getName()+strBlockMark);
-						i++;
-					}
-				}
 				
 				if(directiveMetas != null && !directiveMetas.isEmpty())
 				{
@@ -143,13 +98,15 @@ public class BlockInput extends Composite {
 					i = 0;
 					while(i<count)
 					{
-						if(!elementNames.contains(directiveMetas.get(i).getName()))
+						String dirctvname = directiveMetas.get(i).getName();
+						elementNames.add(elementNames.size(), dirctvname);
+						if(directiveMetas.get(i).getReused())
 						{
-							elementNames.add(directiveMetas.get(i).getName());
+							htDMNames.put(dirctvname, "true");
 						}
-						else if(!directiveMetas.get(i).getReused())
+						else
 						{
-							elementNames.remove(directiveMetas.get(i).getName());
+							htDMNames.put(dirctvname, "false");
 						}
 						i++;
 					}
@@ -160,17 +117,65 @@ public class BlockInput extends Composite {
 					i = 0;
 					while(i<count)
 					{
-						if(!elementNames.contains(blockMetas.get(i).getName()+strBlockMark))
+						String blkname = blockMetas.get(i).getName();
+						elementNames.add(elementNames.size(), blkname+strBlockMark);
+						if(blockMetas.get(i).getReused())
 						{
-							elementNames.add(blockMetas.get(i).getName()+strBlockMark);
+							htBMNames.put(blkname, "true");
 						}
-						else if(!blockMetas.get(i).getReused())
+						else
 						{
-							elementNames.remove(blockMetas.get(i).getName()+strBlockMark);
+							htBMNames.put(blkname, "false");
 						}
 						i++;
 					}
 				}
+				
+				if(directives != null && !directives.isEmpty())
+				{
+					count = directives.size();
+					i = 0;
+					while(i < count)
+					{
+						String name = directives.get(i).getName();
+						String nameslice[] = name.split(" ");
+						String typeInName = nameslice[0];
+						if(htDMNames.containsKey(typeInName))
+						{
+							if((htDMNames.get(typeInName)).equals("true"))
+							{
+							}
+							else
+							{
+								elementNames.remove(typeInName);
+							}
+						}
+						i++;
+					}
+				}
+				if(blocks != null && !blocks.isEmpty())
+				{
+					count = blocks.size();
+					i = 0;
+					while(i < count)
+					{
+						String name = blocks.get(i).getName();
+						String nameslice[] = name.split(" ");
+						String typeInName = nameslice[0];
+						if(htBMNames.containsKey(typeInName))
+						{
+							if((htBMNames.get(typeInName)).equals("true"))
+							{
+							}
+							else
+							{
+								elementNames.remove(typeInName);
+							}
+						}
+						i++;
+					}
+				}
+				
 				
 				ElementSelector eleSelector = new ElementSelector(new Shell(), elementNames);
 				
@@ -181,16 +186,25 @@ public class BlockInput extends Composite {
 					int len = selEleName.length();
 					if(len > 6 && selEleName.substring(selEleName.length()-6,selEleName.length()).equals(strBlockMark))
 					{
-						Block blk;
 						try {
-							blk = orc.newBlock();
-							blk.setName(selEleName.substring(0, selEleName.length()-6));
-							block.addBlock(blk);
+							Block newblk = null;
+							newblk = orc.newBlock();
+							
+							BlockNameSetDialog bnsDlg = new BlockNameSetDialog(getShell(), 
+									selEleName.substring(0, selEleName.length()-6));
+							if(Window.OK == bnsDlg.open())
+							{
+								newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim() +
+										" " + bnsDlg.getBlockName());
+								block.addBlock(newblk);
+							}
 						} catch (RemoteException e1) {
-							// TODO Auto-generated catch block
+							MessageDialog.openError(getShell(), "Error", e1.getMessage());
 							e1.printStackTrace();
-
 						}
+						
+						UpdateListCtl();
+						flagChanged = true;
 					}
 					else
 					{
@@ -200,7 +214,8 @@ public class BlockInput extends Composite {
 						while(i < count)
 						{
 							dMeta = directiveMetas.get(i);
-							if(selEleName == dMeta.getName())
+							String metaName = dMeta.getName();
+							if(selEleName.equals(metaName))
 							{
 								break;
 							}
@@ -212,8 +227,8 @@ public class BlockInput extends Composite {
 							return;
 						}
 						
-						DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);
-					
+						DirectiveInput dInput = new DirectiveInput(new Shell(), null, dMeta);
+						
 						if(Window.OK == dInput.open())
 						{
 							Directive dirct = orc.newDirective();
@@ -238,9 +253,7 @@ public class BlockInput extends Composite {
 							}
 
 							block.addDirective(dirct);
-
 							UpdateListCtl();
-							
 							flagChanged = true;
 						}
 					}//else
@@ -272,15 +285,20 @@ public class BlockInput extends Composite {
 				String selEle = ctlList.getItem(ctlList.getSelectionIndex());
 				
 				int len = selEle.length();
-				if(len > 6 && selEle.substring(selEle.length()-6,selEle.length()).equals(strBlockMark))
+				if(len > 6 && (selEle.trim()).substring(selEle.length()-6,selEle.length()).equals(strBlockMark))
 				{
+					String strSelEleType = (selEle.trim()).substring(0, selEle.length()-6);
+					strSelEleType = strSelEleType.trim();
+					String[] strSelEleTypeSlip = strSelEleType.split(" ");
+					String strSelEleBaseType = strSelEleTypeSlip[0];
+					
 					BlockMeta bMeta = null;
 					int count = blockMetas.size();
 					int i = 0;
 					while(i < count)
 					{
 						bMeta = blockMetas.get(i);
-						if(selEle == bMeta.getName())
+						if(strSelEleBaseType.equals(bMeta.getName()))
 						{
 							break;
 						}
@@ -292,27 +310,84 @@ public class BlockInput extends Composite {
 						return;
 					}
 					
-					String blockName = "";// = input.getName();
-					String blockType = "";// = input.getBlocktype();
-					String blockOutNames = "";// = input.getOuterBlockNames();
-					String blockIndex = "";// = input.getBlockIndex();
-					bMeta = bMeta;
-					String subGroupName = "";// = blkSubGroup;
+					int indexSel = ctlList.getSelectionIndex();
+					int indexSubBlock = 0;
 					
-					HttpElement newInput = new HttpElement(null);
-					newInput.init(blockName, blockType , "0", blockOutNames, middleware);
+					i = 0;
+					while(i < indexSel)
+					{
+						String strItemText = ctlList.getItem(i).trim();
+						if( strItemText.equals(selEle.trim()) )
+						{
+							indexSubBlock++;
+						}
+						i++;
+					}
 					
-					BlockInputDialog biDlg = new BlockInputDialog(new Shell(), newInput, bMeta, subGroupName);
+					Block curBlk = null;
+					count = blocks.size();
+					i = 0;
+					int wIndex = -1;
+					while(i<count && wIndex<indexSubBlock)
+					{
+						curBlk = blocks.get(i);
+						if(strSelEleType.equals(curBlk.getName()))
+						{
+							wIndex++;
+							if(wIndex == indexSubBlock)
+							{
+								break;
+							}
+						}
+						i++;
+					}
+					if(wIndex != indexSubBlock)
+					{
+						MessageDialog.openError(getShell(), "Error", "Can not find the Block!");
+						return;
+					}
+					
+					BlockElementInfo bcInfo = new BlockElementInfo();
+					bcInfo.setBlock(curBlk);
+					bcInfo.setBlockType(strSelEleBaseType);
+					
+					MetaManager mmanager = MetaManager.getInstance();
+					BlockMeta subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
+					bcInfo.setBlockMeta(subbMeta);
+					
+					bcInfo.setMiddleware(middleware);
+					
+					BlockConfigDialog bcDlg = new BlockConfigDialog(new Shell(), bcInfo);
+					
+					if(Window.OK == bcDlg.open())
+					{
+						UpdateListCtl();
+						flagChanged = true;
+					}
 				}
 				else
 				{
+					if(selEle.startsWith(";"))
+					{
+						return;
+					}
+					while(selEle.endsWith(";"))
+					{
+						selEle = selEle.substring(0, selEle.length()-1);
+						if(selEle.startsWith(";"))
+						{
+							return;
+						}
+					}
+					String selEleSlip[] = selEle.split(" ");
+					String strSelEleName = selEleSlip[0];
 					DirectiveMeta dMeta = null;
 					int count = directiveMetas.size();
 					int i = 0;
 					while(i < count)
 					{
 						dMeta = directiveMetas.get(i);
-						if(selEle == dMeta.getName())
+						if(strSelEleName.equals(dMeta.getName()))
 						{
 							break;
 						}
@@ -332,7 +407,7 @@ public class BlockInput extends Composite {
 						while(i < count)
 						{
 							oldDirct = directives.get(i);
-							if(oldDirct.getName() == selEle)
+							if(strSelEleName.equals(oldDirct.getName()))
 							{
 								break;
 							}
@@ -345,12 +420,12 @@ public class BlockInput extends Composite {
 						}
 					}
 					
-					DirectiveInput dInput = new DirectiveInput(new Shell(), dMeta);//oldDirct
+					DirectiveInput dInput = new DirectiveInput(new Shell(), oldDirct, dMeta);//oldDirct
 					
 					if(Window.OK == dInput.open())
 					{
 						Directive newDirct = orc.newDirective();
-						newDirct.setName(selEle);
+						newDirct.setName(strSelEleName);
 						
 						java.util.List<Parameter> listParams = dInput.getParams();
 						if(listParams!=null && !listParams.isEmpty())
@@ -370,7 +445,8 @@ public class BlockInput extends Composite {
 							return;
 						}
 						
-						block.addDirective(newDirct);//block.replaceDirective(dirct, newDirct);
+						block.deleteElement(oldDirct);
+						block.addDirective(newDirct);
 
 						UpdateListCtl();
 						
@@ -407,57 +483,106 @@ public class BlockInput extends Composite {
 				int i = 0;
 				if(len > 6 && selEle.substring(selEle.length()-6,selEle.length()).equals(strBlockMark))
 				{
-					Block oldBlock = null;
-					if(blocks!=null && !blocks.isEmpty())
+					String strSelEleType = (selEle.trim()).substring(0, selEle.length()-6);
+					strSelEleType = strSelEleType.trim();
+					
+					int indexSel = ctlList.getSelectionIndex();
+					int indexSubBlock = 0;
+					
+					i = 0;
+					while(i < indexSel)
 					{
-						count = blocks.size();
-						i = 0;
-						while(i < count)
+						String strItemText = ctlList.getItem(i).trim();
+						if( strItemText.equals(selEle.trim()) )
 						{
-							oldBlock = blocks.get(i);
-							if(oldBlock.getName() == selEle)
+							indexSubBlock++;
+						}
+						i++;
+					}
+					
+					Block curBlk = null;
+					count = blocks.size();
+					i = 0;
+					int wIndex = -1;
+					while(i<count && wIndex<indexSubBlock)
+					{
+						curBlk = blocks.get(i);
+						if(strSelEleType.equals(curBlk.getName()))
+						{
+							wIndex++;
+							if(wIndex == indexSubBlock)
 							{
 								break;
 							}
-							oldBlock = null;
-							i++;
 						}
-						if(oldBlock == null)
-						{
-							return;
-						}
+						i++;
+					}
+					if(wIndex != indexSubBlock)
+					{
+						MessageDialog.openError(getShell(), "Error", "Can not find the Block!");
+						return;
 					}
 					
-					block.addBlock(oldBlock);//block.removeBlock(oldBlock);
+					block.deleteElement(curBlk);
 				}
 				else
 				{
-					Directive oldDirct = null;
-					if(directives!=null && !directives.isEmpty())
+					if(selEle.startsWith(";"))
 					{
-						count = directives.size();
-						i = 0;
-						while(i < count)
-						{
-							oldDirct = directives.get(i);
-							if(selEle == oldDirct.getName())
-							{
-								break;
-							}
-							oldDirct = null;
-							i++;
-						}
-						if(oldDirct == null)
+						return;
+					}
+					while(selEle.endsWith(";"))
+					{
+						selEle = selEle.substring(0, selEle.length()-1);
+						if(selEle.startsWith(";"))
 						{
 							return;
 						}
-						
-						block.addDirective(oldDirct);//block.removeDirective(oldDirct);
 					}
+					String selEleSlip[] = selEle.split(" ");
+					String strSelEleType = selEleSlip[0];
+					
+					int indexSel = ctlList.getSelectionIndex();
+					int indexSubDirct = 0;
+					
+					i = 0;
+					while(i < indexSel)
+					{
+						String strItemText = ctlList.getItem(i).trim();
+						if( strItemText.equals(selEle.trim()) )
+						{
+							indexSubDirct++;
+						}
+						i++;
+					}
+					
+					Directive curDirct = null;
+					count = directives.size();
+					i = 0;
+					int wIndex = -1;
+					while(i<count && wIndex<indexSubDirct)
+					{
+						curDirct = directives.get(i);
+						if(strSelEleType.equals(curDirct.getName()))
+						{
+							wIndex++;
+							if(wIndex == indexSubDirct)
+							{
+								break;
+							}
+						}
+						i++;
+					}
+					if(wIndex != indexSubDirct)
+					{
+						MessageDialog.openError(getShell(), "Error", "Can not find the Directive!");
+						return;
+					}
+					
+					block.deleteElement(curDirct);
 				}
 				
 				UpdateListCtl();
-				
 				flagChanged = true;
 			}
 		});
@@ -468,77 +593,99 @@ public class BlockInput extends Composite {
 		new Label(this, SWT.NONE);
 		
 		UpdateListCtl();
-		
 	}
+	
 	
 	private void UpdateListCtl()
 	{
-		this.directives.clear();
-		this.blocks.clear();
 		try {
 			this.directives = this.block.getDirectives();
 			this.blocks = this.block.getBlocks();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
+			MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+			return;
 		}
 		
 		ctlList.removeAll();
 		
+		java.util.List<DirectiveMeta> subDirectiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
+		java.util.List<BlockMeta> subBlockMetas = bMeta.getBlockMeta(blockSubGroup);
+		
+		java.util.List<String> subDirectiveTypes = new ArrayList<String>();
+		java.util.List<String> subBlockTypes = new ArrayList<String>();
+		
+		subBlockTypes.clear();
+		subDirectiveTypes.clear();
+		int count = 0;
 		int i = 0;
-		if(this.directives != null && !this.directives.isEmpty())
+		if(subDirectiveMetas != null && !subDirectiveMetas.isEmpty())
 		{
-			while(i<this.directives.size())
+			count = subDirectiveMetas.size();
+			while(i<count)
 			{
-				ctlList.add(directives.get(i).getName());
+				String name = subDirectiveMetas.get(i).getName();
+				int curDCount = subDirectiveTypes.size();
+				subDirectiveTypes.add(curDCount,name);
 				i++;
 			}
 		}
+		i = 0;
+		if(subBlockMetas != null && !subBlockMetas.isEmpty())
+		{
+			count = subBlockMetas.size();
+			while(i<count)
+			{
+				String name = subBlockMetas.get(i).getName();
+				int curBCount = subBlockTypes.size();
+				subBlockTypes.add(curBCount,name);
+				i++;
+			}
+		}
+
+		i = 0;
+		if(this.directives != null && !this.directives.isEmpty())
+		{
+			count = this.directives.size();
+			while(i<count)
+			{
+				String name = directives.get(i).getName();
+				String nameslice[] = name.split(" ");
+				String typeInName = nameslice[0];
+				if(subDirectiveTypes.contains(typeInName))
+				{
+					ctlList.add(directives.get(i).toString().trim());
+				}
+				i++;
+			}
+		}
+		i = 0;
 		if(this.blocks != null && !this.blocks.isEmpty())
 		{
-			i = 0;
-			while(i<this.blocks.size())
+			count = this.blocks.size();
+			while(i<count)
 			{
-				ctlList.add(blocks.get(i).getName()+strBlockMark);
+				String name = blocks.get(i).getName();
+				String nameslice[] = name.split(" ");
+				String typeInName = nameslice[0];
+				if(subBlockTypes.contains(typeInName))
+				{
+					ctlList.add(name+strBlockMark);
+				}
 				i++;
 			}
 		}
 		
-	}
-	
-	public List getList()
-	{
-		return ctlList;
-	}
-	public Button getAddButton()
-	{
-		return btnAdd;
-	}
-	public Button getEditButton()
-	{
-		return btnEdit;
-	}
-	public Button getDeleteButton()
-	{
-		return btnDelete;
 	}
 	
 	public boolean isChanged()
 	{
 		return flagChanged;
 	}
-	public void setChangedFlag(boolean flag)
-	{
-		flagChanged = flag;
-	}
-	
-	public Block getBlock()
-	{
-		return this.block;
-	}
 	
 	public void benchmark()
 	{
-		
+		flagChanged = false;
 	}
 	
 	public void setMeta(BlockMeta meta)
