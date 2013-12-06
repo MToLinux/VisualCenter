@@ -14,9 +14,11 @@ import org.cs2c.vcenter.dialog.BlockElementInfo;
 import org.cs2c.vcenter.dialog.BlockNameSetDialog;
 import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.dialog.ElementSelector;
+import org.cs2c.vcenter.editors.BlockConfigFace;
 import org.cs2c.vcenter.metadata.BlockMeta;
 import org.cs2c.vcenter.metadata.DirectiveMeta;
 import org.cs2c.vcenter.metadata.MetaManager;
+import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,8 +53,10 @@ public class BlockInput extends Composite {
 	private java.util.List<Directive> directives = null;
 	private java.util.List<Block> blocks = null;
 	
+	private BlockConfigFace bcfParent = null;
 	
-	public BlockInput(Composite parent, int style, BlockElementInfo bcInfo, String blkSubGroup) {
+	
+	public BlockInput(Composite parent, int style, BlockElementInfo bcInfo, String blkSubGroup, BlockConfigFace edParent) {
 		super(parent, style);
 		
 		this.middleware = bcInfo.getMiddleware();
@@ -62,6 +66,8 @@ public class BlockInput extends Composite {
 		this.orc = this.middleware.getConfigurator();
 		
 		this.block = bcInfo.getBlock();
+		
+		this.bcfParent = edParent;
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -194,8 +200,16 @@ public class BlockInput extends Composite {
 									selEleName.substring(0, selEleName.length()-6));
 							if(Window.OK == bnsDlg.open())
 							{
-								newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim() +
-										" " + bnsDlg.getBlockName());
+								String newBKName = bnsDlg.getBlockName();
+								if(newBKName!=null && !newBKName.isEmpty())
+								{
+									newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim() +
+											" " + newBKName);
+								}
+								else
+								{
+									newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim());
+								}
 								block.addBlock(newblk);
 							}
 						} catch (RemoteException e1) {
@@ -204,6 +218,10 @@ public class BlockInput extends Composite {
 						}
 						
 						UpdateListCtl();
+						if(bcfParent != null)
+						{
+							bcfParent.SetDirty(true);
+						}
 						flagChanged = true;
 					}
 					else
@@ -224,6 +242,23 @@ public class BlockInput extends Composite {
 						}
 						if(dMeta == null)
 						{
+							return;
+						}
+						
+						java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
+						if(listParamMeta == null || listParamMeta.isEmpty())
+						{
+							Directive dirct = orc.newDirective();
+							dirct.setName(selEleName);
+							
+							block.addDirective(dirct);
+							UpdateListCtl();
+							if(bcfParent != null)
+							{
+								bcfParent.SetDirty(true);
+							}
+							flagChanged = true;
+							
 							return;
 						}
 						
@@ -254,6 +289,10 @@ public class BlockInput extends Composite {
 
 							block.addDirective(dirct);
 							UpdateListCtl();
+							if(bcfParent != null)
+							{
+								bcfParent.SetDirty(true);
+							}
 							flagChanged = true;
 						}
 					}//else
@@ -352,7 +391,21 @@ public class BlockInput extends Composite {
 					bcInfo.setBlockType(strSelEleBaseType);
 					
 					MetaManager mmanager = MetaManager.getInstance();
-					BlockMeta subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
+					//BlockMeta subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
+					BlockMeta subbMeta = null;
+					String parentName = "";
+					if(bMeta != null)
+					{
+						parentName = bMeta.getName();
+					}
+					if(parentName.equals("location") && strSelEleBaseType.equals("if"))
+					{
+						subbMeta = mmanager.getBlockMeta("finlocatio");
+					}
+					else
+					{
+						subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
+					}
 					bcInfo.setBlockMeta(subbMeta);
 					
 					bcInfo.setMiddleware(middleware);
@@ -362,6 +415,10 @@ public class BlockInput extends Composite {
 					if(Window.OK == bcDlg.open())
 					{
 						UpdateListCtl();
+						if(bcfParent != null)
+						{
+							bcfParent.SetDirty(true);
+						}
 						flagChanged = true;
 					}
 				}
@@ -420,6 +477,23 @@ public class BlockInput extends Composite {
 						}
 					}
 					
+					java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
+					if(listParamMeta == null || listParamMeta.isEmpty())
+					{
+						Directive dirct = orc.newDirective();
+						dirct.setName(strSelEleName);
+						
+						block.addDirective(dirct);
+						UpdateListCtl();
+						if(bcfParent != null)
+						{
+							bcfParent.SetDirty(true);
+						}
+						flagChanged = true;
+						
+						return;
+					}
+					
 					DirectiveInput dInput = new DirectiveInput(new Shell(), oldDirct, dMeta);//oldDirct
 					
 					if(Window.OK == dInput.open())
@@ -449,7 +523,10 @@ public class BlockInput extends Composite {
 						block.addDirective(newDirct);
 
 						UpdateListCtl();
-						
+						if(bcfParent != null)
+						{
+							bcfParent.SetDirty(true);
+						}
 						flagChanged = true;
 					}
 				}
@@ -583,6 +660,10 @@ public class BlockInput extends Composite {
 				}
 				
 				UpdateListCtl();
+				if(bcfParent != null)
+				{
+					bcfParent.SetDirty(true);
+				}
 				flagChanged = true;
 			}
 		});

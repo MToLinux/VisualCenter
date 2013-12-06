@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 public class DirectiveInput extends Dialog {
@@ -28,11 +29,12 @@ public class DirectiveInput extends Dialog {
 	private List<ParamInput> listParamInput = new ArrayList<ParamInput>();
 	private List<Parameter> valueParams = new ArrayList<Parameter>();
 	
-	private Directive dirct = new RecDirective();
+	private Directive dirct = null;
 	private DirectiveMeta dMeta = null;
 	
 	static Shell newShell = new Shell();
 
+	Label dirctString = null;
 	
 	/**
 	 * @wbp.parser.constructor
@@ -167,6 +169,23 @@ public class DirectiveInput extends Dialog {
 			}
 		}
 		
+		Label tm = new Label(composite, SWT.NONE);
+		tm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gridDataList_tm=new GridData(GridData.FILL_BOTH);
+		gridDataList_tm.verticalSpan=1;
+		tm.setLayoutData(gridDataList_tm);
+		
+		Label dirctString = new Label(composite, SWT.NONE);
+		dirctString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gridDataList_drctstr=new GridData(GridData.FILL_BOTH);
+		gridDataList_drctstr.verticalSpan=1;
+		dirctString.setLayoutData(gridDataList_drctstr);
+		
+		if(dirct != null)
+		{
+			dirctString.setText((dirct.toString()).trim());
+		}
+		
 	    return composite;
    }
 	
@@ -191,5 +210,35 @@ public class DirectiveInput extends Dialog {
 	{
 		return valueParams;
 	}
-
+	
+	public void updateDirctString()
+	{
+		valueParams.clear();
+		if(listParamInput==null || listParamInput.isEmpty())
+		{
+			return;
+		}
+		for(ParamInput pinpt : listParamInput)
+		{
+			valueParams.add(pinpt.getParameter());
+		}
+		
+		if(valueParams!=null && !valueParams.isEmpty())
+		{
+			Parameter param = null;
+			int count = valueParams.size();
+			int i = 0;
+			String dirctStr = dirct.getName(); 
+			while(i < count)
+			{
+				param = valueParams.get(i);
+				dirctStr = dirctStr + " " + param.toString();
+				i++;
+			}
+			dirctStr = dirctStr + ";";
+			dirctStr = dirctStr.trim();
+			dirctString.setText(dirctStr);
+		}
+	}
+	
 }

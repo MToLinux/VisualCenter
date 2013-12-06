@@ -7,10 +7,13 @@ import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class StringParamInput extends Composite implements ParamInput {
 	
@@ -18,6 +21,10 @@ public class StringParamInput extends Composite implements ParamInput {
 	String tips = "";
 	
 	Text ctlText;
+	
+	Button ctlCheckButton;
+	
+	boolean isChecked = false;
 	
 	ParameterMeta pMeta;
 	
@@ -29,7 +36,26 @@ public class StringParamInput extends Composite implements ParamInput {
 
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(1,false));
+		this.setLayout(new GridLayout(2,false));
+		
+		ctlCheckButton = new Button(this,SWT.CHECK);
+		ctlCheckButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				if(isChecked)
+				{
+					isChecked = false;
+					ctlText.setEnabled(false);
+				}
+				else
+				{
+					isChecked = true;
+					ctlText.setEnabled(true);
+				}
+			}
+		});
+		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		ctlCheckButton.setText("");
 		
 		ctlText = new Text(this,SWT.NONE);
 		ctlText.addModifyListener(new ModifyListener() {
@@ -42,14 +68,36 @@ public class StringParamInput extends Composite implements ParamInput {
 		
 		this.pMeta = meta;
 		
+		isChecked = false;
+		ctlText.setEnabled(false);
+		
 		tips = this.pMeta.getTips();
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlText.setToolTipText(tips);
+		}
 	}
 
 	@Override
 	public void setMeta(ParameterMeta meta) {
 		this.pMeta = meta;
 		
+		if(!isChecked)
+		{
+			isChecked = false;
+			ctlText.setEnabled(false);
+		}
+		else
+		{
+			isChecked = true;
+			ctlText.setEnabled(true);
+		}
+		
 		tips = this.pMeta.getTips();
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlText.setToolTipText(tips);
+		}
 	}
 	
 	public void UpdateParam()
@@ -61,7 +109,14 @@ public class StringParamInput extends Composite implements ParamInput {
 	@Override
 	public Parameter getParameter() {
 		
-		return strParam;
+		if(isChecked && strValue!=null && !strValue.isEmpty())
+		{
+			return strParam;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 }

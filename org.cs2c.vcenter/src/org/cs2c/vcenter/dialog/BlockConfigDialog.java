@@ -68,7 +68,7 @@ public class BlockConfigDialog extends Dialog {
 		if(countGroups == 1)
 		{
 			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(cmpsite, SWT.NONE, bcInfo, subGroupName);
+			bInput = new BlockInput(cmpsite, SWT.NONE, bcInfo, subGroupName, null);
 		    
 			bInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 			GridData gridDataList=new GridData(GridData.FILL_BOTH);
@@ -91,7 +91,7 @@ public class BlockConfigDialog extends Dialog {
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
 				
-				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName);
+				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName, null);
 				tbi.setControl(bInputs[i]);
 				
 				htGroupTItems.put(subGroupName, tbi);
