@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?> 
 <root>
 <directive name="accept_mutex"  tips="If accept_mutex is enabled, worker processes will accept new connections by turn. Otherwise, all worker processes will be notified about new connections, and if volume of new connections is low, some of the worker processes may just waste system resources. "  scope="events"  group="core" >
 <param class="SelectParamInput"  items="on:off" />
@@ -12,7 +12,7 @@
 <directive name="debug_connection"  tips="Enables debugging log for selected client connections."  scope="events"  group="core"  reused="true" >
 <param class="StringParamInput"  tips="similar to '127.0.0.1' or 'localhost' etc." />
 </directive>
-<directive name="debug_points"  tips="is used for debugging."  scope="main"  group="core" >
+<directive name="debug_points"  tips="Is used for debugging."  scope="main"  group="core" >
 <param class="SelectParamInput"  items="abort:stop" />
 </directive>
 <directive name="error_log"  tips="Configures logging"  scope="http:server:location"  group="basic"  reused="true" >
@@ -23,10 +23,11 @@
 <param class="StringParamInput"  tips="This parameter defines a file that will store the log. The special value stderr selects the standard error file. Logging to syslog can be configured by specifying the ��syslog:�� prefix." />
 <param class="SelectParamInput"  items="debug:info:notice:warn:error:crit:alert:emerg"  tips="This parameter determines the level of logging, optional." />
 </directive>
-<directive name="env"  tips="This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables."  scope="main "  group="core"  reused="true" >
+<directive name="env"  tips="This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables."  scope="main"  group="core"  reused="true" >
 <param class="StringParamInput"  tips="Like 'MALLOC_OPTIONS' or 'PERL5LIB=/data/modules' " />
 </directive>
-<block name="events"  tips="Provides the configuration file context in which the directives that affect connection processing are specified"  scope="main"  group="core"  reused="true" ></block>
+<block name="events"  tips="Provides the configuration file context in which the directives that affect connection processing are specified"  scope="main"  group="core"  reused="true" >
+</block>
 <directive name="include"  tips="Includes another file, or files matching the specified mask, into configuration"  scope="main"  group="core"  reused="true" >
 <param class="StringParamInput"  tips="Like 'vhosts/*.conf' or 'mime.types' " />
 </directive>
@@ -89,16 +90,16 @@
 <param class="StringParamInput" />
 </directive>
 <directive name="access_log"  tips="Sets the path, format, and configuration for a buffered log write "  scope="http:server:location:finlocatio:limit_except"  group="basic"  reused="true" >
-<param class="StringParamInput"  tips="An empty string means the value is 'off' " />
+<param class="StringParamInput"  tips="" />
 </directive>
 <directive name="log_format"  tips="Specifies log format."  scope="http"  group="basic"  reused="true" >
 <param class="StringParamInput"  tips="Like 'combined'" />
 <param class="StringParamInput"  tips="Like '$remote_addr - $remote_user' " />
 </directive>
 <directive name="open_log_file_cache"  tips="Defines a cache that stores the file descriptors of frequently used logs whose names contain variables. "  scope="http:server:location"  group="gzip" >
-<param class="OptionIntParamInput"  name="max"  min="0"  max="9999999"  units=""  tips="'0' is off" />
+<param class="OptionIntParamInput"  name="max"  min="-1"  max="9999999"  units=""  tips="'-1' is off i.e. open_log_file_cache off" />
 <param class="OptionIntParamInput "  name="inactive"  min="1"  max="9999999"  units="s"  default="10s"  tips="optional" />
-<param class="OptionIntParamInput "  name="min_user"  min="1"  max="9999999"  units=""  default="1"  tips="optional" />
+<param class="OptionIntParamInput "  name="min_uses"  min="1"  max="9999999"  units=""  default="1"  tips="optional" />
 <param class="OptionIntParamInput "  name="valid"  min="1"  max="9999999"  units="s:m"  default="60s"  tips="optional" />
 </directive>
 <directive name="add_before_body"  tips="Adds the text returned as a result of processing a given subrequest before the response body."  scope="http:server:location"  group="others" >
@@ -118,7 +119,8 @@
 <param class="StringParamInput"  tips="Can be epoch:max:off or modified, and while filling epoch or max or off, the second parameter need not filled; the modified is optional and is used in v0.7.0 and v0.6.32" />
 <param class="StringParamInput"  tips="time-----the '@' prefix can be used in 0.7.9 and 0.6.34" />
 </directive>
-<block name="types"  tips="Maps file name extensions to MIME types of responses. "  scope="http:server:location"  group="basic" ></block>
+<block name="types"  tips="Maps file name extensions to MIME types of responses. "  scope="http:server:location"  group="basic" >
+</block>
 <directive name="aio"  tips="Enables or disables the use of asynchronous file I/O (AIO) on FreeBSD and Linux. ---appeared in 0.8.11"  scope="http:server:location "  group="gzip"  reused="false" >
 <param class="SelectParamInput"  items="on:off:sendfile" />
 </directive>
@@ -879,7 +881,7 @@
 <param class="IntParamInput"  min="1"  max="99999"  units="" />
 <param class="StringParamInput"  default="4k|8k"  tips="Like 4k|8k" />
 </directive>
-<directive name="proxy_buffers_size"  tips="limits the total size of buffers that can be busy sending a response to the client while the response is not yet fully read"  scope="http:server:location"  group="proxy" >
+<directive name="proxy_busy_buffers_size"  tips="limits the total size of buffers that can be busy sending a response to the client while the response is not yet fully read"  scope="http:server:location"  group="proxy" >
 <param class="StringParamInput"  tips="Like 8k|16k" />
 </directive>
 <directive name="proxy_cache"  tips="Enables or disables buffering of responses from the proxied server."  scope="http:server:location"  group="proxy" >
@@ -903,7 +905,7 @@
 <param class="TagParamInput"  name="POST" />
 <param class="TagParamInput"  name="..." />
 </directive>
-<directive name="proxy_cache_min_users"  tips="Sets the number of requests after which the response will be cached. "  scope="http:server:location"  group="proxy" >
+<directive name="proxy_cache_min_uses"  tips="Sets the number of requests after which the response will be cached. "  scope="http:server:location"  group="proxy" >
 <param class="IntParamInput"  min="1"  max="99999"  units="" />
 </directive>
 <directive name="proxy_cache_path"  tips="Sets the path and other parameters of a cache."  scope="http"  group="proxy" >
