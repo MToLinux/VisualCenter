@@ -182,4 +182,8 @@ public class UpstreamElement extends TreeElement implements IUpstream, IEditorIn
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int hashCode(){
+		return this.name.hashCode();
+	}
 }
