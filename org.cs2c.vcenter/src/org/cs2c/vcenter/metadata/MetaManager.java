@@ -150,7 +150,8 @@ public class MetaManager {
 			List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
 			tmpParaList = FetchParamofDirective(
 					decreaseBlank(element.getAttribute("name")),
-					decreaseBlank(element.getAttribute("group")));
+					decreaseBlank(element.getAttribute("group")),
+					blockName);
 
 			directiveMetaResult.setOptions(tmpParaList);
 
@@ -161,16 +162,26 @@ public class MetaManager {
 	}
 
 	private List<ParameterMeta> FetchParamofDirective(String directiveName,
-			String groupName) throws ParserConfigurationException,
+			String groupName,String scope) throws ParserConfigurationException,
 			SAXException, IOException, XPathExpressionException {
 
 		XPathFactory factory = XPathFactory.newInstance();
 		XPath xpath = factory.newXPath();
 
 		List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
-
-		String tmpcom = "//directive[@name=\"" + directiveName
-				+ "\" and @group=\"" + groupName + "\"]/param";
+		String tmpcom;
+		if(scope.equalsIgnoreCase("main"))
+		{
+			tmpcom = "//directive[@name=\"" + directiveName
+				+ "\" and @group=\"" + groupName + "\" and contains(@scope,\"" + scope + "\")]/param";
+		
+		}
+		else
+		{
+			 tmpcom = "//directive[@name=\"" + directiveName
+						+ "\" and @group=\"" + groupName + "\" and (contains(@scope,\"exmai\") or contains(@scope,\"" + scope + "\"))]/param";
+				
+		}
 		XPathExpression recuroneexpr = xpath.compile(tmpcom);
 		Object recuroneresult = recuroneexpr.evaluate(doc,
 				XPathConstants.NODESET);
@@ -297,9 +308,15 @@ public class MetaManager {
 	public static void main(String[] args) {
 		MetaManager manager = MetaManager.getInstance();
 		BlockMeta blockMetaResult = new BlockMeta();
-		blockMetaResult = manager.getBlockMeta("limit_except");
+		blockMetaResult = manager.getBlockMeta("location");
 		System.out.println(blockMetaResult.getGroups());
-		printblock1(blockMetaResult.getBlockMeta(blockMetaResult.getGroups().get(0)));
+		for(int i=0;i<blockMetaResult.getDirectiveMeta("fastcgi").size();i++)
+		{
+			if(blockMetaResult.getDirectiveMeta("fastcgi").get(i).getName().equals("fastcgi_cache_bypass"))
+			{
+				System.out.println(blockMetaResult.getDirectiveMeta("fastcgi").get(i).getOptions().toString());
+			}
+		}
 		for(int i=0;i<blockMetaResult.getGroups().size();i++)
 		{
 			printdirective1(blockMetaResult.getDirectiveMeta(blockMetaResult.getGroups().get(i)));

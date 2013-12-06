@@ -76,7 +76,7 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 			Block delBlock = listlo.get(index);
 			orc.delete(delBlock, outerBlockNames);
 			//aoto show in treeview,do refresh
-			this.treeViewer.refresh(this.element);
+			this.treeViewer.refresh(this.element.getParent());
 		}
 	}
 

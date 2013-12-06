@@ -16,10 +16,10 @@ public class TagParamInput extends Composite implements ParamInput {
 
 	String strParamName = "";
 	
-	String strValue = "";
 	String tips = "";
 	
 	Button ctlCheckButton;
+	boolean isChecked = false;
 	
 	ParameterMeta pMeta;
 	
@@ -50,6 +50,11 @@ public class TagParamInput extends Composite implements ParamInput {
 		tips = this.pMeta.getTips();
 		
 		ctlCheckButton.setText(strParamName);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCheckButton.setToolTipText(tips);
+		}
 	}
 
 	@Override
@@ -60,22 +65,44 @@ public class TagParamInput extends Composite implements ParamInput {
 		tips = this.pMeta.getTips();
 		
 		ctlCheckButton.setText(strParamName);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCheckButton.setToolTipText(tips);
+		}
 	}
 	
 	public void UpdateParam()
 	{
-		if(ctlCheckButton.getSelection())
+//		if(ctlCheckButton.getSelection())
+//		{
+//			strParam.setValue(strParamName);
+//		}
+//		else
+//		{
+//			strParam.setValue("");
+//		}
+		if(isChecked)
+		{
+			isChecked = false;
+		}
+		else
+		{
+			isChecked = true;
+		}
+	}
+	
+	@Override
+	public Parameter getParameter() {
+		
+		if(isChecked)
 		{
 			strParam.setValue(strParamName);
 		}
 		else
 		{
-			strParam.setValue("");
+			strParam = null;
 		}
-	}
-
-	@Override
-	public Parameter getParameter() {
 		
 		return strParam;
 	}

@@ -21,11 +21,12 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.ISaveablePart2;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.swt.SWT;
 
-public class BlockConfigFace extends EditorPart {
+public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	
 	public static final String ID="org.cs2c.vcenter.editors.BlockConfigFace";
 	
@@ -54,11 +55,24 @@ public class BlockConfigFace extends EditorPart {
 	private String blockMetaType = null;
 	
 	
+	private boolean dirty;
+	String partName = "";
+	
+	
 	public BlockConfigFace() {
 	}
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		
+		if(MessageDialog.openConfirm(getEditorSite().getShell(),
+				"Question", "Are you sure to save?"))
+		{
+		}
+		else
+		{
+			return;
+		}
 		
 		try {
 			orc.replace(this.oldBlock, this.newBlock, this.blockOutNames);
@@ -86,6 +100,9 @@ public class BlockConfigFace extends EditorPart {
 				}
 			}
 		}
+		
+		dirty = false;
+		firePropertyChange(ISaveablePart2.PROP_DIRTY);
 		
 	}
 
@@ -135,36 +152,40 @@ public class BlockConfigFace extends EditorPart {
 		}
 		
 	}
-
-	@Override
-	public boolean isDirty() {
+	
+	public void SetDirty(boolean dirty)
+	{
+		this.dirty = dirty;
 		
-		if(bInput != null && bInput.isChanged())
+		if(dirty)
 		{
-			if(bInput.isChanged())
+			if(partName.charAt(0)!='*')
 			{
-				return true;
+				setPartName("*"+partName);
+			}
+			else
+			{
+				setPartName(partName);
 			}
 		}
 		else
 		{
-			if(blockGroups!=null && !blockGroups.isEmpty())
+			if(partName.charAt(0)!='*')
 			{
-				int count = 0;
-				int i = 0;
-				while(i < count)
-				{
-					BlockInput blkinput = htGroupBInputs.get(blockGroups.get(i));
-					if(blkinput.isChanged())
-					{
-						return true;
-					}
-					i++;
-				}
+				setPartName(partName);
+			}
+			else
+			{
+				setPartName(partName.substring(1, partName.length()));
 			}
 		}
 		
-		return false;
+	}
+
+	@Override
+	public boolean isDirty() {
+		
+		return dirty;
 	}
 
 	@Override
@@ -198,7 +219,7 @@ public class BlockConfigFace extends EditorPart {
 		if(countGroups == 1)
 		{
 			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName);
+			bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName, this);
 		}
 		else
 		{
@@ -213,7 +234,7 @@ public class BlockConfigFace extends EditorPart {
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
 				
-				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName);
+				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName, this);
 				
 				tbi.setControl(bInputs[i]);
 				
@@ -229,10 +250,36 @@ public class BlockConfigFace extends EditorPart {
 	@Override
 	public void dispose(){
 		super.dispose();
+		
 	}
 	@Override
 	public void setFocus() {
 
+	}
+
+	@Override
+	public int promptToSaveOnClose() {
+		if(dirty)
+		{
+			if(MessageDialog.openConfirm(getEditorSite().getShell(),
+					"Warning", "Modification of '"+partName+"' is not saved, are you sure to close without saving?"))
+			{
+				return ISaveablePart2.NO;
+			}
+			else
+			{
+				return ISaveablePart2.CANCEL;
+			}
+		}
+		
+		return YES;
+	}
+	
+	@Override
+	protected void setPartName(String partName)
+	{
+		this.partName = partName;
+		super.setPartName(partName);
 	}
 	
 }
