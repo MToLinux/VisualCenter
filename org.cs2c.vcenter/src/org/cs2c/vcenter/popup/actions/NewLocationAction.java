@@ -78,7 +78,7 @@ public class NewLocationAction implements IObjectActionDelegate {
 		};
 		//show dialog
 		InputDialog inputDialog = new InputDialog( this.shell,
-				"Please input a String", //dialog title
+				"New Location Dialog", //dialog title
 				"Enter a String:", //dialog prompt
 				"", //default text
 				validator ); //validator to use
@@ -103,7 +103,7 @@ public class NewLocationAction implements IObjectActionDelegate {
 //			System.out.println("blockName:"+blockName);
 			orc.append(newBlock, blockName);
 			//aoto show in treeview,do refresh
-			this.treeViewer.refresh();
+			this.treeViewer.refresh(this.element);
 		}
 	}
 

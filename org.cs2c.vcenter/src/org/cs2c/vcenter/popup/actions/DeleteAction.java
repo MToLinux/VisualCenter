@@ -76,7 +76,7 @@ public class DeleteAction implements IObjectActionDelegate {
 
 			orc.delete(blServer, outerBlockNames);
 			//server_name aoto show in treeview,do refresh
-			this.treeViewer.refresh();
+			this.treeViewer.refresh(this.element.getParent());
 		}
 	}
 	

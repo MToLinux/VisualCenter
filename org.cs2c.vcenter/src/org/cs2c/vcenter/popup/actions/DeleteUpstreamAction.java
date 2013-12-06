@@ -3,14 +3,11 @@
  */
 package org.cs2c.vcenter.popup.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
-import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
-import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
@@ -82,7 +79,7 @@ public class DeleteUpstreamAction implements IObjectActionDelegate {
 			Block delBlock = listlo.get(index);
 			orc.delete(delBlock, outerBlockNames);
 			//aoto show in treeview,do refresh
-			this.treeViewer.refresh();
+			this.treeViewer.refresh(this.element.getParent());
 		}
 	}	
 

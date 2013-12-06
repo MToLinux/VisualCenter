@@ -9,10 +9,7 @@ import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
-import org.cs2c.nginlib.config.RecDirective;
-import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
-//import org.cs2c.nginlib.ctl.Controller;
 import org.cs2c.vcenter.dialog.serverdialog;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
@@ -102,7 +99,7 @@ public class NewServerAction implements IObjectActionDelegate {
 			orc.append(newBlock, blockName);
 			
 			//server_name aoto show in treeview,do refresh
-			this.treeViewer.refresh();
+			this.treeViewer.refresh(this.element);
 		}
 	}
 

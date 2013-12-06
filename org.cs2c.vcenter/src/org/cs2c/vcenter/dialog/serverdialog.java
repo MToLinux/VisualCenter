@@ -41,6 +41,12 @@ public class serverdialog extends Dialog {
 	public String getListenParam() {
 		return ListenParam;
 	}
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText("Server Dialog");
+	}
+
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
