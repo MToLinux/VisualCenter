@@ -275,5 +275,17 @@
          </action>
       </objectContribution>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.cs2c.vcenter.application"
+            name="VisualCenter">
+         <property
+               name="appName"
+               value="VisualCenter">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
