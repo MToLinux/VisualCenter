@@ -10,11 +10,14 @@ import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseAdapter;
 
 public class IntParamInput extends Composite implements ParamInput {
 
@@ -29,8 +32,11 @@ public class IntParamInput extends Composite implements ParamInput {
 	
 	ParameterMeta pMeta;
 	
+	Button ctlCheckButton;
 	Spinner ctlSpinner;
 	Combo ctlCombo;
+	
+	boolean isChecked = false;
 	
 	StringParameter strParam = new RecStringParameter();
 	
@@ -39,7 +45,35 @@ public class IntParamInput extends Composite implements ParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(2,false));
+		this.setLayout(new GridLayout(3,false));
+		
+		ctlCheckButton = new Button(this,SWT.CHECK);
+		ctlCheckButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				if(isChecked)
+				{
+					isChecked = false;
+					ctlSpinner.setEnabled(false);
+					ctlCombo.setEnabled(false);
+				}
+				else
+				{
+					isChecked = true;
+					ctlSpinner.setEnabled(true);
+					if(strUnit!=null && !strUnit.isEmpty())
+					{
+						ctlCombo.setEnabled(true);
+					}
+					else
+					{
+						ctlCombo.setEnabled(false);
+					}
+				}
+			}
+		});
+		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		ctlCheckButton.setText("");
 		
 		ctlSpinner = new Spinner(this,SWT.NONE);
 		ctlSpinner.addModifyListener(new ModifyListener() {
@@ -88,6 +122,16 @@ public class IntParamInput extends Composite implements ParamInput {
 		{
 			ctlCombo.select(0);
 		}
+		
+		isChecked = false;
+		ctlSpinner.setEnabled(false);
+		ctlCombo.setEnabled(false);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlSpinner.setToolTipText(tips);
+			ctlCombo.setToolTipText(tips);
+		}
 	}
 
 	public void UpdateParam()
@@ -107,7 +151,14 @@ public class IntParamInput extends Composite implements ParamInput {
 	
 	public Parameter getParameter() {
 		
-		return strParam;
+		if(isChecked)
+		{
+			return strParam;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	@Override
@@ -141,6 +192,32 @@ public class IntParamInput extends Composite implements ParamInput {
 		if(ctlCombo.getItemCount() > 0)
 		{
 			ctlCombo.select(0);
+		}
+		
+		if(!isChecked)
+		{
+			isChecked = false;
+			ctlSpinner.setEnabled(false);
+			ctlCombo.setEnabled(false);
+		}
+		else
+		{
+			isChecked = true;
+			ctlSpinner.setEnabled(true);
+			if(strUnit!=null && !strUnit.isEmpty())
+			{
+				ctlCombo.setEnabled(true);
+			}
+			else
+			{
+				ctlCombo.setEnabled(false);
+			}
+		}
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlSpinner.setToolTipText(tips);
+			ctlCombo.setToolTipText(tips);
 		}
 	}
 

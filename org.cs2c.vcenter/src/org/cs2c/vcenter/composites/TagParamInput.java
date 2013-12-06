@@ -50,6 +50,11 @@ public class TagParamInput extends Composite implements ParamInput {
 		tips = this.pMeta.getTips();
 		
 		ctlCheckButton.setText(strParamName);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCheckButton.setToolTipText(tips);
+		}
 	}
 
 	@Override
@@ -60,6 +65,11 @@ public class TagParamInput extends Composite implements ParamInput {
 		tips = this.pMeta.getTips();
 		
 		ctlCheckButton.setText(strParamName);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCheckButton.setToolTipText(tips);
+		}
 	}
 	
 	public void UpdateParam()

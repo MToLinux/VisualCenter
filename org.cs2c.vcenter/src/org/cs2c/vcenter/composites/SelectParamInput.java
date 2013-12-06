@@ -9,11 +9,14 @@ import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class SelectParamInput extends Composite implements ParamInput {
 
@@ -26,6 +29,10 @@ public class SelectParamInput extends Composite implements ParamInput {
 
 	Combo ctlCombo;
 	
+	Button ctlCheckButton;
+	
+	boolean isChecked = false;
+	
 	StringParameter strParam = new RecStringParameter();
 
 	
@@ -34,7 +41,26 @@ public class SelectParamInput extends Composite implements ParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(2,false));
+		this.setLayout(new GridLayout(3,false));
+		
+		ctlCheckButton = new Button(this,SWT.CHECK);
+		ctlCheckButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {		
+				if(isChecked)
+				{
+					isChecked = false;
+					ctlCombo.setEnabled(false);
+				}
+				else
+				{
+					isChecked = true;
+					ctlCombo.setEnabled(true);
+				}
+			}
+		});
+		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		ctlCheckButton.setText("");
 		
 		ctlCombo = new Combo(this,SWT.NONE);
 		ctlCombo.addModifyListener(new ModifyListener() {
@@ -66,6 +92,14 @@ public class SelectParamInput extends Composite implements ParamInput {
 		{
 			ctlCombo.select(0);
 		}
+		
+		isChecked = false;
+		ctlCombo.setEnabled(false);
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCombo.setToolTipText(tips);
+		}
 	}
 
 	@Override
@@ -90,6 +124,22 @@ public class SelectParamInput extends Composite implements ParamInput {
 		{
 			ctlCombo.select(0);
 		}
+		
+		if(!isChecked)
+		{
+			isChecked = false;
+			ctlCombo.setEnabled(false);
+		}
+		else
+		{
+			isChecked = true;
+			ctlCombo.setEnabled(true);
+		}
+		
+		if(tips!=null && !tips.isEmpty())
+		{
+			ctlCombo.setToolTipText(tips);
+		}
 	}
 	
 	public void UpdateParam()
@@ -106,7 +156,14 @@ public class SelectParamInput extends Composite implements ParamInput {
 	@Override
 	public Parameter getParameter() {
 
-		return strParam;
+		if(isChecked && selValue!=null && !selValue.isEmpty())
+		{
+			return strParam;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 }
