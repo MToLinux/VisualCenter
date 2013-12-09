@@ -50,7 +50,13 @@ public class MiddlewareInstallerDialog extends Dialog {
 	 */
 	public MiddlewareInstallerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = HostManager.getInstance();
+		try {
+			hostXml = HostManager.getInstance();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			MessageDialog.openError(getShell(), "Error", e.getMessage());
+		}
 		
 	}
 
