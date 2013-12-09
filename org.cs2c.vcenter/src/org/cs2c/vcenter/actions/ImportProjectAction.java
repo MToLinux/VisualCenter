@@ -3,6 +3,7 @@
  */
 package org.cs2c.vcenter.actions;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.cs2c.vcenter.Activator;
@@ -29,7 +30,6 @@ public class ImportProjectAction extends Action {
 	 * 
 	 */
 	public ImportProjectAction() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -37,7 +37,6 @@ public class ImportProjectAction extends Action {
 	 */
 	public ImportProjectAction(String text) {
 		super(text);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -46,7 +45,6 @@ public class ImportProjectAction extends Action {
 	 */
 	public ImportProjectAction(String text, ImageDescriptor image) {
 		super(text, image);
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -55,7 +53,6 @@ public class ImportProjectAction extends Action {
 	 */
 	public ImportProjectAction(String text, int style) {
 		super(text, style);
-		// TODO Auto-generated constructor stub
 	}
 	public ImportProjectAction(IWorkbenchWindow window){
 		super("Import...");
@@ -65,40 +62,43 @@ public class ImportProjectAction extends Action {
 	}
 	@Override
 	public void run(){
-		//  get liu qin return list
-		HostManager objDOMParser = HostManager.getInstance();
-	    List<String> list = objDOMParser.getMainHostInfo();
-		// call Import Project Dialog
-		// open dialog
-		Importmiddleware dialog = new Importmiddleware(window.getShell());
-		dialog.init(list);
-	    dialog.open();
-	    String selectitem = dialog.getServername();
-	    if((null == selectitem)||("" == selectitem.trim())){
-	    	return;
-	    }
-
-		// gethostinfo
-	    HostInfo objHostInfo = objDOMParser.getHostInfo(selectitem);
-	    
-		// get middleware instance based on user input
-		AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
-		authInfo.setHost(objHostInfo.getHostName());
-		authInfo.setUsername(objHostInfo.getUserName());
-		authInfo.setPassword(objHostInfo.getPassWord());
-
-		MiddlewareFactory middle;
 		try {
+			//  get return list
+			HostManager objDOMParser;
+				objDOMParser = HostManager.getInstance();
+		    List<String> list = objDOMParser.getMainHostInfo();
+			// call Import Project Dialog
+			// open dialog
+			Importmiddleware dialog = new Importmiddleware(window.getShell());
+			dialog.init(list);
+		    dialog.open();
+		    String selectitem = dialog.getServername();
+		    if((null == selectitem)||("" == selectitem.trim())){
+		    	return;
+		    }
+	
+			// gethostinfo
+		    HostInfo objHostInfo = objDOMParser.getHostInfo(selectitem);
+		    
+			// get middleware instance based on user input
+			AuthInfo authInfo=MiddlewareFactory.newAuthInfo();
+			authInfo.setHost(objHostInfo.getHostName());
+			authInfo.setUsername(objHostInfo.getUserName());
+			authInfo.setPassword(objHostInfo.getPassWord());
+	
+			MiddlewareFactory middle;
+
 			middle = MiddlewareFactory.getInstance(authInfo, objHostInfo.getHome());
+			IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+			MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
+			view.addProject(selectitem, middle);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			MessageDialog.openInformation(window.getShell(), "RemoteException", e.getMessage());
 			return;
+		} catch (Exception e1) {
+			MessageDialog.openInformation(window.getShell(), "Exception", e1.getMessage());
+			e1.printStackTrace();
 		}
-		
-		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		MiddlewareView view=(MiddlewareView)page.findView(MiddlewareView.ID);
-		view.addProject(selectitem, middle);
-//		view.addProject("Nginx C", middle);
 	}
 }

@@ -1,10 +1,12 @@
 package org.cs2c.vcenter.dialog;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,7 +28,8 @@ public class Importmiddleware extends Dialog {
 	
     List<String> listMiddleware = null;
 	private String middlewarename = null;
-
+	Shell shell = null;
+	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
@@ -99,11 +102,19 @@ public class Importmiddleware extends Dialog {
 		btn_ViewSelect.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				//call Host Editor view Host info
-				Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-				HostsEditDialog addhostDialog = new HostsEditDialog(shell
-						, combo_host.getText(), HostManager.getInstance());
-				addhostDialog.open();
+				try {
+					//call Host Editor view Host info
+					shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					HostsEditDialog addhostDialog;
+					addhostDialog = new HostsEditDialog(shell
+							, combo_host.getText(), HostManager.getInstance());
+					addhostDialog.open();
+
+				} catch (IOException e1) {
+					MessageDialog.openInformation(shell, "Exception", e1.getMessage());
+
+					e1.printStackTrace();
+				}
 			}
 		});
 		btn_ViewSelect.setText("  ...  ");
