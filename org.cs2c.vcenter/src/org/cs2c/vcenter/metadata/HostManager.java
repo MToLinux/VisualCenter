@@ -13,6 +13,11 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.eclipse.core.internal.runtime.Activator;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.osgi.service.datalocation.Location;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -26,14 +31,25 @@ public class HostManager {
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory
 			.newInstance();
 	Document document = null;
-
-	private static class HostManagerHoder {
-
-		private static HostManager instance = new HostManager("conf/host.xml");
-
+	static String strPath;
+	
+	private static class HostManagerHoder 
+	{
+		
+		private static HostManager instance = new HostManager(strPath);
 	}
 
 	public static HostManager getInstance() {
+		try {
+			strPath=FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml";
+			//System.out.println("333333"+strPath);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			MessageDialog.openError(null, "Error", e.getMessage());
+			
+		}
+
 		return HostManagerHoder.instance;
 
 	}
@@ -290,5 +306,5 @@ public class HostManager {
 		}
 		return flag;
 	}
-
 }
+

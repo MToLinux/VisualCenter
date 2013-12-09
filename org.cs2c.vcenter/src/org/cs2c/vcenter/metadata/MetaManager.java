@@ -14,33 +14,40 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class MetaManager {
-	DocumentBuilderFactory domFactory = null;
-	Document doc = null;
+	static DocumentBuilderFactory domFactory = null;
+	static Document doc = null;
 
 	private static class MetaManagerHoder {
+		
 		private static MetaManager instance = new MetaManager();
+		
 	}
 
-	public static MetaManager getInstance() {
+	public static MetaManager getInstance() throws Exception {
+		try {
+			doc = domFactory.newDocumentBuilder().parse(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/element.xml");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			
+			e1.printStackTrace();
+			throw e1;
+		}
 		return MetaManagerHoder.instance;
 	}
 
-	private MetaManager() {
+	private MetaManager()  {
 		// System.out.println("create metamanager");
 		domFactory = DocumentBuilderFactory.newInstance();
 		domFactory.setNamespaceAware(true); // never forget this!
-		try {
-			doc = domFactory.newDocumentBuilder().parse("conf/element.xml");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 	}
 

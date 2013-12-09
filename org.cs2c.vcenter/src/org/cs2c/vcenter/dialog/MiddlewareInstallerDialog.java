@@ -10,6 +10,8 @@ import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
@@ -201,16 +203,22 @@ public class MiddlewareInstallerDialog extends Dialog {
 							return;
 						}
 
-						if (hostXml.insertHostInfo("conf/host.xml", hostInfo)) {
-							MessageDialog
-									.openInformation(getParentShell(), "Note",
-											"Install successfully and the host information has been written to host.xml!");
-						} else {
-							MessageDialog
-									.openInformation(
-											getParentShell(),
-											"Note",
-											"Install successfully but the host information has not been written to host.xml, please add the host information manually!");
+						try {
+							if (hostXml.insertHostInfo(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml", hostInfo)) {
+								MessageDialog
+										.openInformation(getParentShell(), "Note",
+												"Install successfully and the host information has been written to host.xml!");
+							} else {
+								MessageDialog
+										.openInformation(
+												getParentShell(),
+												"Note",
+												"Install successfully but the host information has not been written to host.xml, please add the host information manually!");
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							MessageDialog.openError(getShell(), "Error", e1.getMessage());
 						}
 						setReturnCode(OK);
 						close();
@@ -260,7 +268,7 @@ public class MiddlewareInstallerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.configureShell(newShell);
 		newShell.setText("Install Middleware");
-		newShell.setImage(new Image(newShell.getDisplay(), "icons/project_add.png"));
+		
 
 	}
 	private boolean contentIsValid() {

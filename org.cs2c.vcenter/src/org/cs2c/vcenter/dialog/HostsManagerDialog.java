@@ -1,13 +1,16 @@
 package org.cs2c.vcenter.dialog;
 
+import java.io.IOException;
+
 import org.cs2c.vcenter.metadata.HostManager;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.SWT;
@@ -142,7 +145,14 @@ public class HostsManagerDialog extends Dialog {
 				// JOptionPane.WARNING_MESSAGE)==JOptionPane.OK_OPTION)
 				{
 					hostXml.deleteHostInfo(list.getSelection()[0]);
-					hostXml.saveXml(hostXml.getDocument(), "conf/host.xml");
+					try {
+						hostXml.saveXml(hostXml.getDocument(), FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						MessageDialog.openError(getShell(), "Error", e1.getMessage());
+						return;
+					}
 					getHostsInfoFromXml();
 				}
 
@@ -188,7 +198,7 @@ public class HostsManagerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.configureShell(newShell);
 		newShell.setText("Hosts Information");
-		newShell.setImage(new Image(newShell.getDisplay(), "icons/hosts.png"));
+		
 
 	}
 

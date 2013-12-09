@@ -285,6 +285,14 @@
                name="appName"
                value="VisualCenter">
          </property>
+         <property
+               name="aboutText"
+               value="VisualCenter v0.1.0-alpha&#x0A;Powered by http://osc.cs2c.com.cn/">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/vcenter-16.png">
+         </property>
       </product>
    </extension>
 
