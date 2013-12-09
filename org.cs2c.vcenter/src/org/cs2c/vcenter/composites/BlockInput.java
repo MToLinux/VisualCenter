@@ -30,11 +30,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.window.Window;
 
 public class BlockInput extends Composite {
 	
 	private org.eclipse.swt.widgets.List ctlList;
+	//private org.eclipse.jface.viewers.ListViewer ctlListViewer;
+	private ListViewer ctlListViewer;
 	private Button btnAdd;
 	private Button btnEdit;
 	private Button btnDelete;
@@ -208,7 +211,14 @@ public class BlockInput extends Composite {
 								}
 								else
 								{
-									newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim());
+									if(MessageDialog.openConfirm(getShell(), "Question", "Without a block name?"))
+									{
+										newblk.setName((selEleName.substring(0, selEleName.length()-6)).trim());
+									}
+									else
+									{
+										return;
+									}
 								}
 								block.addBlock(newblk);
 							}

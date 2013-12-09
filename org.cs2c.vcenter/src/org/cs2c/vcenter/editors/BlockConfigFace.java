@@ -155,30 +155,32 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	
 	public void SetDirty(boolean dirty)
 	{
+		//handlePropertyChange(PROP_DIRTY);
 		this.dirty = dirty;
+		firePropertyChange(ISaveablePart2.PROP_DIRTY);
 		
-		if(dirty)
-		{
-			if(partName.charAt(0)!='*')
-			{
-				setPartName("*"+partName);
-			}
-			else
-			{
-				setPartName(partName);
-			}
-		}
-		else
-		{
-			if(partName.charAt(0)!='*')
-			{
-				setPartName(partName);
-			}
-			else
-			{
-				setPartName(partName.substring(1, partName.length()));
-			}
-		}
+//		if(dirty)
+//		{
+//			if(partName.charAt(0)!='*')
+//			{
+//				setPartName("*"+partName);
+//			}
+//			else
+//			{
+//				setPartName(partName);
+//			}
+//		}
+//		else
+//		{
+//			if(partName.charAt(0)!='*')
+//			{
+//				setPartName(partName);
+//			}
+//			else
+//			{
+//				setPartName(partName.substring(1, partName.length()));
+//			}
+//		}
 		
 	}
 

@@ -109,7 +109,7 @@ public class BlockNameSetDialog extends Dialog {
 			return this.blockName;
 		}
 		else
-		{	this.blockName = this.ctlText.getText();
+		{
 			return this.blockName;
 		}
 	}
