@@ -39,15 +39,14 @@ public class HostManager {
 		private static HostManager instance = new HostManager(strPath);
 	}
 
-	public static HostManager getInstance() {
+	public static HostManager getInstance() throws IOException {
 		try {
 			strPath=FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml";
 			//System.out.println("333333"+strPath);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			MessageDialog.openError(null, "Error", e.getMessage());
-			
+			throw e;
 		}
 
 		return HostManagerHoder.instance;
