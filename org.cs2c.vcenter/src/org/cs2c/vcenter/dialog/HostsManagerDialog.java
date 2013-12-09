@@ -40,7 +40,13 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		hostXml = HostManager.getInstance();
+		try {
+			hostXml = HostManager.getInstance();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			MessageDialog.openError(getShell(), "Error", e.getMessage());
+		}
 
 		// hostXml=org.cs2c.vcenter.Application.domparser;
 
