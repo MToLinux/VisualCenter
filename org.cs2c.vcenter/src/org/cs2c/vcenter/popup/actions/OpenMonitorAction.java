@@ -3,6 +3,7 @@ package org.cs2c.vcenter.popup.actions;
 import org.cs2c.vcenter.editors.MonitorFace;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.dialogs.MessageDialog;
 //import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,6 +41,10 @@ public class OpenMonitorAction implements IObjectActionDelegate {
 		try {
 			page.openEditor((IEditorInput)element, MonitorFace.ID);
 		} catch (PartInitException e) {
+			MessageDialog.openInformation(shell, "PartInitException", e.getMessage());
+			e.printStackTrace();
+		}catch (Exception e) {
+			MessageDialog.openInformation(shell, "Exception", e.getMessage());
 			e.printStackTrace();
 		}
 	}

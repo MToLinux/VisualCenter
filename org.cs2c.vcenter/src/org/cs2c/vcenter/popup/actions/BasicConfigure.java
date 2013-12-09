@@ -4,7 +4,6 @@
 package org.cs2c.vcenter.popup.actions;
 
 import org.cs2c.vcenter.editors.BlockConfigFace;
-import org.cs2c.vcenter.editors.MonitorFace;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;

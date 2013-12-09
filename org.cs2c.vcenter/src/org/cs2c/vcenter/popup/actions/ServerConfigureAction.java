@@ -36,7 +36,6 @@ public class ServerConfigureAction implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(IAction action) {
-		// TODO Auto-generated method stub
 		IWorkbenchPage page=PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
 			page.openEditor((IEditorInput)element, BlockConfigFace.ID);
