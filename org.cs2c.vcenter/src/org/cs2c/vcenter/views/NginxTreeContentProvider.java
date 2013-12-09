@@ -9,10 +9,6 @@ import org.cs2c.nginlib.RemoteException;
 import org.cs2c.vcenter.views.models.*;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author Administrator
@@ -24,7 +20,6 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 * 
 	 */
 	public NginxTreeContentProvider() {
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)

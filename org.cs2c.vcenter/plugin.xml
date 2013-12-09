@@ -264,5 +264,25 @@
          </action>
       </objectContribution>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="org.cs2c.vcenter.application"
+            name="VisualCenter">
+         <property
+               name="appName"
+               value="VisualCenter">
+         </property>
+         <property
+               name="aboutText"
+               value="VisualCenter v0.1.0-alpha&#x0A;Powered by http://osc.cs2c.com.cn/">
+         </property>
+         <property
+               name="windowImages"
+               value="icons/vcenter-16.png">
+         </property>
+      </product>
+   </extension>
 
 </plugin>

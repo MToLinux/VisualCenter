@@ -1,16 +1,19 @@
 package org.cs2c.vcenter.dialog;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.cs2c.vcenter.Activator;
 import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.SWT;
@@ -180,8 +183,13 @@ public class HostsEditDialog extends Dialog {
 				if (flag == 1) {
 					if (contentIsValid()) {
 						if (hostXml.hasHostInfo(newHostInfo) == false) {
-
-							hostXml.insertHostInfo("conf/host.xml", newHostInfo);
+					
+							try {
+								hostXml.insertHostInfo(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml", newHostInfo);
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								MessageDialog.openError(null, "Error", e1.getMessage());
+							}
 							setReturnCode(OK);
 							close();
 						} else {
@@ -198,8 +206,16 @@ public class HostsEditDialog extends Dialog {
 
 				} else if (flag == 2) {
 					if (contentIsValid()) {
-						int result = hostXml.modifyHostInfo("conf/host.xml",
-								oldHostInfo, newHostInfo);
+						int result;
+						try {
+							result = hostXml.modifyHostInfo(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml",
+									oldHostInfo, newHostInfo);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							MessageDialog.openError(getShell(), "Error", e1.getMessage());
+							return;
+						}
 						if (result == 3) {
 							MessageDialog
 									.openError(

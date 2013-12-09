@@ -33,7 +33,7 @@
 <directive name="include"  tips="Includes another file, or files matching the specified mask, into configuration"  scope="exmai"  group="others"  reused="true" >
 <param class="StringParamInput"  tips="Like 'vhosts/*.conf' or 'mime.types' " />
 </directive>
-<directive name="lock_file"  tips="nginx uses the locking mechanism to implement accept_mutex and serialize access to shared memory. On most systems the locks are implemented using atomic operations, and this directive is ignored. On other systems the ��lock file�� mechanism is used. This directive specifies a prefix for the names of lock files"  scope="main"  group="core" >
+<directive name="lock_file"  tips="nginx uses the locking mechanism to implement accept_mutex and serialize access to shared memory. On most systems the locks are implemented using atomic operations, and this directive is ignored. On other systems the 'lock file' mechanism is used. This directive specifies a prefix for the names of lock files"  scope="main"  group="core" >
 <param class="StringParamInput"  tips="Like 'logs/nginx.lock' " />
 </directive>
 <directive name="master_process"  tips="Determines whether worker processes are started"  scope="main "  group="core" >
@@ -356,14 +356,14 @@
 <directive name="auth_basic_user"  tips="Specifies a file that keeps user names and passwords"  scope="http:server:location:limit_except "  group="sercurity" >
 <param class="StringParamInput" />
 </directive>
-<directive name="auth_http"  tips="Sets the URL of the HTTP authentication server. "  scope="mail:mserve"  group="sercurity" >
+<directive name="auth_http"  tips="Sets the URL of the HTTP authentication server. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput" />
 </directive>
-<directive name="auth_http_header"  tips="Appends the specified header to requests to the authentication server. "  scope="mail:mserve"  group="sercurity" >
+<directive name="auth_http_header"  tips="Appends the specified header to requests to the authentication server. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput" />
 <param class="StringParamInput" />
 </directive>
-<directive name="auth_http_timeout"  scope="mail:mserve"  group="sercurity" >
+<directive name="auth_http_timeout"  scope="mail:erverinmai"  group="sercurity" >
 <param class="IntParamInput"  min="1"  max="99999"  units="s" />
 </directive>
 <directive name="auth_request"  tips=" Enables authorization based on the result of a subrequest and sets the URI to which the subrequest will be sent. "  scope="http:server:location "  group="sercurity" >
@@ -423,7 +423,7 @@
 <directive name="override_charset"  tips="Determines whether a conversion should be performed for answers received from a proxied or FastCGI server when the answers already carry a charset in the 'Content-Type' response header field. "  scope="http:server:location:finlocatio"  group="basic" >
 <param class="SelectParamInput"  items="on:off" />
 </directive>
-<directive name="source_charset "  tips="Defines the source charset of a response."  scope="location:server: http:finlocatio "  group="basic" >
+<directive name="source_charset"  tips="Defines the source charset of a response."  scope="location:server: http:finlocatio "  group="basic" >
 <param class="StringParamInput"  tips="charset" />
 </directive>
 <directive name="dav_access"  tips="Sets access permissions for newly created files and directories "  scope="location:server:http"  group="sercurity" >
@@ -681,7 +681,7 @@
 <directive name="keepalive"  scope="upstream"  tips="sets the maximum number of idle keepalive connections to upstream servers that are preserved in the cache of each worker process-----appeared in version 1.1.4"  group="basic" >
 <param class="IntParamInput"  min="1"  max="9999"  units="" />
 </directive>
-<directive name="least_conn "  scope="upstream"  tips="Specifies that a  group should use a load balancing method where a request is passed to the server with the least number of active connections, taking into account weights of servers-----appeared in versions 1.3.1 and 1.2.2"  group="basic" ></directive>
+<directive name="least_conn"  scope="upstream"  tips="Specifies that a  group should use a load balancing method where a request is passed to the server with the least number of active connections, taking into account weights of servers-----appeared in versions 1.3.1 and 1.2.2"  group="basic" ></directive>
 <directive name="health_check"  tips="Enables periodic health checks of the servers in a  group referenced in the surrounding location. "  scope="location"  group="basic" >
 <param name="interval"  class="OptionIntParamInput"  min="1"  max="9999999"  units="s"  tips="optional" />
 <param name="fails"  class="OptionIntParamInput"  min="0"  max="9999999"  units=""  tips="optional" />
@@ -731,13 +731,13 @@
 <directive name="image_filter_transparency"  tips="Defines whether transparency should be preserved when transforming GIF images or PNG images with colors specified by a palette. "  group="others" >
 <param class="SelectParamInput"  items="off:on" />
 </directive>
-<directive name="imap_auth"  scope="mserve:mail"  tips="Sets permitted methods of authentication for IMAP clients."  group="others" >
+<directive name="imap_auth"  scope="erverinmai:mail"  tips="Sets permitted methods of authentication for IMAP clients."  group="others" >
 <param class="SelectParamInput"  items="login:lain:cram-md5" />
 </directive>
-<directive name="imap_capabilities"  scope="mserve:mail"  tips="Sets the IMAP protocol extensions list that is passed to the client in response to the CAPABILITY command. "  group="others" >
+<directive name="imap_capabilities"  scope="erverinmai:mail"  tips="Sets the IMAP protocol extensions list that is passed to the client in response to the CAPABILITY command. "  group="others" >
 <param class="StringParamInput"  tips="" />
 </directive>
-<directive name="imap_client_buffer"  scope="mserve:mail"  tips="Sets the IMAP commands read buffer size. "  group="others" >
+<directive name="imap_client_buffer"  scope="erverinmai:mail"  tips="Sets the IMAP commands read buffer size. "  group="others" >
 <param class="StringParamInput"  default="4k|8k" />
 </directive>
 <directive name="index"  scope="http:server:location"  tips="Defines files that will be used as an index. "  group="basic"  reused="true" >
@@ -779,21 +779,21 @@
 <param class="OptionStringParamInput"  name="zone" />
 <param class="OptionStringParamInput"  name="rate" />
 </directive>
-<directive name="listen"  tips="Sets the address and port for the socket on which the server will accept requests. "  scope="mserve"  group="basic"  reused="true" >
+<directive name="listen"  tips="Sets the address and port for the socket on which the server will accept requests. "  scope="erverinmai"  group="basic"  reused="true" >
 <param class="StringParamInput" />
 </directive>
-<directive name="protocol"  tips="Sets the protocol for a proxied server. "  scope="mserve"  group="proxy" >
+<directive name="protocol"  tips="Sets the protocol for a proxied server. "  scope="erverinmai"  group="proxy" >
 <param class="TagParamInput"  name="imap " />
 <param class="TagParamInput"  name="pop3 " />
 <param class="TagParamInput"  name="smtp" />
 </directive>
-<directive name="server_name"  tips="Sets the server name that is used "  scope="mail:mserve"  group="basic" >
+<directive name="server_name"  tips="Sets the server name that is used "  scope="mail:erverinmai"  group="basic" >
 <param class="StringParamInput" />
 </directive>
-<directive name="so_keepalive"  tips="Indicates if the 'TCP keepalive'mode should be enabled on the client's connection (SO_KEEPALIVE socket parameter) when connecting to a proxied server. "  scope="mail:mserve"  group="basic" >
+<directive name="so_keepalive"  tips="Indicates if the 'TCP keepalive'mode should be enabled on the client's connection (SO_KEEPALIVE socket parameter) when connecting to a proxied server. "  scope="mail:erverinmai"  group="basic" >
 <param class="SelectParamInput"  items="on:off" />
 </directive>
-<directive name="timeout"  scope="mail:mserve"  group="basic" >
+<directive name="timeout"  scope="mail:erverinmai"  group="basic" >
 <param class="IntParamInput"  min="1"  max="99999"  units="s" />
 </directive>
 <directive name="gzip_static"  tips="Enables or disables checking the existence of precompressed files."  scope="http:server:location "  group="gzip" >
@@ -989,7 +989,7 @@
 <directive name="proxy_pass"  tips="Sets the protocol and address of a proxied server and an optional URI to which a location should be mapped."  scope="limit_except:finlocatio:location"  group="proxy" >
 <param class="StringParamInput"  tips="url " />
 </directive>
-<directive name="proxy_pass_header "  tips="Permits passing otherwise disabled header fields from a proxied server to a client"  scope="http:server:location"  group="proxy" >
+<directive name="proxy_pass_header"  tips="Permits passing otherwise disabled header fields from a proxied server to a client"  scope="http:server:location"  group="proxy" >
 <param class="StringParamInput"  tips="url" />
 </directive>
 <directive name="proxy_read_timeout"  tips="Defines a timeout for reading a response from the proxied server."  scope="http:server:location"  group="proxy" >
@@ -1037,7 +1037,7 @@
 <directive name="proxy_store_access"  tips="Sets access permissions for newly created files and directories"  scope="http:server:location"  group="proxy" >
 <param class="StringParamInput"  tips="Like 'users:permissions'" />
 </directive>
-<directive name="proxy_temp_file_write_size "  tips="Limits the size of data written to a temporary file at a time"  scope="http:server:location"  group="proxy" >
+<directive name="proxy_temp_file_write_size"  tips="Limits the size of data written to a temporary file at a time"  scope="http:server:location"  group="proxy" >
 <param class="StringParamInput"  tips="Like 8k|16k"  default="8k|16k" />
 </directive>
 <directive name="proxy_temp_path"  tips="Defines a directory for storing temporary files with data received from proxied servers"  scope="http:server:location"  group="proxy" >
@@ -1240,59 +1240,63 @@
 <directive name="xslt_types"  tips="Enables transformations in responses with the specified MIME types in addition to 'text/xml'"  scope="http:server:location"  group="others" >
 <param class="StringParamInput"  tips="mime-type" />
 </directive>
-<directive name="pop3_auth"  tips="Sets permitted methods of authentication for POP3 clients. "  scope="mail:mserve"  group="sercurity" >
+<directive name="pop3_auth"  tips="Sets permitted methods of authentication for POP3 clients. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="SelectParamInput"  items="plain:apop:cram-md5" />
 </directive>
-<directive name="pop3_capabilities"  tips="Sets the POP3 protocol extensions list that is passed to the client in response to the CAPA command."  scope="mail:mserve"  group="others" >
+<directive name="pop3_capabilities"  tips="Sets the POP3 protocol extensions list that is passed to the client in response to the CAPA command."  scope="mail:erverinmai"  group="others" >
 <param class="StringParamInput"  tips="" />
 </directive>
-<directive name="smtp_auth"  tips="Sets permitted methods of SASL authentication for SMTP clients "  scope="mail:mserve"  group="sercurity" >
+<directive name="smtp_auth"  tips="Sets permitted methods of SASL authentication for SMTP clients "  scope="mail:erverinmai"  group="sercurity" >
 <param class="SelectParamInput"  items="Like plain, login, cram-md5, etc." />
 </directive>
-<directive name="smtp_capabilities"  tips="Sets the SMTP protocol extensions list that is passed to the client in response to the EHLO command."  scope="mail:mserve"  group="others" >
+<directive name="smtp_capabilities"  tips="Sets the SMTP protocol extensions list that is passed to the client in response to the EHLO command."  scope="mail:erverinmai"  group="others" >
 <param class="StringParamInput"  tips="" />
 </directive>
-<directive name="proxy_buffer"  tips="Sets the size of the buffer used for proxying. By default, the buffer size is equal to one memory page."  scope="mail:mserve"  group="proxy" >
+<directive name="proxy_buffer"  tips="Sets the size of the buffer used for proxying. By default, the buffer size is equal to one memory page."  scope="mail:erverinmai"  group="proxy" >
 <param class="StringParamInput"  tips="Like '4k|8k'"  default="4k|8k" />
 </directive>
-<directive name="proxy_pass_error_message"  tips="Indicates whether to pass the error message obtained during the authentication on the backend to the client. "  scope="mail:mserve"  group="proxy" >
+<directive name="proxy_pass_error_message"  tips="Indicates whether to pass the error message obtained during the authentication on the backend to the client. "  scope="mail:erverinmai"  group="proxy" >
 <param class="SelectParamInput"  items="on:off" />
 </directive>
-<directive name="proxy_timeout"  scope="mail:mserve"  group="proxy" >
+<directive name="proxy_timeout"  scope="mail:erverinmai"  group="proxy" >
 <param class="IntParamInput"  min="1"  max="999999"  units="h" />
 </directive>
+<<<<<<< HEAD
 <directive name="xclient "  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:mserve"  group="client" >
+=======
+<directive name="xclient"  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:erverinmai"  group="client" >
+>>>>>>> refs/remotes/github/master
 <param class="SelectParamInput"  items="on:off " />
 </directive>
-<directive name="ssl"  tips="Enables the SSL/TLS protocol for the given server."  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl"  tips="Enables the SSL/TLS protocol for the given server."  scope="mail:erverinmai"  group="sercurity" >
 <param class="SelectParamInput"  items="on:off " />
 </directive>
-<directive name="ssl_certificate"  tips="Specifies a file with the certificate in the PEM format for the given server. "  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_certificate"  tips="Specifies a file with the certificate in the PEM format for the given server. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput"  tips="file" />
 </directive>
-<directive name="ssl_certificate_key"  tips="Specifies a file with the secret key in the PEM format for the given server. "  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_certificate_key"  tips="Specifies a file with the secret key in the PEM format for the given server. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput"  tips="file" />
 </directive>
-<directive name="ssl_prefer_server_ciphers"  tips="Specifies that server ciphers should be preferred over client ciphers when the SSLv3 and TLS protocols are used. "  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_prefer_server_ciphers"  tips="Specifies that server ciphers should be preferred over client ciphers when the SSLv3 and TLS protocols are used. "  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput"  tips="" />
 </directive>
-<directive name="ssl_protocols"  tips="Enables the specified protocols.  "  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_protocols"  tips="Enables the specified protocols.  "  scope="mail:erverinmai"  group="sercurity" >
 <param class="TagParamInput"  name="SSLv2 " />
 <param class="TagParamInput"  name="SSLv3 " />
 <param class="TagParamInput"  name="TLSv1" />
 <param class="TagParamInput"  name=" TLSv1.1" />
 <param class="TagParamInput"  name=" TLSv1.2 " />
 </directive>
-<directive name="ssl_session_cache"  tips="Sets the types and sizes of caches that store session parameters."  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_session_cache"  tips="Sets the types and sizes of caches that store session parameters."  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput"  tips="Fill off or none or [builtin[:size]] [shared:name:size] " />
 </directive>
-<directive name="ssl_session_timeout"  tips="Specifies a time during which a client may reuse the session parameters stored in a cache."  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_session_timeout"  tips="Specifies a time during which a client may reuse the session parameters stored in a cache."  scope="mail:erverinmai"  group="sercurity" >
 <param class="IntParamInput"  min="1"  max="99999"  units="m" />
 </directive>
-<directive name="ssl_session_ticket_key"  tips="Sets a file with the secret key used to encrypt and decrypt TLS session tickets.-----appeared in version 1.5.7"  scope="mail:mserve"  group="sercurity" >
+<directive name="ssl_session_ticket_key"  tips="Sets a file with the secret key used to encrypt and decrypt TLS session tickets.-----appeared in version 1.5.7"  scope="mail:erverinmai"  group="sercurity" >
 <param class="StringParamInput"  tips="file" />
 </directive>
-<directive name="starttls"  tips=""  scope="mail:mserve"  group="others" >
+<directive name="starttls"  tips=""  scope="mail:erverinmai"  group="others" >
 <param class="SelectParamInput"  items="on:off:only " />
 </directive>
 </root>

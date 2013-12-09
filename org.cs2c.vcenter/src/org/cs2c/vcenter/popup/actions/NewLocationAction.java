@@ -10,7 +10,6 @@ import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
-import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
@@ -56,8 +55,8 @@ public class NewLocationAction implements IObjectActionDelegate {
 			}else{
 				e.printStackTrace();
 			}
-
 		}catch (Exception ex) {
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 			ex.printStackTrace();
 		}
 	}

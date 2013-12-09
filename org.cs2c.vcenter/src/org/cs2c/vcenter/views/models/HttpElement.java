@@ -4,9 +4,6 @@
 package org.cs2c.vcenter.views.models;
 
 import java.util.*;
-import java.util.Map.Entry;
-
-import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
