@@ -30,14 +30,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.window.Window;
 
 public class BlockInput extends Composite {
 	
 	private org.eclipse.swt.widgets.List ctlList;
-	//private org.eclipse.jface.viewers.ListViewer ctlListViewer;
-	private ListViewer ctlListViewer;
 	private Button btnAdd;
 	private Button btnEdit;
 	private Button btnDelete;

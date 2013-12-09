@@ -6,6 +6,7 @@ import java.util.List;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
+import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -20,27 +21,28 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseAdapter;
 
 public class IntParamInput extends Composite implements ParamInput {
-
-	String strParamName = "";
-	List<String> strUnit = new ArrayList<String>();
-	int max = 999999999;
-	int min = -999999999;
-	String tips = "";
 	
-	int selValue = 0;
-	String selUnit = "";
+	private List<String> strUnit = new ArrayList<String>();
+	private int max = 999999999;
+	private int min = -999999999;
+	private String tips = "";
 	
-	ParameterMeta pMeta;
+	private int selValue = 0;
+	private String selUnit = "";
 	
-	Button ctlCheckButton;
-	Spinner ctlSpinner;
-	Combo ctlCombo;
+	private ParameterMeta pMeta;
 	
-	boolean isChecked = false;
+	private Button ctlCheckButton;
+	private Spinner ctlSpinner;
+	private Combo ctlCombo;
 	
-	StringParameter strParam = new RecStringParameter();
+	private boolean isChecked = false;
 	
-	public IntParamInput(Composite parent, int style, ParameterMeta meta) {
+	private StringParameter strParam = new RecStringParameter();
+	
+	private DirectiveInput parentDialog = null;
+	
+	public IntParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -70,6 +72,9 @@ public class IntParamInput extends Composite implements ParamInput {
 						ctlCombo.setEnabled(false);
 					}
 				}
+				
+				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -79,6 +84,7 @@ public class IntParamInput extends Composite implements ParamInput {
 		ctlSpinner.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -87,12 +93,14 @@ public class IntParamInput extends Composite implements ParamInput {
 		ctlCombo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		
 		this.pMeta = meta;
+		this.parentDialog = parentDlg;
 		
 		selValue = 0;
 		max = (int) this.pMeta.getMax();

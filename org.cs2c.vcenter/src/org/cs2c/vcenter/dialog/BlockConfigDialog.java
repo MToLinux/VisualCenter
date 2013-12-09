@@ -30,8 +30,12 @@ public class BlockConfigDialog extends Dialog {
 	private BlockElementInfo bcInfo = null;
 	
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public BlockConfigDialog(Shell parentShell, BlockElementInfo bcInfo) {
 		super(parentShell);
+		setShellStyle(SWT.SHELL_TRIM);
 		
 		this.bcInfo = bcInfo;
 		
