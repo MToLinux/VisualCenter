@@ -5,7 +5,6 @@ package org.cs2c.vcenter.views.models;
 
 import java.util.List;
 
-import org.cs2c.nginlib.MiddlewareFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;

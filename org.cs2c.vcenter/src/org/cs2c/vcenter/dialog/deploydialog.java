@@ -1,7 +1,7 @@
 package org.cs2c.vcenter.dialog;
 
 import java.io.File;
-import java.io.FilenameFilter;
+//import java.io.FilenameFilter;
 
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;

@@ -12,24 +12,19 @@ import org.cs2c.nginlib.config.Block;
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecBlock;
 import org.cs2c.nginlib.config.RecConfigurator;
-//import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.nginlib.config.StringParameter;
 import org.cs2c.nginlib.ctl.Controller;
 import org.cs2c.vcenter.dialog.deploydialog;
-//import org.cs2c.vcenter.dialog.serverdialog;
-import org.cs2c.vcenter.views.MiddlewareView;
+//import org.cs2c.vcenter.views.MiddlewareView;
 import org.cs2c.vcenter.views.models.TreeElement;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-//import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-
-//import com.trilead.ssh2.SCPClient;
+//import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
@@ -170,7 +165,7 @@ public class DeployAction implements IObjectActionDelegate {
 	@Override
 	public void setActivePart(IAction action, IWorkbenchPart targetPart) {
 		shell = targetPart.getSite().getShell();
-		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
+//		MiddlewareView meviewer = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 //		this.treeViewer = meviewer.getTreeViewer();
 //		this.meview = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 	}

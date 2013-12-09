@@ -6,12 +6,9 @@ package org.cs2c.vcenter.views.models;
 import java.util.*;
 import java.util.Map.Entry;
 
-import org.cs2c.nginlib.MiddlewareFactory;
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.nginlib.config.Block;
-import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.RecConfigurator;
-import org.cs2c.nginlib.config.RecStringParameter;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;

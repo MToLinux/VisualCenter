@@ -9,7 +9,6 @@ import org.cs2c.vcenter.views.models.HttpElement;
 import org.cs2c.vcenter.views.models.LocationElement;
 import org.cs2c.vcenter.views.models.LogElement;
 import org.cs2c.vcenter.views.models.LogInstanceElement;
-import org.cs2c.vcenter.views.models.ModuleElement;
 import org.cs2c.vcenter.views.models.ProjectElement;
 import org.cs2c.vcenter.views.models.ServerElement;
 import org.cs2c.vcenter.views.models.TreeElement;
@@ -19,9 +18,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.IViewerLabelProvider;
 import org.eclipse.swt.graphics.Image;
-import org.w3c.dom.Node;
 
 /**
  * @author Administrator
