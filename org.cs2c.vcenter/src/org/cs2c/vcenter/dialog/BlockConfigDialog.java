@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TabItem;
 public class BlockConfigDialog extends Dialog {
 	
 	private TabFolder tabFolder = null;
-
+	
 	private Hashtable<String, TabItem> htGroupTItems = new Hashtable<String, TabItem>();
 	private Hashtable<String, BlockInput> htGroupBInputs = new Hashtable<String, BlockInput>();
 	private BlockInput bInput = null;
@@ -57,26 +57,26 @@ public class BlockConfigDialog extends Dialog {
 		cmpsite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		cmpsite.setLayout(new GridLayout(1,false));
 		
-		blockGroups = bMeta.getGroups();
+		this.blockGroups = this.bMeta.getGroups();
 		
 		int countGroups = 0;
-		if(blockGroups == null && blockGroups.isEmpty())
+		if(this.blockGroups == null && this.blockGroups.isEmpty())
 		{
 			return null;
 		}
 		else
 		{
-			countGroups = blockGroups.size();
+			countGroups = this.blockGroups.size();
 		}
 		
 		if(countGroups == 1)
 		{
-			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(cmpsite, SWT.NONE, bcInfo, subGroupName, null);
+			String subGroupName = this.blockGroups.get(0);
+			this.bInput = new BlockInput(cmpsite, SWT.NONE, this.bcInfo, subGroupName, null);
 		    
-			bInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+			this.bInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 			GridData gridDataList=new GridData(GridData.FILL_BOTH);
-			bInput.setLayoutData(gridDataList);
+			this.bInput.setLayoutData(gridDataList);
 		}
 		else
 		{
@@ -90,16 +90,16 @@ public class BlockConfigDialog extends Dialog {
 			BlockInput[] bInputs = new BlockInput[countGroups];
 			while(i < countGroups)
 			{
-				String subGroupName = blockGroups.get(i);
+				String subGroupName = this.blockGroups.get(i);
 				
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
 				
-				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, bcInfo, subGroupName, null);
+				bInputs[i] = new BlockInput(this.tabFolder, SWT.NONE, this.bcInfo, subGroupName, null);
 				tbi.setControl(bInputs[i]);
 				
-				htGroupTItems.put(subGroupName, tbi);
-				htGroupBInputs.put(subGroupName, bInputs[i]);
+				this.htGroupTItems.put(subGroupName, tbi);
+				this.htGroupBInputs.put(subGroupName, bInputs[i]);
 				
 				i++;
 			}

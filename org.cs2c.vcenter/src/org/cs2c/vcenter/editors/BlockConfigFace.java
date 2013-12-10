@@ -44,7 +44,7 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	private String blockType = null;
 	
 	private BlockMeta bMeta = null;
-	List<String> blockGroups = null;
+	private List<String> blockGroups = null;
 	
 	
 	private MiddlewareFactory middleware = null;
@@ -55,8 +55,8 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	private String blockMetaType = null;
 	
 	
-	private boolean dirty;
-	String partName = "";
+	private boolean dirty = false;
+	private String partName = "";
 	
 	
 	public BlockConfigFace() {
@@ -75,33 +75,33 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 		}
 		
 		try {
-			orc.replace(this.oldBlock, this.newBlock, this.blockOutNames);
+			this.orc.replace(this.oldBlock, this.newBlock, this.blockOutNames);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			MessageDialog.openError(new Shell(), "Error", e.getMessage());
 			return;
 		}
 		
-		if(bInput != null && bInput.isChanged())
+		if(this.bInput != null && this.bInput.isChanged())
 		{
-			bInput.benchmark();
+			this.bInput.benchmark();
 		}
 		else
 		{
-			if(blockGroups!=null && !blockGroups.isEmpty())
+			if(this.blockGroups!=null && !this.blockGroups.isEmpty())
 			{
 				int count = 0;
 				int i = 0;
 				while(i < count)
 				{
-					BlockInput blkinput = htGroupBInputs.get(blockGroups.get(i));
+					BlockInput blkinput = this.htGroupBInputs.get(this.blockGroups.get(i));
 					blkinput.benchmark();
 					i++;
 				}
 			}
 		}
 		
-		dirty = false;
+		this.dirty = false;
 		firePropertyChange(ISaveablePart2.PROP_DIRTY);
 		
 	}
@@ -155,16 +155,14 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	
 	public void SetDirty(boolean dirty)
 	{
-		//handlePropertyChange(PROP_DIRTY);
 		this.dirty = dirty;
 		firePropertyChange(ISaveablePart2.PROP_DIRTY);
-		
 	}
 
 	@Override
 	public boolean isDirty() {
 		
-		return dirty;
+		return this.dirty;
 	}
 
 	@Override
@@ -174,31 +172,38 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 
 	@Override
 	public void createPartControl(Composite parent) {
-
-		MetaManager mmanager = MetaManager.getInstance();
-		bMeta = mmanager.getBlockMeta(this.blockMetaType);
-		blockGroups = bMeta.getGroups();
+		
+		MetaManager mmanager = null;
+		try {
+			mmanager = MetaManager.getInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageDialog.openError(new Shell(), "Error", e.getMessage());
+			return;
+		}
+		this.bMeta = mmanager.getBlockMeta(this.blockMetaType);
+		this.blockGroups = this.bMeta.getGroups();
 		
 		int countGroups = 0;
-		if(blockGroups == null && blockGroups.isEmpty())
+		if(this.blockGroups == null && this.blockGroups.isEmpty())
 		{
 			return;
 		}
 		else
 		{
-			countGroups = blockGroups.size();
+			countGroups = this.blockGroups.size();
 		}
 		
 		BlockElementInfo bcInfo = new BlockElementInfo();
 		bcInfo.setBlock(this.newBlock);
 		bcInfo.setBlockType(this.blockType);
 		bcInfo.setBlockMeta(this.bMeta);
-		bcInfo.setMiddleware(middleware);
+		bcInfo.setMiddleware(this.middleware);
 		
 		if(countGroups == 1)
 		{
-			String subGroupName = blockGroups.get(0);
-			bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName, this);
+			String subGroupName = this.blockGroups.get(0);
+			this.bInput = new BlockInput(parent, SWT.NONE, bcInfo, subGroupName, this);
 		}
 		else
 		{
@@ -208,7 +213,7 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 			BlockInput[] bInputs = new BlockInput[countGroups];
 			while(i < countGroups)
 			{
-				String subGroupName = blockGroups.get(i);
+				String subGroupName = this.blockGroups.get(i);
 				
 				TabItem tbi = new TabItem(this.tabFolder, SWT.NONE);
 				tbi.setText(subGroupName);
@@ -217,8 +222,8 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 				
 				tbi.setControl(bInputs[i]);
 				
-				htGroupTItems.put(subGroupName, tbi);
-				htGroupBInputs.put(subGroupName, bInputs[i]);
+				this.htGroupTItems.put(subGroupName, tbi);
+				this.htGroupBInputs.put(subGroupName, bInputs[i]);
 				
 				i++;
 			}
@@ -238,7 +243,7 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 
 	@Override
 	public int promptToSaveOnClose() {
-		if(dirty)
+		if(this.dirty)
 		{
 			if(MessageDialog.openConfirm(getEditorSite().getShell(),
 					"Warning", "Modification of '"+partName+"' is not saved, are you sure to close without saving?"))
@@ -258,7 +263,7 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	protected void setPartName(String partName)
 	{
 		this.partName = partName;
-		super.setPartName(partName);
+		super.setPartName(this.partName);
 	}
 	
 }

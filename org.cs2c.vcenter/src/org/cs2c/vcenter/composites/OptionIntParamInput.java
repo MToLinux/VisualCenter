@@ -194,7 +194,6 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		}
 		else
 		{
-			//ctlCombo.add("");
 			ctlCombo.setEnabled(false);
 		}
 		if(ctlCombo.getItemCount() > 0)

@@ -38,13 +38,13 @@ public class BlockInput extends Composite {
 	private Button btnAdd;
 	private Button btnEdit;
 	private Button btnDelete;
-	boolean flagChanged;
+	boolean flagChanged = false;
 	
 	private MiddlewareFactory middleware = null;
 	private String blockSubGroup = null;
 	private Configurator orc = null;
 	
-	final String strBlockMark = " {...}";
+	private final String strBlockMark = " {...}";
 	
 	private BlockMeta bMeta = null;
 	
@@ -397,22 +397,21 @@ public class BlockInput extends Composite {
 					bcInfo.setBlock(curBlk);
 					bcInfo.setBlockType(strSelEleBaseType);
 					
-					MetaManager mmanager = MetaManager.getInstance();
-					//BlockMeta subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
+					MetaManager mmanager = null;
 					BlockMeta subbMeta = null;
+					try {
+						mmanager = MetaManager.getInstance();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+						MessageDialog.openError(getShell(), "Error", e1.getMessage());
+						return;
+					}
 					String parentName = "";
 					if(bMeta != null)
 					{
 						parentName = bMeta.getName();
 					}
-					if(parentName.equals("location") && strSelEleBaseType.equals("if"))
-					{
-						subbMeta = mmanager.getBlockMeta("finlocatio");
-					}
-					else
-					{
-						subbMeta = mmanager.getBlockMeta(strSelEleBaseType);
-					}
+					subbMeta = mmanager.getBlockMeta(strSelEleBaseType, parentName);
 					bcInfo.setBlockMeta(subbMeta);
 					
 					bcInfo.setMiddleware(middleware);
@@ -695,10 +694,10 @@ public class BlockInput extends Composite {
 			return;
 		}
 		
-		ctlList.removeAll();
+		this.ctlList.removeAll();
 		
-		java.util.List<DirectiveMeta> subDirectiveMetas = bMeta.getDirectiveMeta(blockSubGroup);
-		java.util.List<BlockMeta> subBlockMetas = bMeta.getBlockMeta(blockSubGroup);
+		java.util.List<DirectiveMeta> subDirectiveMetas = this.bMeta.getDirectiveMeta(this.blockSubGroup);
+		java.util.List<BlockMeta> subBlockMetas = this.bMeta.getBlockMeta(this.blockSubGroup);
 		
 		java.util.List<String> subDirectiveTypes = new ArrayList<String>();
 		java.util.List<String> subBlockTypes = new ArrayList<String>();
@@ -737,12 +736,12 @@ public class BlockInput extends Composite {
 			count = this.directives.size();
 			while(i<count)
 			{
-				String name = directives.get(i).getName();
+				String name = this.directives.get(i).getName();
 				String nameslice[] = name.split(" ");
 				String typeInName = nameslice[0];
 				if(subDirectiveTypes.contains(typeInName))
 				{
-					ctlList.add(directives.get(i).toString().trim());
+					this.ctlList.add(this.directives.get(i).toString().trim());
 				}
 				i++;
 			}
@@ -753,12 +752,12 @@ public class BlockInput extends Composite {
 			count = this.blocks.size();
 			while(i<count)
 			{
-				String name = blocks.get(i).getName();
+				String name = this.blocks.get(i).getName();
 				String nameslice[] = name.split(" ");
 				String typeInName = nameslice[0];
 				if(subBlockTypes.contains(typeInName))
 				{
-					ctlList.add(name+strBlockMark);
+					this.ctlList.add(name + this.strBlockMark);
 				}
 				i++;
 			}
@@ -768,17 +767,17 @@ public class BlockInput extends Composite {
 	
 	public boolean isChanged()
 	{
-		return flagChanged;
+		return this.flagChanged;
 	}
 	
 	public void benchmark()
 	{
-		flagChanged = false;
+		this.flagChanged = false;
 	}
 	
 	public void setMeta(BlockMeta meta)
 	{
-		bMeta = meta;
+		this.bMeta = meta;
 	}
 	
 }
