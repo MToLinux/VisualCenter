@@ -50,12 +50,6 @@
             name="Host Monitor">
       </editor>
       <editor
-            class="org.cs2c.vcenter.editors.HttpEditor"
-            default="false"
-            id="org.cs2c.vcenter.editors.HttpEditor"
-            name="Http Editor">
-      </editor>
-      <editor
             class="org.cs2c.vcenter.editors.ServerEditor"
             default="false"
             id="org.cs2c.vcenter.editor.ServerEditor"
@@ -89,14 +83,9 @@
       <editor
             class="org.cs2c.vcenter.editors.BlockConfigFace"
             default="false"
+            icon="icons/block.png"
             id="org.cs2c.vcenter.editors.BlockConfigFace"
             name="Block Config Face">
-      </editor>
-      <editor
-            class="org.cs2c.vcenter.editors.BasicConfigFace"
-            default="false"
-            id="org.cs2c.vcenter.editors.BasicConfigFace"
-            name="Basic Config Face">
       </editor>
    </extension>
    <extension

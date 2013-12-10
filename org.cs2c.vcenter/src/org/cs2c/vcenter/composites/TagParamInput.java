@@ -3,6 +3,7 @@ package org.cs2c.vcenter.composites;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
+import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -14,19 +15,20 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class TagParamInput extends Composite implements ParamInput {
 
-	String strParamName = "";
+	private String strParamName = "";
 	
-	String tips = "";
+	private String tips = "";
 	
-	Button ctlCheckButton;
-	boolean isChecked = false;
+	private Button ctlCheckButton;
+	private boolean isChecked = false;
 	
-	ParameterMeta pMeta;
+	private ParameterMeta pMeta;
 	
-	StringParameter strParam = new RecStringParameter();
+	private StringParameter strParam = new RecStringParameter();
 
+	private DirectiveInput parentDialog = null;
 	
-	public TagParamInput(Composite parent, int style, ParameterMeta meta) {
+	public TagParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -38,6 +40,7 @@ public class TagParamInput extends Composite implements ParamInput {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -45,6 +48,7 @@ public class TagParamInput extends Composite implements ParamInput {
 		
 		
 		this.pMeta = meta;
+		this.parentDialog = parentDlg;
 		
 		strParamName = this.pMeta.getName();
 		tips = this.pMeta.getTips();
@@ -74,14 +78,6 @@ public class TagParamInput extends Composite implements ParamInput {
 	
 	public void UpdateParam()
 	{
-//		if(ctlCheckButton.getSelection())
-//		{
-//			strParam.setValue(strParamName);
-//		}
-//		else
-//		{
-//			strParam.setValue("");
-//		}
 		if(isChecked)
 		{
 			isChecked = false;

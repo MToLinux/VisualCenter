@@ -5,6 +5,7 @@ import java.util.List;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
+import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -20,23 +21,24 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class SelectParamInput extends Composite implements ParamInput {
 
-	List<String> strOptions = null;
-	String tips = "";
+	private List<String> strOptions = null;
+	private String tips = "";
 	
-	String selValue = "";
+	private String selValue = "";
 	
-	ParameterMeta pMeta;
+	private ParameterMeta pMeta;
 
-	Combo ctlCombo;
+	private Combo ctlCombo;
 	
-	Button ctlCheckButton;
+	private Button ctlCheckButton;
 	
-	boolean isChecked = false;
+	private boolean isChecked = false;
 	
-	StringParameter strParam = new RecStringParameter();
+	private StringParameter strParam = new RecStringParameter();
 
+	private DirectiveInput parentDialog = null;
 	
-	public SelectParamInput(Composite parent, int style, ParameterMeta meta) {
+	public SelectParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -57,6 +59,9 @@ public class SelectParamInput extends Composite implements ParamInput {
 					isChecked = true;
 					ctlCombo.setEnabled(true);
 				}
+				
+				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -66,12 +71,14 @@ public class SelectParamInput extends Composite implements ParamInput {
 		ctlCombo.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		
 		
 		this.pMeta = meta;
+		this.parentDialog = parentDlg;
 		new Label(this, SWT.NONE);
 		
 		strOptions = this.pMeta.getItems();

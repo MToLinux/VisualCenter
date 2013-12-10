@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.Parameter;
-import org.cs2c.nginlib.config.RecDirective;
 import org.cs2c.vcenter.composites.IntParamInput;
 import org.cs2c.vcenter.composites.OptionIntParamInput;
 import org.cs2c.vcenter.composites.OptionStringParamInput;
@@ -16,6 +15,7 @@ import org.cs2c.vcenter.composites.TagParamInput;
 import org.cs2c.vcenter.metadata.DirectiveMeta;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -32,9 +32,9 @@ public class DirectiveInput extends Dialog {
 	private Directive dirct = null;
 	private DirectiveMeta dMeta = null;
 	
-	static Shell newShell = new Shell();
+	private static Shell newShell = new Shell();
 
-	Label dirctString = null;
+	private Label dirctString = null;
 	
 	/**
 	 * @wbp.parser.constructor
@@ -42,9 +42,16 @@ public class DirectiveInput extends Dialog {
 	
 	public DirectiveInput(Shell parent, Directive direct, DirectiveMeta dMeta) {
 		super(parent);
+		setShellStyle(SWT.BORDER | SWT.MIN | SWT.MAX | SWT.RESIZE);
 		
 		this.dirct = direct;
+		
 		this.dMeta = dMeta;
+		if(dMeta == null)
+		{
+			MessageDialog.openError(parent, "Error", "Directive Meta is null!");
+		}
+		
 		if(this.dirct != null)
 		{
 			List<Parameter> params = new ArrayList<Parameter>();
@@ -81,7 +88,7 @@ public class DirectiveInput extends Dialog {
 				String strClassName = pMeta.getClassName();
 				if(strClassName.equals("OptionIntParamInput"))
 				{
-					OptionIntParamInput oppInput = new OptionIntParamInput(composite, SWT.NONE, pMeta);
+					OptionIntParamInput oppInput = new OptionIntParamInput(composite, SWT.NONE, pMeta, this);
 					oppInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
 					gridDataList_opp.verticalSpan=1;
@@ -96,7 +103,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("OptionStringParamInput"))
 				{
-					OptionStringParamInput ospInput = new OptionStringParamInput(composite, SWT.NONE, pMeta);
+					OptionStringParamInput ospInput = new OptionStringParamInput(composite, SWT.NONE, pMeta, this);
 				    ospInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_osp=new GridData(GridData.FILL_BOTH);
 					gridDataList_osp.verticalSpan=1;
@@ -110,7 +117,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("IntParamInput"))
 				{
-					IntParamInput ipInput = new IntParamInput(composite, SWT.NONE, pMeta);
+					IntParamInput ipInput = new IntParamInput(composite, SWT.NONE, pMeta, this);
 				    ipInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_ip=new GridData(GridData.FILL_BOTH);
 					gridDataList_ip.verticalSpan=1;
@@ -124,7 +131,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("StringParamInput"))
 				{
-					StringParamInput strpInput = new StringParamInput(composite, SWT.NONE, pMeta);
+					StringParamInput strpInput = new StringParamInput(composite, SWT.NONE, pMeta, this);
 					strpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_strp=new GridData(GridData.FILL_BOTH);
 					gridDataList_strp.verticalSpan=1;
@@ -138,7 +145,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("SelectParamInput"))
 				{
-					SelectParamInput slctpInput = new SelectParamInput(composite, SWT.NONE, pMeta);
+					SelectParamInput slctpInput = new SelectParamInput(composite, SWT.NONE, pMeta, this);
 					slctpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_slctp=new GridData(GridData.FILL_BOTH);
 					gridDataList_slctp.verticalSpan=1;
@@ -152,7 +159,7 @@ public class DirectiveInput extends Dialog {
 				}
 				else if(strClassName.equals("TagParamInput"))
 				{
-					TagParamInput tagpInput = new TagParamInput(composite, SWT.NONE, pMeta);
+					TagParamInput tagpInput = new TagParamInput(composite, SWT.NONE, pMeta, this);
 					tagpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 					GridData gridDataList_tagp=new GridData(GridData.FILL_BOTH);
 					gridDataList_tagp.verticalSpan=1;
@@ -167,6 +174,7 @@ public class DirectiveInput extends Dialog {
 				
 				i++;
 			}
+			
 		}
 		
 		Label tm = new Label(composite, SWT.NONE);
@@ -175,7 +183,7 @@ public class DirectiveInput extends Dialog {
 		gridDataList_tm.verticalSpan=1;
 		tm.setLayoutData(gridDataList_tm);
 		
-		Label dirctString = new Label(composite, SWT.NONE);
+		dirctString = new Label(composite, SWT.BORDER);
 		dirctString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		GridData gridDataList_drctstr=new GridData(GridData.FILL_BOTH);
 		gridDataList_drctstr.verticalSpan=1;
@@ -183,7 +191,11 @@ public class DirectiveInput extends Dialog {
 		
 		if(dirct != null)
 		{
-			dirctString.setText((dirct.toString()).trim());
+			dirctString.setText("Directive: " + (dirct.toString()).trim());
+		}
+		else
+		{
+			dirctString.setText("Directive: " + dMeta.getName() + " ;");
 		}
 		
 	    return composite;
@@ -220,15 +232,19 @@ public class DirectiveInput extends Dialog {
 		}
 		for(ParamInput pinpt : listParamInput)
 		{
-			valueParams.add(pinpt.getParameter());
+			Parameter tmParam = pinpt.getParameter();
+			if(tmParam != null)
+			{
+				valueParams.add(tmParam);
+			}
 		}
 		
+		String dirctStr = dMeta.getName();//dirct.getName();
 		if(valueParams!=null && !valueParams.isEmpty())
 		{
 			Parameter param = null;
 			int count = valueParams.size();
 			int i = 0;
-			String dirctStr = dirct.getName(); 
 			while(i < count)
 			{
 				param = valueParams.get(i);
@@ -236,8 +252,15 @@ public class DirectiveInput extends Dialog {
 				i++;
 			}
 			dirctStr = dirctStr + ";";
-			dirctStr = dirctStr.trim();
-			dirctString.setText(dirctStr);
+		}
+		dirctStr = dirctStr.trim();
+		if(!dirctStr.endsWith(";"))
+		{
+			dirctStr = dirctStr + " ;";
+		}
+		if(dirctString!=null)
+		{
+			dirctString.setText("Directive: " + dirctStr);
 		}
 	}
 	

@@ -12,7 +12,7 @@
 <directive name="debug_connection"  tips="Enables debugging log for selected client connections."  scope="events"  group="core"  reused="true" >
 <param class="StringParamInput"  tips="similar to '127.0.0.1' or 'localhost' etc." />
 </directive>
-<directive name="debug_points"  tips="Is used for debugging."  scope="main"  group="core" >
+<directive name="debug_points"  tips="is used for debugging."  scope="main"  group="core" >
 <param class="SelectParamInput"  items="abort:stop" />
 </directive>
 <directive name="error_log"  tips="Configures logging"  scope="http:server:location"  group="basic"  reused="true" >
@@ -23,7 +23,7 @@
 <param class="StringParamInput"  tips="This parameter defines a file that will store the log. The special value stderr selects the standard error file. Logging to syslog can be configured by specifying the ��syslog:�� prefix." />
 <param class="SelectParamInput"  items="debug:info:notice:warn:error:crit:alert:emerg"  tips="This parameter determines the level of logging, optional." />
 </directive>
-<directive name="env"  tips="This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables."  scope="main"  group="core"  reused="true" >
+<directive name="env"  tips="This directive allows preserving some of the inherited variables, changing their values, or creating new environment variables."  scope="main "  group="core"  reused="true" >
 <param class="StringParamInput"  tips="Like 'MALLOC_OPTIONS' or 'PERL5LIB=/data/modules' " />
 </directive>
 <block name="events"  tips="Provides the configuration file context in which the directives that affect connection processing are specified"  scope="main"  group="core"  reused="true" ></block>
@@ -89,16 +89,16 @@
 <param class="StringParamInput" />
 </directive>
 <directive name="access_log"  tips="Sets the path, format, and configuration for a buffered log write "  scope="http:server:location:finlocatio:limit_except"  group="basic"  reused="true" >
-<param class="StringParamInput"  tips="" />
+<param class="StringParamInput"  tips="An empty string means the value is 'off' " />
 </directive>
 <directive name="log_format"  tips="Specifies log format."  scope="http"  group="basic"  reused="true" >
 <param class="StringParamInput"  tips="Like 'combined'" />
 <param class="StringParamInput"  tips="Like '$remote_addr - $remote_user' " />
 </directive>
 <directive name="open_log_file_cache"  tips="Defines a cache that stores the file descriptors of frequently used logs whose names contain variables. "  scope="http:server:location"  group="gzip" >
-<param class="OptionIntParamInput"  name="max"  min="-1"  max="9999999"  units=""  tips="'-1' is off i.e. open_log_file_cache off" />
+<param class="OptionIntParamInput"  name="max"  min="0"  max="9999999"  units=""  tips="'0' is off" />
 <param class="OptionIntParamInput "  name="inactive"  min="1"  max="9999999"  units="s"  default="10s"  tips="optional" />
-<param class="OptionIntParamInput "  name="min_uses"  min="1"  max="9999999"  units=""  default="1"  tips="optional" />
+<param class="OptionIntParamInput "  name="min_user"  min="1"  max="9999999"  units=""  default="1"  tips="optional" />
 <param class="OptionIntParamInput "  name="valid"  min="1"  max="9999999"  units="s:m"  default="60s"  tips="optional" />
 </directive>
 <directive name="add_before_body"  tips="Adds the text returned as a result of processing a given subrequest before the response body."  scope="http:server:location"  group="others" >
@@ -158,10 +158,10 @@
 <directive name="default_type"  tips="Defines the default MIME type of a response. Mapping of file name extensions to MIME types can be set with the types directive. "  scope=" http:server:location"  group="basic"  reused="false" >
 <param class="StringParamInput"  tips="" />
 </directive>
-<directive name="directio"  tips="Enables the use of the O_DIRECT flag (FreeBSD, Linux), the F_NOCACHE flag (Mac OS X), or the directio() function (Solaris), when reading files that are larger than or equal to the specified size-------appeared in version 0.7.7"  scope="http:server:location"  group="gzip" >
+<directive name="directio"  tips="Enables the use of the O_DIRECT flag (FreeBSD, Linux), the F_NOCACHE flag (Mac OS X), or the directio() function (Solaris), when reading files that are larger than or equal to the specified size-------appeared in version 0.7.7"  scope="http:server :location"  group="gzip" >
 <param class="OptionIntParamInput "  name="max"  min="0"  max="9999999"  units="m"  tips="'0' means off" />
 </directive>
-<directive name="directio_alignment"  tips="Sets the alignment for directio----appeared in version 0.8.11"  scope="http:server:location"  group="gzip" >
+<directive name="direction_alignment"  tips="Sets the alignment for directio----appeared in version 0.8.11"  scope="http:server:location"  group="gzip" >
 <param class="OptionIntParamInput "  name="max"  min="0"  max="9999999"  units="m" />
 </directive>
 <directive name="disable_symlinks"  tips="Determines how symbolic links should be treated when opening files------appeared in version 1.1.15"  scope="http:server:location"  group="gzip" >
@@ -222,7 +222,7 @@
 <directive name="log_subrequest"  tips="Enables or disables logging of subrequests into access_log."  scope="http:server:location "  group="others" >
 <param class="SelectParamInput"  items="off:on" />
 </directive>
-<directive name="max_ranges"  tips="Limits the maximum allowed number of ranges in byte-range requests----- appeared in version 1.1.2"  scope="http:server:location"  group="basic" >
+<directive name="max_rangers"  tips="Limits the maximum allowed number of ranges in byte-range requests----- appeared in version 1.1.2"  scope="http:server:location"  group="basic" >
 <param class="IntParamInput"  min="0"  max="9999999" />
 </directive>
 <directive name="merge_slashes"  tips="Enables or disables compression of two or more adjacent slashes in a URI into a single slash. "  scope="http:server "  group="others" >
@@ -245,10 +245,6 @@
 </directive>
 <directive name="open_file_cache_valid"  tips="Sets a time after which open_file_cache elements should be validated. "  scope="http:server:location "  group="gzip" >
 <param class="IntParamInput"  min="1"  max="9999999"  units="s" />
-</directive>
-<directive name="output_buffers"  tips="Sets the number and size of buffers used for reading a response from a disk. "  scope="http:server:location "  group="gzip" >
-<param class="IntParamInput"  min="1"  max="9999999"  units="" />
-<param class="IntParamInput"  min="1"  max="9999999"  units="k" />
 </directive>
 <directive name="port_in_redirect"  tips="Enables or disables specifying the port in redirects issued by nginx. "  scope="http:server:location"  group="basic" >
 <param class="SelectParamInput"  items="off:on" />
@@ -357,7 +353,7 @@
 <directive name="auth_basic"  tips="Enables validation of user name and password using the 'HTTP Basic Authentication' protocol."  scope="http:server:location:limit_except"  group="sercurity" >
 <param class="StringParamInput"  tips="String or off" />
 </directive>
-<directive name="auth_basic_user_file"  tips="Specifies a file that keeps user names and passwords"  scope="http:server:location:limit_except "  group="sercurity" >
+<directive name="auth_basic_user"  tips="Specifies a file that keeps user names and passwords"  scope="http:server:location:limit_except "  group="sercurity" >
 <param class="StringParamInput" />
 </directive>
 <directive name="auth_http"  tips="Sets the URL of the HTTP authentication server. "  scope="mail:erverinmai"  group="sercurity" >
@@ -402,7 +398,7 @@
 <directive name="rewrite"  tips="If the specified regular expression matches a URI, the URI is changed as specified in the replacement string."  scope="location:server:if"  group="sercurity" >
 <param class="StringParamInput"  tips="regular expression" />
 <param class="StringParamInput" />
-<param class="SelectParamInput"  items="last:break:redirect:permanent"  tips="optional" />
+<param class="SelectParamInput"  items="last:break:redirect"  tips="optional" />
 </directive>
 <directive name="rewrite_log"  tips="Enables or disables logging of ngx_http_rewrite_module module directives processing results into the error_log at the notice level"  scope="http:server:location:if"  group="sercurity" >
 <param class="SelectParamInput"  items="on:off" />
@@ -605,6 +601,12 @@
 <block name="geo"  tips="Describes the dependency of values of the specified variable on the client IP address. "  scope="http"  group="others" >
 <param class="StringParamInput"  tips="optional,$address" />
 <param class="StringParamInput "  tips="$variable" />
+<param class="TagParamInput"  name="delete " />
+<param class="TagParamInput"  name="default " />
+<param class="TagParamInput"  name="include" />
+<param class="TagParamInput"  name="proxy" />
+<param class="TagParamInput"  name="proxy_recursive" />
+<param class="TagParamInput"  name="ranges " />
 </block>
 <directive name="geoip_country"  tips="Specifies a database used to determine the country depending on the client IP address."  scope="http"  group="others" >
 <param class="StringParamInput"  tips="file" />
@@ -696,7 +698,7 @@
 <param name="domain"  class="OptionStringParamInput"  tips="optional" />
 <param name="path"  class="OptionStringParamInput"  tips="optional" />
 </directive>
-<directive name="upstream_conf"  scope="location"  tips="Turns on the HTTP interface of upstream configuration in the surrounding location. "  group="basic" ></directive>
+<directive name="upstream_conf "  scope="location"  tips="Turns on the HTTP interface of upstream configuration in the surrounding location. "  group="basic" ></directive>
 <directive name="hls"  scope="location"  tips="Turns on HLS streaming in the surrounding location."  group="others" ></directive>
 <directive name="hls_buffers"  scope="http:server:location"  tips="Sets the maximum number and size of buffers that are used for reading and writing data frames. "  group="others" >
 <param class="IntParamInput"  min="1"  max="9999"  units="" />
@@ -854,7 +856,7 @@
 <directive name="perl"  tips="Sets a Perl handler for the given location."  scope="location"  group="others" >
 <param class="StringParamInput"  tips="Like module::function:'sub {  }' " />
 </directive>
-<directive name="perl_modules"  tips="Sets an additional path for Perl modules"  scope="http"  group="others" >
+<directive name="perl_module"  tips="Sets an additional path for Perl modules"  scope="http"  group="others" >
 <param class="StringParamInput"  tips="path" />
 </directive>
 <directive name="perl_require"  tips="Defines the name of a module that will be loaded during each reconfiguration."  scope="http"  group="others" >
@@ -877,7 +879,7 @@
 <param class="IntParamInput"  min="1"  max="99999"  units="" />
 <param class="StringParamInput"  default="4k|8k"  tips="Like 4k|8k" />
 </directive>
-<directive name="proxy_busy_buffers_size"  tips="limits the total size of buffers that can be busy sending a response to the client while the response is not yet fully read"  scope="http:server:location"  group="proxy" >
+<directive name="proxy_buffers_size"  tips="limits the total size of buffers that can be busy sending a response to the client while the response is not yet fully read"  scope="http:server:location"  group="proxy" >
 <param class="StringParamInput"  tips="Like 8k|16k" />
 </directive>
 <directive name="proxy_cache"  tips="Enables or disables buffering of responses from the proxied server."  scope="http:server:location"  group="proxy" >
@@ -901,7 +903,7 @@
 <param class="TagParamInput"  name="POST" />
 <param class="TagParamInput"  name="..." />
 </directive>
-<directive name="proxy_cache_min_uses"  tips="Sets the number of requests after which the response will be cached. "  scope="http:server:location"  group="proxy" >
+<directive name="proxy_cache_min_users"  tips="Sets the number of requests after which the response will be cached. "  scope="http:server:location"  group="proxy" >
 <param class="IntParamInput"  min="1"  max="99999"  units="" />
 </directive>
 <directive name="proxy_cache_path"  tips="Sets the path and other parameters of a cache."  scope="http"  group="proxy" >
@@ -1259,7 +1261,11 @@
 <directive name="proxy_timeout"  scope="mail:erverinmai"  group="proxy" >
 <param class="IntParamInput"  min="1"  max="999999"  units="h" />
 </directive>
+<<<<<<< HEAD
+<directive name="xclient "  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:mserve"  group="client" >
+=======
 <directive name="xclient"  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:erverinmai"  group="client" >
+>>>>>>> refs/remotes/github/master
 <param class="SelectParamInput"  items="on:off " />
 </directive>
 <directive name="ssl"  tips="Enables the SSL/TLS protocol for the given server."  scope="mail:erverinmai"  group="sercurity" >

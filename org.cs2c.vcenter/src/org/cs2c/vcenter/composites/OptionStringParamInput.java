@@ -3,6 +3,7 @@ package org.cs2c.vcenter.composites;
 import org.cs2c.nginlib.config.Option;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecOption;
+import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -18,21 +19,22 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class OptionStringParamInput extends Composite implements ParamInput {
 
-	String strParamName = "";
-	String strValue = "";
-	String tips = "";
+	private String strParamName = "";
+	private String strValue = "";
+	private String tips = "";
 	
-	Button ctlCheckButton;
-	Label ctlLabel;
-	Text ctlText;
+	private Button ctlCheckButton;
+	private Label ctlLabel;
+	private Text ctlText;
 	
-	boolean isChecked = false;
+	private boolean isChecked = false;
 	
-	ParameterMeta pMeta;
-	Option opt = new RecOption();
+	private ParameterMeta pMeta;
+	private Option opt = new RecOption();
 
+	private DirectiveInput parentDialog = null;
 	
-	public OptionStringParamInput(Composite parent, int style, ParameterMeta meta/*, Parameter param*/) {
+	public OptionStringParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg/*, Parameter param*/) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -53,6 +55,9 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 					isChecked = true;
 					ctlText.setEnabled(true);
 				}
+				
+				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -65,12 +70,14 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		ctlText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
 		
 		this.pMeta = meta;
+		this.parentDialog = parentDlg;
 		
 		strParamName = this.pMeta.getName();
 		ctlLabel.setText(strParamName+" = ");

@@ -3,6 +3,7 @@ package org.cs2c.vcenter.composites;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
+import org.cs2c.vcenter.dialog.DirectiveInput;
 import org.cs2c.vcenter.metadata.ParameterMeta;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -17,21 +18,22 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class StringParamInput extends Composite implements ParamInput {
 	
-	String strValue = "";
-	String tips = "";
+	private String strValue = "";
+	private String tips = "";
 	
-	Text ctlText;
+	private Text ctlText;
 	
-	Button ctlCheckButton;
+	private Button ctlCheckButton;
 	
-	boolean isChecked = false;
+	private boolean isChecked = false;
 	
-	ParameterMeta pMeta;
+	private ParameterMeta pMeta;
 	
-	StringParameter strParam = new RecStringParameter();
+	private StringParameter strParam = new RecStringParameter();
 
+	private DirectiveInput parentDialog = null;
 
-	public StringParamInput(Composite parent, int style, ParameterMeta meta) {
+	public StringParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 
 		this.layout(true);
@@ -52,6 +54,9 @@ public class StringParamInput extends Composite implements ParamInput {
 					isChecked = true;
 					ctlText.setEnabled(true);
 				}
+				
+				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -61,12 +66,14 @@ public class StringParamInput extends Composite implements ParamInput {
 		ctlText.addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				UpdateParam();
+				parentDialog.updateDirctString();
 			}
 		});
 		ctlText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 	
 		
 		this.pMeta = meta;
+		this.parentDialog = parentDlg;
 		
 		isChecked = false;
 		ctlText.setEnabled(false);
