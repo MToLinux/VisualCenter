@@ -7,14 +7,18 @@ import java.util.*;
 
 import org.cs2c.nginlib.RemoteException;
 import org.cs2c.vcenter.views.models.*;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * @author Administrator
  *
  */
 public class NginxTreeContentProvider implements ITreeContentProvider {
+	Shell shell = null;
 
 	/**
 	 * 
@@ -27,8 +31,6 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -36,8 +38,6 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 	 */
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/* (non-Javadoc)
@@ -60,7 +60,14 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 			children = pnode.getChildren();
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+		}catch (Exception ex) {
+			shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
+			ex.printStackTrace();
 		}
+
 		if(children==null){
 			return null;
 		}
@@ -85,8 +92,14 @@ public class NginxTreeContentProvider implements ITreeContentProvider {
 		try {
 			return node.hasChildren();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell, "RemoteException", e.getMessage());
+			return false;
+		}catch (Exception ex) {
+			shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
+			ex.printStackTrace();
 			return false;
 		}
 	}

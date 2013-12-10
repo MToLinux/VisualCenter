@@ -63,9 +63,6 @@ public class DeployAction implements IObjectActionDelegate {
 			ex.printStackTrace();
 		}
 	}
-//	private void showMessage(String message) {
-//		this.meview.showMessage(message);
-//	}
 
 	private void DeployToServer() throws RemoteException, IOException{
 		String rootvalue = null;

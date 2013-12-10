@@ -1261,11 +1261,7 @@
 <directive name="proxy_timeout"  scope="mail:erverinmai"  group="proxy" >
 <param class="IntParamInput"  min="1"  max="999999"  units="h" />
 </directive>
-<<<<<<< HEAD
-<directive name="xclient "  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:mserve"  group="client" >
-=======
 <directive name="xclient"  tips="Enables or disables issuing of the XCLIENT command on connection to the SMTP backend. "  scope="mail:erverinmai"  group="client" >
->>>>>>> refs/remotes/github/master
 <param class="SelectParamInput"  items="on:off " />
 </directive>
 <directive name="ssl"  tips="Enables the SSL/TLS protocol for the given server."  scope="mail:erverinmai"  group="sercurity" >

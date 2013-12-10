@@ -53,6 +53,7 @@ public class NewUpstreamAction implements IObjectActionDelegate {
 			}
 
 		}catch (Exception ex) {
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 			ex.printStackTrace();
 		}
 	}

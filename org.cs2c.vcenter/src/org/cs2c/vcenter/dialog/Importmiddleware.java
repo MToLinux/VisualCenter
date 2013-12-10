@@ -80,11 +80,11 @@ public class Importmiddleware extends Dialog {
 		
 		combo_host = new Combo(container, SWT.NONE);
 		combo_host.setEnabled(true);
-		combo_host.addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				Setmiddlewarename();
-			}
-		});
+//		combo_host.addModifyListener(new ModifyListener() {
+//			public void modifyText(ModifyEvent e) {
+//				Setmiddlewarename();
+//			}
+//		});
 		GridData gd_combo_host = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_combo_host.widthHint = 178;
 		combo_host.setLayoutData(gd_combo_host);
@@ -148,11 +148,6 @@ public class Importmiddleware extends Dialog {
 				middlewarename=null;
 			}
 		});
-	}
-	
-	@Override
-	protected void setShellStyle(int newShellStyle) {
-	    super.setShellStyle(newShellStyle ^ SWT.CLOSE);
 	}
 
 	/**
