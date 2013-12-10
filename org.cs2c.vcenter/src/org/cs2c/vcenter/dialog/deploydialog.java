@@ -142,11 +142,11 @@ public class deploydialog extends Dialog {
 	}
 	
 	private void SetOkEnable() {
-		LocalFilename = text_file.getText().trim();
-		RemotePath = txtRemotepath.getText().trim();
+		String strLocalFilename = text_file.getText().trim();
+		String strRemotePath = txtRemotepath.getText().trim();
 		
-		if((null != LocalFilename)&&(null != RemotePath)&&
-			("" != LocalFilename)&&("" != RemotePath)){
+		if((null != strLocalFilename)&&(null != strRemotePath)&&
+			("" != strLocalFilename)&&("" != strRemotePath)){
 			button_ok.setEnabled(true);
 		}else{
 			button_ok.setEnabled(false);
@@ -165,6 +165,7 @@ public class deploydialog extends Dialog {
 		button_ok.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
+				//check file
 				LocalFilename = text_file.getText();
 				RemotePath = txtRemotepath.getText();
 			}
@@ -179,11 +180,6 @@ public class deploydialog extends Dialog {
 				RemotePath = null;
 			}
 		});
-	}
-
-	@Override
-	protected void setShellStyle(int newShellStyle) {
-	    super.setShellStyle(newShellStyle ^ SWT.CLOSE);
 	}
 
 	/**

@@ -139,6 +139,11 @@ public class DeployAction implements IObjectActionDelegate {
 		Controller orc = null;
 		orc = this.element.getMiddlewareFactory().getController();
 		File zipfile = new File(LocalFilename);
+		if(!zipfile.exists()){
+			MessageDialog.openInformation(shell, "Information", "File "+LocalFilename+" is not exist, please select zip file.");
+			return;
+		}
+		
 		if (null != zipfile){
 //			System.out.println("RemotePath:"+RemotePath);
 			orc.deploy(zipfile, RemotePath);
