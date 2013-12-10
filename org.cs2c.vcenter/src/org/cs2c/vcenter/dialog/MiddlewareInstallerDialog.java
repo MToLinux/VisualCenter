@@ -14,7 +14,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.Image;
+
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -50,14 +50,10 @@ public class MiddlewareInstallerDialog extends Dialog {
 	 */
 	public MiddlewareInstallerDialog(Shell parentShell) {
 		super(parentShell);
-		try {
-			hostXml = HostManager.getInstance();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			MessageDialog.openError(getShell(), "Error", e.getMessage());
-		}
 		
+			hostXml = HostManager.getInstance();
+		
+
 	}
 
 	/**
@@ -210,9 +206,15 @@ public class MiddlewareInstallerDialog extends Dialog {
 						}
 
 						try {
-							if (hostXml.insertHostInfo(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml", hostInfo)) {
+							if (hostXml.insertHostInfo(
+									FileLocator.toFileURL(
+											Platform.getBundle(
+													"org.cs2c.vcenter")
+													.getEntry("")).getPath()
+											+ "conf/host.xml", hostInfo)) {
 								MessageDialog
-										.openInformation(getParentShell(), "Note",
+										.openInformation(getParentShell(),
+												"Note",
 												"Install successfully and the host information has been written to host.xml!");
 							} else {
 								MessageDialog
@@ -224,7 +226,8 @@ public class MiddlewareInstallerDialog extends Dialog {
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-							MessageDialog.openError(getShell(), "Error", e1.getMessage());
+							MessageDialog.openInformation(getShell(), "IOException",
+									e1.getMessage());
 						}
 						setReturnCode(OK);
 						close();
@@ -268,15 +271,14 @@ public class MiddlewareInstallerDialog extends Dialog {
 		return new Point(435, 298);
 	}
 
-	
 	@Override
 	protected void configureShell(Shell newShell) {
 		// TODO Auto-generated method stub
 		super.configureShell(newShell);
 		newShell.setText("Install Middleware");
-		
 
 	}
+
 	private boolean contentIsValid() {
 
 		if (text.getText().isEmpty()) {
@@ -300,7 +302,8 @@ public class MiddlewareInstallerDialog extends Dialog {
 			return false;
 		}
 		if (text_4.getText().isEmpty()) {
-			MessageDialog.openError(getParentShell(), "Error", "Home path is empty");
+			MessageDialog.openError(getParentShell(), "Error",
+					"Home path is empty");
 			return false;
 		}
 		if (text_5.getText().isEmpty()) {

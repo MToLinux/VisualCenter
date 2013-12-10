@@ -13,11 +13,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.osgi.service.datalocation.Location;
+import org.eclipse.swt.widgets.Shell;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -31,53 +30,35 @@ public class HostManager {
 	DocumentBuilderFactory builderFactory = DocumentBuilderFactory
 			.newInstance();
 	Document document = null;
-	static String strPath;
-	
-	private static class HostManagerHoder 
-	{
-		
-		private static HostManager instance = new HostManager(strPath);
+
+	private static class HostManagerHoder {
+
+		private static HostManager instance = new HostManager();
 	}
 
-	public static HostManager getInstance() throws IOException {
+	public static HostManager getInstance() {
+		return HostManagerHoder.instance;
+	}
+
+	private HostManager() {
+		String filePath = null;
 		try {
-			strPath=FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml";
-			//System.out.println("333333"+strPath);
-		} catch (IOException e) {
+			filePath = FileLocator.toFileURL(
+					Platform.getBundle("org.cs2c.vcenter").getEntry(""))
+					.getPath()
+					+ "conf/host.xml";
+			document = builderFactory.newDocumentBuilder().parse(filePath);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw e;
+			MessageDialog.openInformation(new Shell(), "Exception",
+					e.getMessage());
+			return;
 		}
-
-		return HostManagerHoder.instance;
-
-	}
-
-	private HostManager(String filePath) {
-		document = parseXml(filePath);
 	}
 
 	public Document getDocument() {
 
-		return document;
-	}
-
-	// Load and parse XML file into DOM
-	public Document parseXml(String filePath) {
-		Document document = null;
-		try {
-			// DOM parser instance
-			DocumentBuilder builder = builderFactory.newDocumentBuilder();
-			// parse an XML file into a DOM tree
-			document = builder.parse(new File(filePath));
-
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return document;
 	}
 
@@ -123,7 +104,6 @@ public class HostManager {
 				hostInfo.setManagerUserName(element.getAttribute("musername"));
 				hostInfo.setManagerPassWord(element.getAttribute("mpassword"));
 				return hostInfo;
-
 			}
 		}
 		return null;
@@ -153,7 +133,6 @@ public class HostManager {
 				}
 			}
 		}
-		// System.out.println("112");
 		return false;
 	}
 
@@ -305,5 +284,5 @@ public class HostManager {
 		}
 		return flag;
 	}
-}
 
+}

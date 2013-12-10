@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.cs2c.vcenter.Activator;
 import org.cs2c.vcenter.metadata.HostInfo;
 import org.cs2c.vcenter.metadata.HostManager;
 import org.eclipse.core.runtime.FileLocator;
@@ -188,7 +187,9 @@ public class HostsEditDialog extends Dialog {
 								hostXml.insertHostInfo(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml", newHostInfo);
 							} catch (IOException e1) {
 								// TODO Auto-generated catch block
-								MessageDialog.openError(null, "Error", e1.getMessage());
+								e1.printStackTrace();
+								MessageDialog.openInformation(getShell(), "IOException", e1.getMessage());
+								return;
 							}
 							setReturnCode(OK);
 							close();
@@ -213,7 +214,8 @@ public class HostsEditDialog extends Dialog {
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-							MessageDialog.openError(getShell(), "Error", e1.getMessage());
+							MessageDialog.openInformation(getShell(),
+									"IOException", e1.getMessage());
 							return;
 						}
 						if (result == 3) {
