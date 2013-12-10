@@ -1,6 +1,5 @@
 package org.cs2c.vcenter.dialog;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.cs2c.vcenter.metadata.HostManager;
@@ -110,9 +109,8 @@ public class Importmiddleware extends Dialog {
 							, combo_host.getText(), HostManager.getInstance());
 					addhostDialog.open();
 
-				} catch (IOException e1) {
+				} catch (Exception e1) {
 					MessageDialog.openInformation(shell, "Exception", e1.getMessage());
-
 					e1.printStackTrace();
 				}
 			}
