@@ -17,38 +17,43 @@ import javax.xml.xpath.XPathFactory;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class MetaManager {
-	static DocumentBuilderFactory domFactory = null;
-	static Document doc = null;
+	 DocumentBuilderFactory domFactory = DocumentBuilderFactory
+				.newInstance();
+	 Document doc = null;
 
 	private static class MetaManagerHoder {
-		
-		private static MetaManager instance = new MetaManager();
-		
+		private static MetaManager instance= new MetaManager();
+
 	}
 
-	public static MetaManager getInstance() throws Exception {
-		try {
-			doc = domFactory.newDocumentBuilder().parse(FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/element.xml");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			
-			e1.printStackTrace();
-			throw e1;
-		}
+	public static MetaManager getInstance ()  {
+
 		return MetaManagerHoder.instance;
 	}
 
-	private MetaManager()  {
-		// System.out.println("create metamanager");
-		domFactory = DocumentBuilderFactory.newInstance();
-		domFactory.setNamespaceAware(true); // never forget this!
+	private MetaManager()    {
 
+		domFactory.setNamespaceAware(true); // never forget this!
+		try {
+			doc = domFactory.newDocumentBuilder().parse(FileLocator
+					.toFileURL(
+							Platform.getBundle("org.cs2c.vcenter")
+									.getEntry("")).getPath()
+					+ "conf/element.xml");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			MessageDialog.openInformation(null, "Exception", e.getMessage());
+			return;
+		}
 	}
 
 	public BlockMeta getBlockMeta(String blockName) {
@@ -414,55 +419,76 @@ public class MetaManager {
 		} else
 			return "";
 	}
-	/*
-	 * private static void printblock(List<BlockMeta> blocklist) {
-	 * System.out.println("blocknum="+blocklist.size()); } private static void
-	 * printblock1(List<BlockMeta> blocklist) { for(int
-	 * i=0;i<blocklist.size();i++) {
-	 * System.out.println("name="+blocklist.get(i).getName());
-	 * System.out.println("tips="+blocklist.get(i).getTips());
-	 * System.out.println("reused="+blocklist.get(i).getReused()); }
-	 * 
-	 * } private static void printdirective(List<DirectiveMeta> directivelist) {
-	 * 
-	 * System.out.println("directivenum="+directivelist.size()); } private
-	 * static void printdirective1(List<DirectiveMeta> directivelist) { for(int
-	 * i=0;i<directivelist.size();i++) {
-	 * System.out.println("name="+directivelist.get(i).getName());
-	 * System.out.println("tips="+directivelist.get(i).getTips());
-	 * System.out.println("scope="+directivelist.get(i).getScope());
-	 * System.out.println("resued="+directivelist.get(i).getReused()); for(int
-	 * j=0;j<directivelist.get(i).getOptions().size();j++) {
-	 * //System.out.println
-	 * //("class="+directivelist.get(i).getOptions().get(j).getClassName());
-	 * //System //
-	 * .out.println("name="+directivelist.get(i).getOptions().get(j).getName());
-	 * 
-	 * //System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin
-	 * //());
-	 * //System.out.println("max="+directivelist.get(i).getOptions().get(j). //
-	 * getMax());
-	 * //System.out.println("units="+directivelist.get(i).getOptions() //
-	 * .get(j).getUnits());
-	 * //System.out.println("items="+directivelist.get(i).getOptions //
-	 * ().get(j).getItems());
-	 * 
-	 * } }
-	 * 
-	 * 
-	 * } public static void main(String[] args) { MetaManager manager =
-	 * MetaManager.getInstance(); BlockMeta blockMetaResult = new BlockMeta();
-	 * blockMetaResult = manager.getBlockMeta("if","http");
-	 * System.out.println(blockMetaResult.getGroups()); for(int
-	 * i=0;i<blockMetaResult.getDirectiveMeta("fastcgi").size();i++) {
-	 * if(blockMetaResult
-	 * .getDirectiveMeta("fastcgi").get(i).getName().equals("fastcgi_cache_bypass"
-	 * )) {
-	 * System.out.println(blockMetaResult.getDirectiveMeta("fastcgi").get(i)
-	 * .getOptions().toString()); } } for(int
-	 * i=0;i<blockMetaResult.getGroups().size();i++) {
-	 * printdirective1(blockMetaResult
-	 * .getDirectiveMeta(blockMetaResult.getGroups().get(i))); } }
-	 */
+
+	private static void printblock(List<BlockMeta> blocklist) {
+		System.out.println("blocknum=" + blocklist.size());
+	}
+
+	private static void printblock1(List<BlockMeta> blocklist) {
+		for (int i = 0; i < blocklist.size(); i++) {
+			System.out.println("name=" + blocklist.get(i).getName());
+			System.out.println("tips=" + blocklist.get(i).getTips());
+			System.out.println("reused=" + blocklist.get(i).getReused());
+		}
+
+	}
+
+	private static void printdirective(List<DirectiveMeta> directivelist) {
+
+		System.out.println("directivenum=" + directivelist.size());
+	}
+
+	private static void printdirective1(List<DirectiveMeta> directivelist) {
+		for (int i = 0; i < directivelist.size(); i++) {
+			System.out.println("name=" + directivelist.get(i).getName());
+			System.out.println("tips=" + directivelist.get(i).getTips());
+			System.out.println("scope=" + directivelist.get(i).getScope());
+			System.out.println("resued=" + directivelist.get(i).getReused());
+			for (int j = 0; j < directivelist.get(i).getOptions().size(); j++) {
+				// System.out.println
+				// ("class="+directivelist.get(i).getOptions().get(j).getClassName());
+				// System
+				// .out.println("name="+directivelist.get(i).getOptions().get(j).getName());
+
+				// System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin
+				// ());
+				// System.out.println("max="+directivelist.get(i).getOptions().get(j).
+				// getMax());
+				// System.out.println("units="+directivelist.get(i).getOptions()
+				// //
+				// .get(j).getUnits());
+				// System.out.println("items="+directivelist.get(i).getOptions
+				// //
+				// ().get(j).getItems());
+
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+		MetaManager manager;
+		try {
+			manager = MetaManager.getInstance();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return;
+		}
+		BlockMeta blockMetaResult = new BlockMeta();
+		blockMetaResult = manager.getBlockMeta("if", "http");
+		System.out.println(blockMetaResult.getGroups());
+		for (int i = 0; i < blockMetaResult.getDirectiveMeta("fastcgi").size(); i++) {
+			if (blockMetaResult.getDirectiveMeta("fastcgi").get(i).getName()
+					.equals("fastcgi_cache_bypass")) {
+				System.out.println(blockMetaResult.getDirectiveMeta("fastcgi")
+						.get(i).getOptions().toString());
+			}
+		}
+		for (int i = 0; i < blockMetaResult.getGroups().size(); i++) {
+			printdirective1(blockMetaResult.getDirectiveMeta(blockMetaResult
+					.getGroups().get(i)));
+		}
+	}
 
 }

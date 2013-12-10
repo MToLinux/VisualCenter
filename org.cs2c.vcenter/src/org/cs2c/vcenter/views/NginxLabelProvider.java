@@ -16,6 +16,7 @@ import org.cs2c.vcenter.views.models.UpstreamElement;
 import org.cs2c.vcenter.views.models.UpstreamInstanceElement;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
@@ -102,8 +103,10 @@ public class NginxLabelProvider implements ILabelProvider {
 		}catch(IOException e)
 		{
 			e.printStackTrace();
+			MessageDialog.openInformation(null,"IOException", e.getMessage());
+			return null;
 		}
-		return null;
+		
 	}
 
 	/* (non-Javadoc)

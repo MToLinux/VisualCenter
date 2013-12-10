@@ -7,7 +7,7 @@ import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.Image;
+
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -40,16 +40,9 @@ public class HostsManagerDialog extends Dialog {
 	 */
 	public HostsManagerDialog(Shell parentShell) {
 		super(parentShell);
-		try {
+		
 			hostXml = HostManager.getInstance();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			MessageDialog.openError(getShell(), "Error", e.getMessage());
-		}
-
-		// hostXml=org.cs2c.vcenter.Application.domparser;
-
+	
 	}
 
 	/**
@@ -152,11 +145,17 @@ public class HostsManagerDialog extends Dialog {
 				{
 					hostXml.deleteHostInfo(list.getSelection()[0]);
 					try {
-						hostXml.saveXml(hostXml.getDocument(), FileLocator.toFileURL(Platform.getBundle("org.cs2c.vcenter").getEntry("")).getPath()+"conf/host.xml");
+						hostXml.saveXml(
+								hostXml.getDocument(),
+								FileLocator.toFileURL(
+										Platform.getBundle("org.cs2c.vcenter")
+												.getEntry("")).getPath()
+										+ "conf/host.xml");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
-						MessageDialog.openError(getShell(), "Error", e1.getMessage());
+						MessageDialog.openInformation(getShell(),
+								"IOException", e1.getMessage());
 						return;
 					}
 					getHostsInfoFromXml();
@@ -204,7 +203,6 @@ public class HostsManagerDialog extends Dialog {
 		// TODO Auto-generated method stub
 		super.configureShell(newShell);
 		newShell.setText("Hosts Information");
-		
 
 	}
 
