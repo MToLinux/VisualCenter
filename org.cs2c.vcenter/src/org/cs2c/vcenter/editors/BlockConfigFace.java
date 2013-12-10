@@ -174,13 +174,7 @@ public class BlockConfigFace extends EditorPart implements ISaveablePart2 {
 	public void createPartControl(Composite parent) {
 		
 		MetaManager mmanager = null;
-		try {
-			mmanager = MetaManager.getInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-			MessageDialog.openError(new Shell(), "Error", e.getMessage());
-			return;
-		}
+		mmanager = MetaManager.getInstance();
 		this.bMeta = mmanager.getBlockMeta(this.blockMetaType);
 		this.blockGroups = this.bMeta.getGroups();
 		

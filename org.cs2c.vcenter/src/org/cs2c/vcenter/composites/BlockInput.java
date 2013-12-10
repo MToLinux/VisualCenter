@@ -399,13 +399,13 @@ public class BlockInput extends Composite {
 					
 					MetaManager mmanager = null;
 					BlockMeta subbMeta = null;
-					try {
+//					try {
 						mmanager = MetaManager.getInstance();
-					} catch (Exception e1) {
-						e1.printStackTrace();
-						MessageDialog.openError(getShell(), "Error", e1.getMessage());
-						return;
-					}
+//					} catch (Exception e1) {
+//						e1.printStackTrace();
+//						MessageDialog.openError(getShell(), "Error", e1.getMessage());
+//						return;
+//					}
 					String parentName = "";
 					if(bMeta != null)
 					{
