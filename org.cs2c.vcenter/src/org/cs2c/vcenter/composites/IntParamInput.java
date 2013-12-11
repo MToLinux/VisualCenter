@@ -47,7 +47,7 @@ public class IntParamInput extends BaseParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(3,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
@@ -77,7 +77,11 @@ public class IntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
 		ctlCheckButton.setText("");
 		
 		ctlSpinner = new Spinner(this,SWT.NONE);
@@ -87,7 +91,9 @@ public class IntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlSpinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gridDataListSP = new GridData(GridData.FILL_BOTH);
+		gridDataListSP.horizontalSpan=6;
+		ctlSpinner.setLayoutData(gridDataListSP);
 		
 		ctlCombo = new Combo(this,SWT.NONE);
 		ctlCombo.addModifyListener(new ModifyListener() {
@@ -96,8 +102,9 @@ public class IntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		
+		GridData gridDataListCMB = new GridData(GridData.FILL_BOTH);
+		gridDataListCMB.horizontalSpan=3;
+		ctlCombo.setLayoutData(gridDataListCMB);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;

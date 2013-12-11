@@ -1,7 +1,6 @@
 package org.cs2c.vcenter.dialog;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.cs2c.nginlib.config.Directive;
@@ -39,7 +38,6 @@ public class DirectiveInput extends Dialog {
 	private Label dirctTips = null;
 	private String dirctTipsStr = "";
 	
-	Hashtable<String, String> htParams = new Hashtable<String, String>();
 	
 	/**
 	 * @wbp.parser.constructor
@@ -73,10 +71,8 @@ public class DirectiveInput extends Dialog {
 	
 	private void AddParamInput(BaseParamInput input)
 	{
-		input.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
-		gridDataList_opp.verticalSpan=1;
-		input.setLayoutData(gridDataList_opp);
+		GridData gridDataList = new GridData(GridData.FILL_BOTH);
+		input.setLayoutData(gridDataList);
 	    
 		input.setInputData(initialParams);
 	    
@@ -140,25 +136,16 @@ public class DirectiveInput extends Dialog {
 			
 		}
 		
-		Label tm = new Label(composite, SWT.NONE);
-		tm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		GridData gridDataList_tm=new GridData(GridData.FILL_BOTH);
-		gridDataList_tm.verticalSpan=1;
-		tm.setLayoutData(gridDataList_tm);
-		
 		Label tmlDirctStr = new Label(composite, SWT.NONE);
-		tmlDirctStr.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		GridData gridDataList_tml=new GridData(GridData.FILL_BOTH);
 		gridDataList_tml.verticalAlignment = SWT.BOTTOM;
-		gridDataList_tm.verticalSpan=1;
 		tmlDirctStr.setLayoutData(gridDataList_tml);
 		tmlDirctStr.setText("Directive:");
-		dirctString = new Label(composite, SWT.BORDER);
-		dirctString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		GridData gridDataList_drctstr=new GridData(GridData.FILL_BOTH);
-		gridDataList_drctstr.verticalSpan=1;
-		dirctString.setLayoutData(gridDataList_drctstr);
 		
+		dirctString = new Label(composite, SWT.BORDER);
+		GridData gridDataList_drctstr=new GridData(GridData.FILL_BOTH);
+		gridDataList_drctstr.verticalSpan=2;
+		dirctString.setLayoutData(gridDataList_drctstr);
 		if(dirct != null)
 		{
 			dirctString.setText((dirct.toString()).trim());
@@ -169,15 +156,13 @@ public class DirectiveInput extends Dialog {
 		}
 		
 		Label tmlTips = new Label(composite, SWT.NONE);
-		tmlTips.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		gridDataList_tm.verticalSpan=1;
 		GridData gd_tmlTips = new GridData(GridData.FILL_BOTH);
 		gd_tmlTips.verticalAlignment = SWT.BOTTOM;
 		tmlTips.setLayoutData(gd_tmlTips);
 		tmlTips.setText("Tips:");
+		
 		dirctTips = new Label(composite, SWT.BORDER);
-		dirctTips.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		gridDataList_drctstr.verticalSpan=1;
+		gridDataList_drctstr.verticalSpan=2;
 		dirctTips.setLayoutData(new GridData(GridData.FILL_BOTH));
 		dirctTips.setText(this.dirctTipsStr);
 		

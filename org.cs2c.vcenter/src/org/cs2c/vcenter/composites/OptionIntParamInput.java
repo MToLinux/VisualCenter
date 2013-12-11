@@ -49,9 +49,14 @@ public class OptionIntParamInput extends BaseParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(4,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -79,11 +84,12 @@ public class OptionIntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		ctlCheckButton.setText("");
 		
 		ctlLabel = new Label(this,SWT.NONE);
-		ctlLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListLB = new GridData(GridData.FILL_BOTH);
+		gridDataListLB.horizontalSpan=3;
+		ctlLabel.setLayoutData(gridDataListLB);
 		
 		ctlSpinner = new Spinner(this,SWT.NONE);
 		ctlSpinner.addModifyListener(new ModifyListener() {
@@ -92,7 +98,9 @@ public class OptionIntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListSP = new GridData(GridData.FILL_BOTH);
+		gridDataListSP.horizontalSpan=4;
+		ctlSpinner.setLayoutData(gridDataListSP);
 		
 		ctlCombo = new Combo(this,SWT.NONE);
 		ctlCombo.addModifyListener(new ModifyListener() {
@@ -101,7 +109,9 @@ public class OptionIntParamInput extends BaseParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		GridData gridDataListCMB = new GridData(GridData.FILL_BOTH);
+		gridDataListCMB.horizontalSpan=2;
+		ctlCombo.setLayoutData(gridDataListCMB);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;
