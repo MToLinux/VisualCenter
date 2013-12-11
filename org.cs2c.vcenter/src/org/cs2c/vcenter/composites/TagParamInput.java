@@ -1,5 +1,7 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.List;
+
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
@@ -13,7 +15,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class TagParamInput extends Composite implements ParamInput {
+public class TagParamInput extends BaseParamInput {
 
 	private String strParamName = "";
 	
@@ -102,5 +104,23 @@ public class TagParamInput extends Composite implements ParamInput {
 		
 		return strParam;
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString();
+			paramStr = paramStr.trim();
+			if(paramStr.equals(strParamName))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				
+				params.remove(param);
+				break;
+			}
+		}
+	}
+	
 }

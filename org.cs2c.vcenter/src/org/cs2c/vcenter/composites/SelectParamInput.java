@@ -19,7 +19,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class SelectParamInput extends Composite implements ParamInput {
+public class SelectParamInput extends BaseParamInput {
 
 	private List<String> strOptions = null;
 	private String tips = "";
@@ -172,5 +172,25 @@ public class SelectParamInput extends Composite implements ParamInput {
 			return null;
 		}
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString().trim();
+			if(strOptions!=null && !strOptions.isEmpty() && strOptions.contains(paramStr))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlCombo.setEnabled(true);
+				
+				ctlCombo.setText(paramStr);
+				
+				params.remove(param);
+				break;
+			}
+		}
+	}
+	
 }

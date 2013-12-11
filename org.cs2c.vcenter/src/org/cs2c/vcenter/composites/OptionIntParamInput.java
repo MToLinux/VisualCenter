@@ -21,7 +21,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class OptionIntParamInput extends Composite implements ParamInput {
+public class OptionIntParamInput extends BaseParamInput {
 
 	private String strParamName = "";
 	private List<String> strUnit = new ArrayList<String>();
@@ -44,7 +44,7 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 	
 	private DirectiveInput parentDialog = null;
 	
-	public OptionIntParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg/*, Parameter param*/) {
+	public OptionIntParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -137,25 +137,9 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		
 		ctlLabel.setText(strParamName+" = ");
 
-//		if(param==null)
-//		{
-			isChecked = false;
-			ctlSpinner.setEnabled(false);
-			ctlCombo.setEnabled(false);
-//		}
-//		else
-//		{
-//			isChecked = true;
-//			ctlSpinner.setEnabled(true);
-//			if(strUnit!=null && !strUnit.isEmpty())
-//			{
-//				ctlCombo.setEnabled(true);
-//			}
-//			else
-//			{
-//				ctlCombo.setEnabled(false);
-//			}
-//		}
+		isChecked = false;
+		ctlSpinner.setEnabled(false);
+		ctlCombo.setEnabled(false);
 			
 		if(tips!=null && !tips.isEmpty())
 		{
@@ -258,6 +242,50 @@ public class OptionIntParamInput extends Composite implements ParamInput {
 		else
 		{
 			return null;
+		}
+	}
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = deleteExtraSpace(param.toString());
+			paramStr = paramStr.replaceAll(" ", "");
+			String[] paramStrSlip = paramStr.split("=");
+			if(paramStrSlip[0].equals(strParamName))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlSpinner.setEnabled(true);
+				
+				if(strUnit!=null && !strUnit.isEmpty())
+				{
+					ctlCombo.setEnabled(true);
+					
+					int i;
+					for (i = paramStrSlip[1].length();--i>=0;)
+					{
+						if (Character.isDigit(paramStrSlip[1].charAt(i)))
+						{
+							break;
+						}
+					}
+					String substr = paramStrSlip[1].substring(0, i+1);
+					int nvalue = Integer.parseInt(substr);
+					ctlSpinner.setSelection(nvalue);
+					ctlCombo.setText(paramStrSlip[1].substring(i+1, paramStrSlip[1].length()));
+				}
+				else
+				{
+					ctlCombo.setEnabled(false);
+					
+					ctlSpinner.setSelection(Integer.parseInt(paramStrSlip[1]));
+				}
+				
+				params.remove(param);
+				break;
+			}
 		}
 	}
 

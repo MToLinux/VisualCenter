@@ -1,5 +1,7 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.List;
+
 import org.cs2c.nginlib.config.Option;
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecOption;
@@ -17,7 +19,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class OptionStringParamInput extends Composite implements ParamInput {
+public class OptionStringParamInput extends BaseParamInput {
 
 	private String strParamName = "";
 	private String strValue = "";
@@ -34,7 +36,7 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 
 	private DirectiveInput parentDialog = null;
 	
-	public OptionStringParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg/*, Parameter param*/) {
+	public OptionStringParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
 		super(parent, style);
 		
 		this.layout(true);
@@ -88,17 +90,8 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		isChecked = false;
 		ctlText.setEnabled(false);
 		
-//		if(param==null)
-//		{
-			isChecked = false;
-			ctlText.setEnabled(false);
-//		}
-//		else
-//		{
-//			isChecked = true;
-//			ctlText.setEnabled(true);
-//			ctlText.setText(param.get...());
-//		}
+		isChecked = false;
+		ctlText.setEnabled(false);
 			
 		if(tips!=null && !tips.isEmpty())
 		{
@@ -154,6 +147,28 @@ public class OptionStringParamInput extends Composite implements ParamInput {
 		else
 		{
 			return null;
+		}
+	}
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = deleteExtraSpace(param.toString());
+			paramStr = paramStr.replaceAll(" ", "");
+			String[] paramStrSlip = paramStr.split("=");
+			if(paramStrSlip[0].equals(strParamName))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlText.setEnabled(true);
+				
+				ctlText.setText(paramStrSlip[1]);
+				
+				params.remove(param);
+				break;
+			}
 		}
 	}
 	

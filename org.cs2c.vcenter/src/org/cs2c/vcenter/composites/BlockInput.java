@@ -218,18 +218,19 @@ public class BlockInput extends Composite {
 									}
 								}
 								block.addBlock(newblk);
+								
+								UpdateListCtl();
+								if(bcfParent != null)
+								{
+									bcfParent.SetDirty(true);
+								}
+								flagChanged = true;
 							}
 						} catch (RemoteException e1) {
 							MessageDialog.openError(getShell(), "Error", e1.getMessage());
 							e1.printStackTrace();
 						}
 						
-						UpdateListCtl();
-						if(bcfParent != null)
-						{
-							bcfParent.SetDirty(true);
-						}
-						flagChanged = true;
 					}
 					else
 					{
@@ -338,20 +339,20 @@ public class BlockInput extends Composite {
 					String[] strSelEleTypeSlip = strSelEleType.split(" ");
 					String strSelEleBaseType = strSelEleTypeSlip[0];
 					
-					BlockMeta bMeta = null;
+					BlockMeta curbMeta = null;
 					int count = blockMetas.size();
 					int i = 0;
 					while(i < count)
 					{
-						bMeta = blockMetas.get(i);
-						if(strSelEleBaseType.equals(bMeta.getName()))
+						curbMeta = blockMetas.get(i);
+						if(strSelEleBaseType.equals(curbMeta.getName()))
 						{
 							break;
 						}
-						bMeta = null;
+						curbMeta = null;
 						i++;
 					}
-					if(bMeta == null)
+					if(curbMeta == null)
 					{
 						return;
 					}
@@ -399,13 +400,7 @@ public class BlockInput extends Composite {
 					
 					MetaManager mmanager = null;
 					BlockMeta subbMeta = null;
-//					try {
-						mmanager = MetaManager.getInstance();
-//					} catch (Exception e1) {
-//						e1.printStackTrace();
-//						MessageDialog.openError(getShell(), "Error", e1.getMessage());
-//						return;
-//					}
+					mmanager = MetaManager.getInstance();
 					String parentName = "";
 					if(bMeta != null)
 					{

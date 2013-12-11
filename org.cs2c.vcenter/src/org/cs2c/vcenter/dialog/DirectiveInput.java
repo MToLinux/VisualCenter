@@ -1,10 +1,12 @@
 package org.cs2c.vcenter.dialog;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.cs2c.nginlib.config.Directive;
 import org.cs2c.nginlib.config.Parameter;
+import org.cs2c.vcenter.composites.BaseParamInput;
 import org.cs2c.vcenter.composites.IntParamInput;
 import org.cs2c.vcenter.composites.OptionIntParamInput;
 import org.cs2c.vcenter.composites.OptionStringParamInput;
@@ -28,13 +30,16 @@ public class DirectiveInput extends Dialog {
 	
 	private List<ParamInput> listParamInput = new ArrayList<ParamInput>();
 	private List<Parameter> valueParams = new ArrayList<Parameter>();
+	private List<Parameter> initialParams = new ArrayList<Parameter>();
 	
 	private Directive dirct = null;
 	private DirectiveMeta dMeta = null;
 	
-	private static Shell newShell = new Shell();
-
 	private Label dirctString = null;
+	private Label dirctTips = null;
+	private String dirctTipsStr = "";
+	
+	Hashtable<String, String> htParams = new Hashtable<String, String>();
 	
 	/**
 	 * @wbp.parser.constructor
@@ -51,19 +56,31 @@ public class DirectiveInput extends Dialog {
 		{
 			MessageDialog.openError(parent, "Error", "Directive Meta is null!");
 		}
+		this.dirctTipsStr = this.dMeta.getTips();
 		
 		if(this.dirct != null)
 		{
 			List<Parameter> params = new ArrayList<Parameter>();
 			params = this.dirct.getParameters();
+			
 			for(Parameter param : params)
 			{
-				valueParams.add(param);
+				initialParams.add(param);
 			}
-			
-			//Unknown the Parameter Type£¡£¡£¡
 		}
 		
+	}
+	
+	private void AddParamInput(BaseParamInput input)
+	{
+		input.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
+		gridDataList_opp.verticalSpan=1;
+		input.setLayoutData(gridDataList_opp);
+	    
+		input.setInputData(initialParams);
+	    
+	    listParamInput.add(input);
 	}
 	
 	protected Control createDialogArea(Composite parent) {
@@ -74,7 +91,7 @@ public class DirectiveInput extends Dialog {
 
 		composite.layout(true);
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		composite.setLayout(new GridLayout(1,false));
+		composite.setLayout(new GridLayout(1,true));
 		
 		List<ParameterMeta> listParamMetas = new ArrayList<ParameterMeta>();
 		listParamMetas = dMeta.getOptions();
@@ -86,90 +103,36 @@ public class DirectiveInput extends Dialog {
 			{
 				ParameterMeta pMeta = listParamMetas.get(i);
 				String strClassName = pMeta.getClassName();
+				
+				BaseParamInput pInput = null;
 				if(strClassName.equals("OptionIntParamInput"))
 				{
-					OptionIntParamInput oppInput = new OptionIntParamInput(composite, SWT.NONE, pMeta, this);
-					oppInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_opp=new GridData(GridData.FILL_BOTH);
-					gridDataList_opp.verticalSpan=1;
-				    oppInput.setLayoutData(gridDataList_opp);
-				    
-				    if(this.dirct != null)
-					{
-				    	this.dirct.getParameters();
-					}
-				    
-				    listParamInput.add(oppInput);
+					pInput = new OptionIntParamInput(composite, SWT.NONE, pMeta, this);
 				}
 				else if(strClassName.equals("OptionStringParamInput"))
 				{
-					OptionStringParamInput ospInput = new OptionStringParamInput(composite, SWT.NONE, pMeta, this);
-				    ospInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_osp=new GridData(GridData.FILL_BOTH);
-					gridDataList_osp.verticalSpan=1;
-				    ospInput.setLayoutData(gridDataList_osp);
-				    
-				    if(this.dirct != null)
-					{
-					}
-				    
-				    listParamInput.add(ospInput);
+					pInput = new OptionStringParamInput(composite, SWT.NONE, pMeta, this);
 				}
 				else if(strClassName.equals("IntParamInput"))
 				{
-					IntParamInput ipInput = new IntParamInput(composite, SWT.NONE, pMeta, this);
-				    ipInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_ip=new GridData(GridData.FILL_BOTH);
-					gridDataList_ip.verticalSpan=1;
-					ipInput.setLayoutData(gridDataList_ip);
-					
-					if(this.dirct != null)
-					{
-					}
-					
-					listParamInput.add(ipInput);
+					pInput = new IntParamInput(composite, SWT.NONE, pMeta, this);
 				}
 				else if(strClassName.equals("StringParamInput"))
 				{
-					StringParamInput strpInput = new StringParamInput(composite, SWT.NONE, pMeta, this);
-					strpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_strp=new GridData(GridData.FILL_BOTH);
-					gridDataList_strp.verticalSpan=1;
-					strpInput.setLayoutData(gridDataList_strp);
-					
-					if(this.dirct != null)
-					{
-					}
-					
-					listParamInput.add(strpInput);
+					pInput = new StringParamInput(composite, SWT.NONE, pMeta, this);
 				}
 				else if(strClassName.equals("SelectParamInput"))
 				{
-					SelectParamInput slctpInput = new SelectParamInput(composite, SWT.NONE, pMeta, this);
-					slctpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_slctp=new GridData(GridData.FILL_BOTH);
-					gridDataList_slctp.verticalSpan=1;
-					slctpInput.setLayoutData(gridDataList_slctp);
-					
-					if(this.dirct != null)
-					{
-					}
-					
-					listParamInput.add(slctpInput);
+					pInput = new SelectParamInput(composite, SWT.NONE, pMeta, this);
 				}
 				else if(strClassName.equals("TagParamInput"))
 				{
-					TagParamInput tagpInput = new TagParamInput(composite, SWT.NONE, pMeta, this);
-					tagpInput.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-					GridData gridDataList_tagp=new GridData(GridData.FILL_BOTH);
-					gridDataList_tagp.verticalSpan=1;
-					tagpInput.setLayoutData(gridDataList_tagp);
-					
-					if(this.dirct != null)
-					{
-					}
-					
-					listParamInput.add(tagpInput);
+					pInput = new TagParamInput(composite, SWT.NONE, pMeta, this);
+				}
+				
+				if(pInput != null)
+				{
+					AddParamInput(pInput);
 				}
 				
 				i++;
@@ -178,25 +141,45 @@ public class DirectiveInput extends Dialog {
 		}
 		
 		Label tm = new Label(composite, SWT.NONE);
-		tm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		tm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		GridData gridDataList_tm=new GridData(GridData.FILL_BOTH);
 		gridDataList_tm.verticalSpan=1;
 		tm.setLayoutData(gridDataList_tm);
 		
+		Label tmlDirctStr = new Label(composite, SWT.NONE);
+		tmlDirctStr.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gridDataList_tml=new GridData(GridData.FILL_BOTH);
+		gridDataList_tml.verticalAlignment = SWT.BOTTOM;
+		gridDataList_tm.verticalSpan=1;
+		tmlDirctStr.setLayoutData(gridDataList_tml);
+		tmlDirctStr.setText("Directive:");
 		dirctString = new Label(composite, SWT.BORDER);
-		dirctString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		dirctString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		GridData gridDataList_drctstr=new GridData(GridData.FILL_BOTH);
 		gridDataList_drctstr.verticalSpan=1;
 		dirctString.setLayoutData(gridDataList_drctstr);
 		
 		if(dirct != null)
 		{
-			dirctString.setText("Directive: " + (dirct.toString()).trim());
+			dirctString.setText((dirct.toString()).trim());
 		}
 		else
 		{
-			dirctString.setText("Directive: " + dMeta.getName() + " ;");
+			dirctString.setText(dMeta.getName() + " ;");
 		}
+		
+		Label tmlTips = new Label(composite, SWT.NONE);
+		tmlTips.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		gridDataList_tm.verticalSpan=1;
+		GridData gd_tmlTips = new GridData(GridData.FILL_BOTH);
+		gd_tmlTips.verticalAlignment = SWT.BOTTOM;
+		tmlTips.setLayoutData(gd_tmlTips);
+		tmlTips.setText("Tips:");
+		dirctTips = new Label(composite, SWT.BORDER);
+		dirctTips.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		gridDataList_drctstr.verticalSpan=1;
+		dirctTips.setLayoutData(new GridData(GridData.FILL_BOTH));
+		dirctTips.setText(this.dirctTipsStr);
 		
 	    return composite;
    }
@@ -260,7 +243,7 @@ public class DirectiveInput extends Dialog {
 		}
 		if(dirctString!=null)
 		{
-			dirctString.setText("Directive: " + dirctStr);
+			dirctString.setText(dirctStr);
 		}
 	}
 	
