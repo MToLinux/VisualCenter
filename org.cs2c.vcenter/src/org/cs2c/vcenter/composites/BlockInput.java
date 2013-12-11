@@ -255,6 +255,11 @@ public class BlockInput extends Composite {
 						java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
 						if(listParamMeta == null || listParamMeta.isEmpty())
 						{
+							if(!MessageDialog.openConfirm(getShell(), "Question", "This directive has no parameter?"))
+							{
+								return;
+							}
+							
 							Directive dirct = orc.newDirective();
 							dirct.setName(selEleName);
 							
@@ -480,17 +485,7 @@ public class BlockInput extends Composite {
 					java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
 					if(listParamMeta == null || listParamMeta.isEmpty())
 					{
-						Directive dirct = orc.newDirective();
-						dirct.setName(strSelEleName);
-						
-						block.addDirective(dirct);
-						UpdateListCtl();
-						if(bcfParent != null)
-						{
-							bcfParent.SetDirty(true);
-						}
-						flagChanged = true;
-						
+						MessageDialog.openInformation(getShell(), "Information", "This directive has no parameter!");
 						return;
 					}
 					
