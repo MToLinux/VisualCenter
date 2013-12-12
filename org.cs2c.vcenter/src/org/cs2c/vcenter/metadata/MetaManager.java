@@ -331,11 +331,18 @@ public class MetaManager {
 
 		List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
 		String tmpcom;
-
-		tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
+		if(scope.equals("main"))
+		{
+			tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
 				+ groupName + "\" and contains(@scope,\"" + scope
 				+ "\")]/param";
-
+		}
+		else
+		{
+			tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
+				+ groupName + "\" and (contains(@scope,\"" + scope
+				+ "\") or contains(@scope,\"exmai\"))]/param";
+		}
 		XPathExpression recuroneexpr = xpath.compile(tmpcom);
 		Object recuroneresult = recuroneexpr.evaluate(doc,
 				XPathConstants.NODESET);
