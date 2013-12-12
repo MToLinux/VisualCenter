@@ -1,5 +1,7 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.List;
+
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
@@ -16,7 +18,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class StringParamInput extends Composite implements ParamInput {
+public class StringParamInput extends BaseParamInput {
 	
 	private String strValue = "";
 	private String tips = "";
@@ -38,7 +40,7 @@ public class StringParamInput extends Composite implements ParamInput {
 
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(2,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
@@ -59,7 +61,11 @@ public class StringParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
 		ctlCheckButton.setText("");
 		
 		ctlText = new Text(this,SWT.NONE);
@@ -69,8 +75,9 @@ public class StringParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-	
+		GridData gridDataListTX = new GridData(GridData.FILL_BOTH);
+		gridDataListTX.horizontalSpan=9;
+		ctlText.setLayoutData(gridDataListTX);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;
@@ -125,5 +132,26 @@ public class StringParamInput extends Composite implements ParamInput {
 			return null;
 		}
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString().trim();
+			paramStr = paramStr.replaceAll(" ", "");
+			if(paramStr.indexOf("=")==-1 /*&& isnotIntParam(paramStr)*/)
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlText.setEnabled(true);
+				
+				ctlText.setText(paramStr);
+				
+				params.remove(param);
+				break;
+			}
+		}
+	}
+	
 }

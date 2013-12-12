@@ -20,7 +20,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseAdapter;
 
-public class IntParamInput extends Composite implements ParamInput {
+public class IntParamInput extends BaseParamInput {
 	
 	private List<String> strUnit = new ArrayList<String>();
 	private int max = 999999999;
@@ -47,7 +47,7 @@ public class IntParamInput extends Composite implements ParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(3,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
@@ -77,7 +77,11 @@ public class IntParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
 		ctlCheckButton.setText("");
 		
 		ctlSpinner = new Spinner(this,SWT.NONE);
@@ -87,7 +91,9 @@ public class IntParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListSP = new GridData(GridData.FILL_BOTH);
+		gridDataListSP.horizontalSpan=6;
+		ctlSpinner.setLayoutData(gridDataListSP);
 		
 		ctlCombo = new Combo(this,SWT.NONE);
 		ctlCombo.addModifyListener(new ModifyListener() {
@@ -96,8 +102,9 @@ public class IntParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+		GridData gridDataListCMB = new GridData(GridData.FILL_BOTH);
+		gridDataListCMB.horizontalSpan=3;
+		ctlCombo.setLayoutData(gridDataListCMB);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;
@@ -228,5 +235,66 @@ public class IntParamInput extends Composite implements ParamInput {
 			ctlCombo.setToolTipText(tips);
 		}
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString().trim();
+			paramStr = paramStr.replaceAll(" ", "");
+			
+			int i;
+			for (i = paramStr.length();--i>=0;)
+			{
+				if (Character.isDigit(paramStr.charAt(i)))
+				{
+					break;
+				}
+			}
+			
+			if(isNum(paramStr))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlSpinner.setEnabled(true);
+				
+				ctlSpinner.setSelection(Integer.parseInt(paramStr));
+				
+				if(strUnit!=null && !strUnit.isEmpty())
+				{
+					ctlCombo.setEnabled(true);
+					ctlCombo.setText("");
+				}
+				else
+				{
+					ctlCombo.setEnabled(false);
+					ctlCombo.setText("");
+				}
+				
+				params.remove(param);
+				break;
+			}
+			else if(i>0 && isNum(paramStr.substring(0, i+1)))
+			{
+				if(strUnit!=null && !strUnit.isEmpty() && 
+					strUnit.contains(paramStr.substring(i+1, paramStr.length())))
+				{
+					isChecked = true;
+					ctlCheckButton.setSelection(true);
+					ctlSpinner.setEnabled(true);
+					
+					ctlSpinner.setSelection(Integer.parseInt(paramStr.substring(0, i+1)));
+					
+					ctlCombo.setEnabled(true);
+					ctlCombo.setText(paramStr.substring(i+1, paramStr.length()));
+					
+					params.remove(param);
+					break;
+				}
+			}
+		}
+		
+	}
+	
 }

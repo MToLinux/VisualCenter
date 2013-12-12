@@ -99,20 +99,15 @@ public class serverdialog extends Dialog {
 	}
 	
 	private void SetOkEnable() {
-		Servername = text_sername.getText().trim();
-		ListenParam = text_listen.getText().trim();
+		String strServername = text_sername.getText().trim();
+		String strListenParam = text_listen.getText().trim();
 		
-		if((null != Servername)&&(null != ListenParam)&&
-			("" != Servername)&&("" != ListenParam)){
+		if((null != strServername)&&(null != strListenParam)&&
+			("" != strServername)&&("" != strListenParam)){
 			button_ok.setEnabled(true);
 		}else{
 			button_ok.setEnabled(false);
 		}
-	}
-	
-	@Override
-	protected void setShellStyle(int newShellStyle) {
-	    super.setShellStyle(newShellStyle ^ SWT.CLOSE);
 	}
 	
 	/**

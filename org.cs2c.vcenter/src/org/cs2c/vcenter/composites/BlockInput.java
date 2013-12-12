@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -183,7 +182,7 @@ public class BlockInput extends Composite {
 				}
 				
 				
-				ElementSelector eleSelector = new ElementSelector(new Shell(), elementNames);
+				ElementSelector eleSelector = new ElementSelector(getShell(), elementNames);
 				
 				if(Window.OK == eleSelector.open())
 				{
@@ -218,18 +217,19 @@ public class BlockInput extends Composite {
 									}
 								}
 								block.addBlock(newblk);
+								
+								UpdateListCtl();
+								if(bcfParent != null)
+								{
+									bcfParent.SetDirty(true);
+								}
+								flagChanged = true;
 							}
 						} catch (RemoteException e1) {
 							MessageDialog.openError(getShell(), "Error", e1.getMessage());
 							e1.printStackTrace();
 						}
 						
-						UpdateListCtl();
-						if(bcfParent != null)
-						{
-							bcfParent.SetDirty(true);
-						}
-						flagChanged = true;
 					}
 					else
 					{
@@ -255,6 +255,11 @@ public class BlockInput extends Composite {
 						java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
 						if(listParamMeta == null || listParamMeta.isEmpty())
 						{
+							if(!MessageDialog.openConfirm(getShell(), "Question", "This directive has no parameter?"))
+							{
+								return;
+							}
+							
 							Directive dirct = orc.newDirective();
 							dirct.setName(selEleName);
 							
@@ -269,7 +274,7 @@ public class BlockInput extends Composite {
 							return;
 						}
 						
-						DirectiveInput dInput = new DirectiveInput(new Shell(), null, dMeta);
+						DirectiveInput dInput = new DirectiveInput(getShell(), null, dMeta);
 						
 						if(Window.OK == dInput.open())
 						{
@@ -338,20 +343,20 @@ public class BlockInput extends Composite {
 					String[] strSelEleTypeSlip = strSelEleType.split(" ");
 					String strSelEleBaseType = strSelEleTypeSlip[0];
 					
-					BlockMeta bMeta = null;
+					BlockMeta curbMeta = null;
 					int count = blockMetas.size();
 					int i = 0;
 					while(i < count)
 					{
-						bMeta = blockMetas.get(i);
-						if(strSelEleBaseType.equals(bMeta.getName()))
+						curbMeta = blockMetas.get(i);
+						if(strSelEleBaseType.equals(curbMeta.getName()))
 						{
 							break;
 						}
-						bMeta = null;
+						curbMeta = null;
 						i++;
 					}
-					if(bMeta == null)
+					if(curbMeta == null)
 					{
 						return;
 					}
@@ -399,13 +404,7 @@ public class BlockInput extends Composite {
 					
 					MetaManager mmanager = null;
 					BlockMeta subbMeta = null;
-//					try {
-						mmanager = MetaManager.getInstance();
-//					} catch (Exception e1) {
-//						e1.printStackTrace();
-//						MessageDialog.openError(getShell(), "Error", e1.getMessage());
-//						return;
-//					}
+					mmanager = MetaManager.getInstance();
 					String parentName = "";
 					if(bMeta != null)
 					{
@@ -416,7 +415,7 @@ public class BlockInput extends Composite {
 					
 					bcInfo.setMiddleware(middleware);
 					
-					BlockConfigDialog bcDlg = new BlockConfigDialog(new Shell(), bcInfo);
+					BlockConfigDialog bcDlg = new BlockConfigDialog(getShell(), bcInfo);
 					
 					if(Window.OK == bcDlg.open())
 					{
@@ -486,21 +485,11 @@ public class BlockInput extends Composite {
 					java.util.List<ParameterMeta> listParamMeta = dMeta.getOptions();
 					if(listParamMeta == null || listParamMeta.isEmpty())
 					{
-						Directive dirct = orc.newDirective();
-						dirct.setName(strSelEleName);
-						
-						block.addDirective(dirct);
-						UpdateListCtl();
-						if(bcfParent != null)
-						{
-							bcfParent.SetDirty(true);
-						}
-						flagChanged = true;
-						
+						MessageDialog.openInformation(getShell(), "Information", "This directive has no parameter!");
 						return;
 					}
 					
-					DirectiveInput dInput = new DirectiveInput(new Shell(), oldDirct, dMeta);//oldDirct
+					DirectiveInput dInput = new DirectiveInput(getShell(), oldDirct, dMeta);//oldDirct
 					
 					if(Window.OK == dInput.open())
 					{
@@ -552,7 +541,7 @@ public class BlockInput extends Composite {
 
 				if(ctlList.getSelectionCount() == 0)
 				{
-					MessageDialog.openWarning(new Shell(),"Warning","Please select an option!");
+					MessageDialog.openWarning(getShell(),"Warning","Please select an option!");
 					return;
 				}
 				if(false == MessageDialog.openQuestion(getShell(), "Question", "Are you sure to delete the option?"))
@@ -690,7 +679,7 @@ public class BlockInput extends Composite {
 			this.blocks = this.block.getBlocks();
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
-			MessageDialog.openError(new Shell(), "Error", e1.getMessage());
+			MessageDialog.openError(getShell(), "Error", e1.getMessage());
 			return;
 		}
 		

@@ -13,13 +13,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class SelectParamInput extends Composite implements ParamInput {
+public class SelectParamInput extends BaseParamInput {
 
 	private List<String> strOptions = null;
 	private String tips = "";
@@ -43,7 +42,7 @@ public class SelectParamInput extends Composite implements ParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(3,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
@@ -64,7 +63,11 @@ public class SelectParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
 		ctlCheckButton.setText("");
 		
 		ctlCombo = new Combo(this,SWT.NONE);
@@ -74,12 +77,12 @@ public class SelectParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		
+		GridData gridDataListCMB = new GridData(GridData.FILL_BOTH);
+		gridDataListCMB.horizontalSpan=9;
+		ctlCombo.setLayoutData(gridDataListCMB);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;
-		new Label(this, SWT.NONE);
 		
 		strOptions = this.pMeta.getItems();
 		tips = this.pMeta.getTips();
@@ -172,5 +175,25 @@ public class SelectParamInput extends Composite implements ParamInput {
 			return null;
 		}
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString().trim();
+			if(strOptions!=null && !strOptions.isEmpty() && strOptions.contains(paramStr))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				ctlCombo.setEnabled(true);
+				
+				ctlCombo.setText(paramStr);
+				
+				params.remove(param);
+				break;
+			}
+		}
+	}
+	
 }

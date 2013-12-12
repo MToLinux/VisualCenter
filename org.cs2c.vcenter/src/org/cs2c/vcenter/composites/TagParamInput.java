@@ -1,5 +1,7 @@
 package org.cs2c.vcenter.composites;
 
+import java.util.List;
+
 import org.cs2c.nginlib.config.Parameter;
 import org.cs2c.nginlib.config.RecStringParameter;
 import org.cs2c.nginlib.config.StringParameter;
@@ -10,10 +12,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-public class TagParamInput extends Composite implements ParamInput {
+public class TagParamInput extends BaseParamInput {
 
 	private String strParamName = "";
 	
@@ -21,11 +24,12 @@ public class TagParamInput extends Composite implements ParamInput {
 	
 	private Button ctlCheckButton;
 	private boolean isChecked = false;
+	private Label ctlLabel;
 	
 	private ParameterMeta pMeta;
 	
 	private StringParameter strParam = new RecStringParameter();
-
+	
 	private DirectiveInput parentDialog = null;
 	
 	public TagParamInput(Composite parent, int style, ParameterMeta meta, DirectiveInput parentDlg) {
@@ -33,7 +37,7 @@ public class TagParamInput extends Composite implements ParamInput {
 		
 		this.layout(true);
 		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		this.setLayout(new GridLayout(1,false));
+		this.setLayout(new GridLayout(10,true));
 		
 		ctlCheckButton = new Button(this,SWT.CHECK);
 		ctlCheckButton.addMouseListener(new MouseAdapter() {
@@ -43,9 +47,18 @@ public class TagParamInput extends Composite implements ParamInput {
 				parentDialog.updateDirctString();
 			}
 		});
-		ctlCheckButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		ctlCheckButton.setText(strParamName);
+		GridData gridDataListCB = new GridData(GridData.FILL_BOTH);
+		gridDataListCB.verticalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalAlignment = SWT.CENTER;
+		gridDataListCB.horizontalSpan=1;
+		ctlCheckButton.setLayoutData(gridDataListCB);
+		ctlCheckButton.setText("");
 		
+		ctlLabel = new Label(this,SWT.CHECK);
+		GridData gridDataListLB = new GridData(GridData.FILL_BOTH);
+		gridDataListLB.horizontalSpan=9;
+		ctlLabel.setLayoutData(gridDataListLB);
+		ctlLabel.setText(strParamName);
 		
 		this.pMeta = meta;
 		this.parentDialog = parentDlg;
@@ -53,11 +66,12 @@ public class TagParamInput extends Composite implements ParamInput {
 		strParamName = this.pMeta.getName();
 		tips = this.pMeta.getTips();
 		
-		ctlCheckButton.setText(strParamName);
+		ctlLabel.setText(strParamName);
 		
 		if(tips!=null && !tips.isEmpty())
 		{
 			ctlCheckButton.setToolTipText(tips);
+			ctlLabel.setToolTipText(tips);
 		}
 	}
 
@@ -68,11 +82,12 @@ public class TagParamInput extends Composite implements ParamInput {
 		strParamName = this.pMeta.getName();
 		tips = this.pMeta.getTips();
 		
-		ctlCheckButton.setText(strParamName);
+		ctlLabel.setText(strParamName);
 		
 		if(tips!=null && !tips.isEmpty())
 		{
 			ctlCheckButton.setToolTipText(tips);
+			ctlLabel.setToolTipText(tips);
 		}
 	}
 	
@@ -102,5 +117,23 @@ public class TagParamInput extends Composite implements ParamInput {
 		
 		return strParam;
 	}
-
+	
+	@Override
+	public void setInputData(List<Parameter> params)
+	{
+		for(Parameter param : params)
+		{
+			String paramStr = param.toString();
+			paramStr = paramStr.trim();
+			if(paramStr.equals(strParamName))
+			{
+				isChecked = true;
+				ctlCheckButton.setSelection(true);
+				
+				params.remove(param);
+				break;
+			}
+		}
+	}
+	
 }

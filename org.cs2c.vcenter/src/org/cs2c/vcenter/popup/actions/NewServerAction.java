@@ -51,8 +51,8 @@ public class NewServerAction implements IObjectActionDelegate {
 			}else{
 				e.printStackTrace();
 			}
-
 		}catch (Exception ex) {
+			MessageDialog.openInformation(shell, "Exception", ex.getMessage());
 			ex.printStackTrace();
 		}
 	}
