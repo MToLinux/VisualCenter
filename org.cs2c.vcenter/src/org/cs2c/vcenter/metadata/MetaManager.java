@@ -25,29 +25,29 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class MetaManager {
-	 DocumentBuilderFactory domFactory = DocumentBuilderFactory
-				.newInstance();
-	 Document doc = null;
+	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+	Document doc = null;
 
 	private static class MetaManagerHoder {
-		private static MetaManager instance= new MetaManager();
+		private static MetaManager instance = new MetaManager();
 
 	}
 
-	public static MetaManager getInstance ()  {
+	public static MetaManager getInstance() {
 
 		return MetaManagerHoder.instance;
 	}
 
-	private MetaManager()    {
+	private MetaManager() {
 
 		domFactory.setNamespaceAware(true); // never forget this!
 		try {
-			doc = domFactory.newDocumentBuilder().parse(FileLocator
-					.toFileURL(
-							Platform.getBundle("org.cs2c.vcenter")
-									.getEntry("")).getPath()
-					+ "conf/element.xml");
+			doc = domFactory.newDocumentBuilder().parse(
+					FileLocator
+							.toFileURL(
+									Platform.getBundle("org.cs2c.vcenter")
+											.getEntry("")).getPath()
+							+ "conf/element.xml");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -419,7 +419,7 @@ public class MetaManager {
 		} else
 			return "";
 	}
-
+/****
 	private static void printblock(List<BlockMeta> blocklist) {
 		System.out.println("blocknum=" + blocklist.size());
 	}
@@ -444,39 +444,14 @@ public class MetaManager {
 			System.out.println("tips=" + directivelist.get(i).getTips());
 			System.out.println("scope=" + directivelist.get(i).getScope());
 			System.out.println("resued=" + directivelist.get(i).getReused());
-			for (int j = 0; j < directivelist.get(i).getOptions().size(); j++) {
-				// System.out.println
-				// ("class="+directivelist.get(i).getOptions().get(j).getClassName());
-				// System
-				// .out.println("name="+directivelist.get(i).getOptions().get(j).getName());
-
-				// System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin
-				// ());
-				// System.out.println("max="+directivelist.get(i).getOptions().get(j).
-				// getMax());
-				// System.out.println("units="+directivelist.get(i).getOptions()
-				// //
-				// .get(j).getUnits());
-				// System.out.println("items="+directivelist.get(i).getOptions
-				// //
-				// ().get(j).getItems());
-
-			}
 		}
-
 	}
 
 	public static void main(String[] args) {
-		MetaManager manager;
-		try {
-			manager = MetaManager.getInstance();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
+		MetaManager manager = MetaManager.getInstance();
+
 		BlockMeta blockMetaResult = new BlockMeta();
-		blockMetaResult = manager.getBlockMeta("if", "http");
+		blockMetaResult = manager.getBlockMeta("if", "location");
 		System.out.println(blockMetaResult.getGroups());
 		for (int i = 0; i < blockMetaResult.getDirectiveMeta("fastcgi").size(); i++) {
 			if (blockMetaResult.getDirectiveMeta("fastcgi").get(i).getName()
@@ -490,5 +465,5 @@ public class MetaManager {
 					.getGroups().get(i)));
 		}
 	}
-
+******/
 }
