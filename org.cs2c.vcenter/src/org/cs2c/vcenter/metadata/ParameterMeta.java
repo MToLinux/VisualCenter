@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ParameterMeta {
 	private String name;
-	private String value;
+	//private String value;
 	private String className;
 	private int min;
 	private int max;
@@ -16,7 +16,7 @@ public class ParameterMeta {
 	public ParameterMeta()
 	{
 		 name=null;
-		 value=null;
+		// value=null;
 		 className=null;
 		 min=-2;
 		 max=-2;
@@ -28,10 +28,12 @@ public class ParameterMeta {
 	{
 		this.name=para;
 	}
+	/*
 	public void setValue(String para)
 	{
 		this.value=para;
 	}
+	*/
 	public void setClassName(String para)
 	{
 		this.className=para;
@@ -50,7 +52,7 @@ public class ParameterMeta {
 		this.tips=para;
 	}
 	
-	public void setUnits(List<String>  strlist)
+	public void setUnit(List<String>  strlist)
 	{
 		this.units=strlist;
 		
@@ -63,10 +65,12 @@ public class ParameterMeta {
 	{
 		return this.name;
 	}
+	/*
 	public String getValue( )
 	{
 		return this.value;
 	}
+	*/
 	public String getClassName()
 	{
 		return this.className;

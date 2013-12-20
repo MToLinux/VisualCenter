@@ -17,8 +17,7 @@ import javax.xml.xpath.XPathFactory;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -354,8 +353,8 @@ public class MetaManager {
 
 			tmpParaMeta.setName(decreaseBlank(recuroneelement
 					.getAttribute("name")));
-			tmpParaMeta.setValue(decreaseBlank(recuroneelement
-					.getAttribute("value")));
+			//tmpParaMeta.setValue(decreaseBlank(recuroneelement
+			//		.getAttribute("value")));
 			tmpParaMeta.setClassName(decreaseBlank(recuroneelement
 					.getAttribute("class")));
 			if ((decreaseBlank(recuroneelement.getAttribute("min")) == "")
@@ -399,7 +398,7 @@ public class MetaManager {
 					List<String> tmpunits = new ArrayList<String>();
 					tmpunits.add(decreaseBlank(recuroneelement
 							.getAttribute("units")));
-					tmpParaMeta.setUnits(tmpunits);
+					tmpParaMeta.setUnit(tmpunits);
 				} else {
 					String unitsvalue[] = recuroneelement.getAttribute("units")
 							.split(":");
@@ -407,10 +406,10 @@ public class MetaManager {
 					for (int n = 0; n < unitsvalue.length; n++) {
 						tmpunits.add(decreaseBlank(unitsvalue[n]));
 					}
-					tmpParaMeta.setUnits(tmpunits);
+					tmpParaMeta.setUnit(tmpunits);
 				}
 			} else
-				tmpParaMeta.setUnits(null);
+				tmpParaMeta.setUnit(null);
 			tmpParaList.add(tmpParaMeta);
 		}
 
