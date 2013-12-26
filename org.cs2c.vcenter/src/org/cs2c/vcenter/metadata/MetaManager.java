@@ -17,37 +17,36 @@ import javax.xml.xpath.XPathFactory;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class MetaManager {
-	 DocumentBuilderFactory domFactory = DocumentBuilderFactory
-				.newInstance();
-	 Document doc = null;
+	DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+	Document doc = null;
 
 	private static class MetaManagerHoder {
-		private static MetaManager instance= new MetaManager();
+		private static MetaManager instance = new MetaManager();
 
 	}
 
-	public static MetaManager getInstance ()  {
+	public static MetaManager getInstance() {
 
 		return MetaManagerHoder.instance;
 	}
 
-	private MetaManager()    {
+	private MetaManager() {
 
 		domFactory.setNamespaceAware(true); // never forget this!
 		try {
-			doc = domFactory.newDocumentBuilder().parse(FileLocator
-					.toFileURL(
-							Platform.getBundle("org.cs2c.vcenter")
-									.getEntry("")).getPath()
-					+ "conf/element.xml");
+			doc = domFactory.newDocumentBuilder().parse(
+					FileLocator
+							.toFileURL(
+									Platform.getBundle("org.cs2c.vcenter")
+											.getEntry("")).getPath()
+							+ "conf/element.xml");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -331,11 +330,18 @@ public class MetaManager {
 
 		List<ParameterMeta> tmpParaList = new ArrayList<ParameterMeta>(0);
 		String tmpcom;
-
-		tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
+		if(scope.equals("main"))
+		{
+			tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
 				+ groupName + "\" and contains(@scope,\"" + scope
 				+ "\")]/param";
-
+		}
+		else
+		{
+			tmpcom = "//directive[@name=\"" + directiveName + "\" and @group=\""
+				+ groupName + "\" and (contains(@scope,\"" + scope
+				+ "\") or contains(@scope,\"exmai\"))]/param";
+		}
 		XPathExpression recuroneexpr = xpath.compile(tmpcom);
 		Object recuroneresult = recuroneexpr.evaluate(doc,
 				XPathConstants.NODESET);
@@ -347,8 +353,8 @@ public class MetaManager {
 
 			tmpParaMeta.setName(decreaseBlank(recuroneelement
 					.getAttribute("name")));
-			tmpParaMeta.setValue(decreaseBlank(recuroneelement
-					.getAttribute("value")));
+			//tmpParaMeta.setValue(decreaseBlank(recuroneelement
+			//		.getAttribute("value")));
 			tmpParaMeta.setClassName(decreaseBlank(recuroneelement
 					.getAttribute("class")));
 			if ((decreaseBlank(recuroneelement.getAttribute("min")) == "")
@@ -392,7 +398,7 @@ public class MetaManager {
 					List<String> tmpunits = new ArrayList<String>();
 					tmpunits.add(decreaseBlank(recuroneelement
 							.getAttribute("units")));
-					tmpParaMeta.setUnits(tmpunits);
+					tmpParaMeta.setUnit(tmpunits);
 				} else {
 					String unitsvalue[] = recuroneelement.getAttribute("units")
 							.split(":");
@@ -400,10 +406,10 @@ public class MetaManager {
 					for (int n = 0; n < unitsvalue.length; n++) {
 						tmpunits.add(decreaseBlank(unitsvalue[n]));
 					}
-					tmpParaMeta.setUnits(tmpunits);
+					tmpParaMeta.setUnit(tmpunits);
 				}
 			} else
-				tmpParaMeta.setUnits(null);
+				tmpParaMeta.setUnit(null);
 			tmpParaList.add(tmpParaMeta);
 		}
 
@@ -419,7 +425,7 @@ public class MetaManager {
 		} else
 			return "";
 	}
-
+/****
 	private static void printblock(List<BlockMeta> blocklist) {
 		System.out.println("blocknum=" + blocklist.size());
 	}
@@ -444,39 +450,14 @@ public class MetaManager {
 			System.out.println("tips=" + directivelist.get(i).getTips());
 			System.out.println("scope=" + directivelist.get(i).getScope());
 			System.out.println("resued=" + directivelist.get(i).getReused());
-			for (int j = 0; j < directivelist.get(i).getOptions().size(); j++) {
-				// System.out.println
-				// ("class="+directivelist.get(i).getOptions().get(j).getClassName());
-				// System
-				// .out.println("name="+directivelist.get(i).getOptions().get(j).getName());
-
-				// System.out.println("min="+directivelist.get(i).getOptions().get(j).getMin
-				// ());
-				// System.out.println("max="+directivelist.get(i).getOptions().get(j).
-				// getMax());
-				// System.out.println("units="+directivelist.get(i).getOptions()
-				// //
-				// .get(j).getUnits());
-				// System.out.println("items="+directivelist.get(i).getOptions
-				// //
-				// ().get(j).getItems());
-
-			}
 		}
-
 	}
 
 	public static void main(String[] args) {
-		MetaManager manager;
-		try {
-			manager = MetaManager.getInstance();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return;
-		}
+		MetaManager manager = MetaManager.getInstance();
+
 		BlockMeta blockMetaResult = new BlockMeta();
-		blockMetaResult = manager.getBlockMeta("if", "http");
+		blockMetaResult = manager.getBlockMeta("if", "location");
 		System.out.println(blockMetaResult.getGroups());
 		for (int i = 0; i < blockMetaResult.getDirectiveMeta("fastcgi").size(); i++) {
 			if (blockMetaResult.getDirectiveMeta("fastcgi").get(i).getName()
@@ -490,5 +471,5 @@ public class MetaManager {
 					.getGroups().get(i)));
 		}
 	}
-
+******/
 }
