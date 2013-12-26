@@ -242,7 +242,7 @@ public class MonitorFace extends EditorPart {
 			this.writeChart.addDataset(datasetWrite);
 			Map<String,Number> datasetNetwork=new HashMap<String,Number>();
 			datasetNetwork.put("Input", networkStatus.getInputKbPerSec());
-			datasetNetwork.put("Output", networkStatus.getOutputPerSec());
+			datasetNetwork.put("Output", networkStatus.getOutputKbPerSec());
 			this.networkChart.addDataset(datasetNetwork);
 			
 			NginxStatus nginxStatus=monitor.getNginxStatus(true,projectElement.getStatusPath(), projectElement.getManagerUsername(), projectElement.getManagerPassword());
