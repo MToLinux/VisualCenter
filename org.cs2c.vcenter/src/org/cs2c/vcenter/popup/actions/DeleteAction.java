@@ -61,6 +61,10 @@ public class DeleteAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * Delete Server's main process function
+	 * @throws RemoteException
+	 */
 	private void DeleteServer() throws RemoteException {
 		//delete a server block
 		String outerBlockNames = "http:0";
@@ -70,7 +74,6 @@ public class DeleteAction implements IObjectActionDelegate {
 		Block blServer = getServerBlock(orc);
 		
 		if(blServer!=null){
-			//TODO
 //			System.out.println("blServer:"+blServer.getName()+"："+blServer.toString());	//TODO
 //			System.out.println("outerBlockNames:"+outerBlockNames);	//TODO
 
@@ -80,6 +83,12 @@ public class DeleteAction implements IObjectActionDelegate {
 		}
 	}
 	
+	/**
+	 * get the target block
+	 * @param orc RecConfigurator
+	 * @return the target block
+	 * @throws RemoteException
+	 */
 	private Block getServerBlock(RecConfigurator orc) throws RemoteException{
 		String blockName = null;
 		String outerBlockNames = "http:0";
@@ -89,7 +98,7 @@ public class DeleteAction implements IObjectActionDelegate {
 		list= orc.getBlocks(blockName, outerBlockNames);
 		
 		if((list != null)&&(list.size()>0)){
-//			System.out.println("outerBlockNames:"+outerBlockNames);	//TODO
+//			System.out.println("outerBlockNames:"+outerBlockNames);
 			int index = Integer.parseInt(this.element.getBlockIndex());
 			Block delBlock = list.get(index);
 			return delBlock;

@@ -64,6 +64,11 @@ public class DeployAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * Deploy the webset jar to Server.
+	 * @throws RemoteException
+	 * @throws IOException
+	 */
 	private void DeployToServer() throws RemoteException, IOException{
 		String rootvalue = null;
 //		Directive oldDirective = null;

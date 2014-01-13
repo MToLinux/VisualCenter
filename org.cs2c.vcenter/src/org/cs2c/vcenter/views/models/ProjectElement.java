@@ -23,29 +23,55 @@ public class ProjectElement extends TreeElement implements IProject, IEditorInpu
 	public ProjectElement(TreeElement parent) {
 		super(null);
 	}
+	
+	/**
+	 * get StatusPath
+	 * @return statusPath
+	 */
 	public String getStatusPath() {
 		return statusPath;
 	}
 
+	/**
+	 * set StatusPath
+	 * @param statusPath statusPath
+	 */
 	public void setStatusPath(String statusPath) {
 		this.statusPath = statusPath;
 	}
 
+	/**
+	 * get Manager's user name
+	 * @return Manager's user name
+	 */
 	public String getManagerUsername() {
 		return managerUsername;
 	}
 
+	/**
+	 * set Manager's user name
+	 * @param managerUsername Manager's user name
+	 */
 	public void setManagerUsername(String managerUsername) {
 		this.managerUsername = managerUsername;
 	}
 
+	/**
+	 * get user Manager's Password
+	 * @return user Manager's password
+	 */
 	public String getManagerPassword() {
 		return managerPassword;
 	}
-
+	
+	/**
+	 * set user Manager's Password
+	 * @param managerPassword user Manager's password
+	 */
 	public void setManagerPassword(String managerPassword) {
 		this.managerPassword = managerPassword;
 	}
+	
 	@Override
 	public List<TreeElement> getChildren() {
 		List<TreeElement> elements=new LinkedList<TreeElement>();

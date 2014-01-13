@@ -45,9 +45,18 @@ public class ReloadConfigureAction implements IObjectActionDelegate {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * open and show MessageDialog
+	 * @param mess the message
+	 */
 	private void openMessageDialog(String mess){
 		MessageDialog.openInformation(shell, "Exception", mess);
 	}
+	/**
+	 * Reload the Nginx configure file to make it take effect.
+	 * this function call the function restart() which belong to the Nginxlib's Controller
+	 * @throws RemoteException
+	 */
 	private void ReloadConf() throws RemoteException{
 		Controller reccontro=this.element.getMiddlewareFactory().getController();
 		if(reccontro==null)
@@ -78,6 +87,10 @@ public class ReloadConfigureAction implements IObjectActionDelegate {
 		shell = targetPart.getSite().getShell();
 		this.meview = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 	}
+	/**
+	 * open and show MessageDialog
+	 * @param mess the message
+	 */
 	private void showMessage(String message) {
 		this.meview.showMessage(message);
 	}

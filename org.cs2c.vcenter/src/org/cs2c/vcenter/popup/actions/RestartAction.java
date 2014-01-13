@@ -51,6 +51,10 @@ public class RestartAction implements IObjectActionDelegate {
 			}
 		}
 	}
+	/**
+	 * Restart Nginx server by call the function restart() which belong to the Nginxlib's Controller
+	 * @throws RemoteException
+	 */
 	private void RestartNginx() throws RemoteException{
 		Controller reccontro=this.element.getMiddlewareFactory().getController();
 		if(reccontro==null)
@@ -62,6 +66,10 @@ public class RestartAction implements IObjectActionDelegate {
 			reccontro.restart();
 		}
 	}
+	/**
+	 * open and show MessageDialog
+	 * @param mess the message
+	 */
 	private void openMessageDialog(String mess){
 		MessageDialog.openInformation(shell, "RemoteException", mess);
 	}

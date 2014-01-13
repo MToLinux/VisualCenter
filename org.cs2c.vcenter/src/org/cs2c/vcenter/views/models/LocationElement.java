@@ -116,6 +116,11 @@ public class LocationElement extends TreeElement implements ILocation, IEditorIn
 		return maploNameIndex;
 	}
 
+	/**
+	 * 
+	 * @return
+	 * @throws RemoteException
+	 */
 	private Block getFatherBlock() throws RemoteException{
 
 		String blockName = null;

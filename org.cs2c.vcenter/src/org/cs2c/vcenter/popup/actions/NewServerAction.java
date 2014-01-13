@@ -56,6 +56,11 @@ public class NewServerAction implements IObjectActionDelegate {
 			ex.printStackTrace();
 		}
 	}
+	
+	/**
+	 * New a server block's main process which information is input by user
+	 * @throws RemoteException
+	 */
 	private void NewServer() throws RemoteException{
 		//open dialog
 		serverdialog dialog = new serverdialog(shell);

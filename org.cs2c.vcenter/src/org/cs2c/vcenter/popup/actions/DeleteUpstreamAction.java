@@ -61,6 +61,10 @@ public class DeleteUpstreamAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * Delete target Upstream node and block
+	 * @throws RemoteException
+	 */
 	private void DeleteUpstream() throws RemoteException {
 		//delete a Upstream block
 		String outerBlockNames = null;

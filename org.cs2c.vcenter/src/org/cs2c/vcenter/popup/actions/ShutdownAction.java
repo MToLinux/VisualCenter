@@ -55,6 +55,11 @@ public class ShutdownAction implements IObjectActionDelegate {
 		}
 
 	}
+	
+	/**
+	 * Shutdown Nginx server by call the function shutdown() which belong to the Nginxlib's Controller
+	 * @throws RemoteException
+	 */
 	private void ShutdownNginx() throws RemoteException{
 		Controller reccontro=this.element.getMiddlewareFactory().getController();
 		if(reccontro==null)
@@ -66,6 +71,11 @@ public class ShutdownAction implements IObjectActionDelegate {
 			reccontro.shutdown();
 		}
 	}
+	
+	/**
+	 * open and show MessageDialog
+	 * @param mess the message
+	 */
 	private void openMessageDialog(String mess){
 		MessageDialog.openInformation(shell, "Information", mess);
 	}

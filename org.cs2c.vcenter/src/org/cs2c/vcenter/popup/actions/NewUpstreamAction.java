@@ -58,6 +58,10 @@ public class NewUpstreamAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * New a upstream block's main process which information is input by user
+	 * @throws RemoteException
+	 */
 	private void NewUpstream() throws RemoteException {
 		String blockName = null;
 		RecConfigurator orc = null;

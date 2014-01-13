@@ -60,6 +60,11 @@ public class DeleteLocationAction implements IObjectActionDelegate {
 			ex.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Delete target Location node and block
+	 * @throws RemoteException
+	 */
 	private void DeleteLocation() throws RemoteException {
 		String outerBlockNames = null;
 		String locationName = null;

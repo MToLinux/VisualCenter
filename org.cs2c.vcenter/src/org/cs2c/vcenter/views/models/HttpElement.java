@@ -45,6 +45,11 @@ public class HttpElement extends TreeElement implements IHttp, IEditorInput {
 		return children;
 	}
 	
+	/**
+	 *  get server Name which view in the tree view
+	 * @return server Name's list
+	 * @throws RemoteException
+	 */
 	private List<String> getServerName() throws RemoteException{
 		String blockName = null;
 		String outerBlockNames = "http:0";

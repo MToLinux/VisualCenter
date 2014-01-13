@@ -56,10 +56,18 @@ public class StartAction implements IObjectActionDelegate {
 		}
 	}
 	
+	/**
+	 * open and show MessageDialog
+	 * @param mess the message
+	 */
 	private void openMessageDialog(String mess){
 		MessageDialog.openInformation(shell, "Information", mess);
 	}
 	
+	/**
+	 * call the function start() which belong to the Nginxlib's Controller
+	 * @throws RemoteException
+	 */
 	private void StartNginx() throws RemoteException{
 		Controller reccontro=this.element.getMiddlewareFactory().getController();
 		if(reccontro==null)
@@ -90,6 +98,10 @@ public class StartAction implements IObjectActionDelegate {
 		this.meview = (MiddlewareView)PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(MiddlewareView.ID);
 	}
 	
+	/**
+	 * call the view's showMessage function
+	 * @param message
+	 */
 	private void showMessage(String message) {
 		this.meview.showMessage(message);
 	}

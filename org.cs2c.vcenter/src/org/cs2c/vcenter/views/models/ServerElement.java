@@ -72,6 +72,11 @@ public class ServerElement extends TreeElement implements IServer, IEditorInput 
 		return children;
 	}
 
+	/**
+	 * get Location Name which view in the tree view
+	 * @return Map<String, String> contains Location Name and it's repeat times 
+	 * @throws RemoteException
+	 */
 	private Map<String, String> getLocationName() throws RemoteException {
 		List<Block> list= null;
 		String loIndex = "0";
@@ -113,6 +118,11 @@ public class ServerElement extends TreeElement implements IServer, IEditorInput 
 		return maploNameIndex;
 	}
 	
+	/**
+	 * get the target server block
+	 * @return server block
+	 * @throws RemoteException
+	 */
 	private Block getServerBlock() throws RemoteException{
 
 		String blockName = null;

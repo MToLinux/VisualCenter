@@ -61,6 +61,10 @@ public class NewLocationAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 *get a new location which its name is user input value
+	 * @throws RemoteException
+	 */
 	private void NewLocation() throws RemoteException {
 		String blockName = null;
 		RecConfigurator orc = null;
@@ -106,6 +110,13 @@ public class NewLocationAction implements IObjectActionDelegate {
 		}
 	}
 
+	/**
+	 * 
+	 * @param orc
+	 * @param viewServer_name
+	 * @return
+	 * @throws RemoteException
+	 */
 	private int GetServerIndex(RecConfigurator orc,String viewServer_name) throws RemoteException {
 		String outerBlockNames = "http";
 		List<Block> list = orc.getBlocks("server", outerBlockNames);
